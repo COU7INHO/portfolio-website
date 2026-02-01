@@ -63,7 +63,7 @@ const Hero = () => {
               
               {/* Photo container with gradient fade */}
               <div className="relative w-72 h-72 md:w-96 md:h-96">
-                <div className="w-full h-full rounded-full overflow-hidden gradient-fade-edges">
+                <div className="w-full h-full rounded-2xl overflow-hidden gradient-fade-edges">
                   <img 
                     src={profilePhoto} 
                     alt="Tiago Coutinho" 
