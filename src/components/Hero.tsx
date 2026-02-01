@@ -18,8 +18,8 @@ const Hero = () => {
       if (currentIndex < fullName.length) {
         setDisplayedName(fullName.slice(0, currentIndex + 1));
         currentIndex++;
-        // Variable speed between 60-120ms for human-like feel
-        const nextDelay = Math.random() * 60 + 60;
+        // Variable speed between 42-84ms for human-like feel (30% faster)
+        const nextDelay = Math.random() * 42 + 42;
         setTimeout(typeNextChar, nextDelay);
       } else {
         // Typing complete
