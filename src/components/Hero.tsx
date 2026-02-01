@@ -59,11 +59,11 @@ const Hero = () => {
           <div className="order-1 lg:order-2 flex justify-center lg:justify-end">
             <div className="reveal opacity-0 relative">
               {/* Glow effect behind photo */}
-              <div className="absolute inset-0 bg-primary/20 blur-3xl rounded-full scale-75" />
+              <div className="absolute inset-0 bg-primary/20 blur-3xl rounded-xl scale-75" />
               
               {/* Photo container with gradient fade */}
               <div className="relative w-72 h-72 md:w-96 md:h-96">
-                <div className="w-full h-full rounded-2xl overflow-hidden gradient-fade-edges">
+                <div className="w-full h-full rounded-xl overflow-hidden gradient-fade-edges">
                   <img 
                     src={profilePhoto} 
                     alt="Tiago Coutinho" 
