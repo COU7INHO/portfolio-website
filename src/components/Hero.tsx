@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import profilePhoto from '@/assets/profile-photo.jpg';
 
 const Hero = () => {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -62,17 +63,12 @@ const Hero = () => {
               
               {/* Photo container with gradient fade */}
               <div className="relative w-72 h-72 md:w-96 md:h-96">
-                {/* Placeholder profile - professional silhouette */}
-                <div className="w-full h-full rounded-full bg-gradient-to-br from-secondary to-muted gradient-fade-edges flex items-center justify-center overflow-hidden">
-                  <div className="w-full h-full bg-gradient-to-b from-muted/50 to-transparent flex items-end justify-center">
-                    <svg 
-                      className="w-3/4 h-3/4 text-muted-foreground/30" 
-                      viewBox="0 0 24 24" 
-                      fill="currentColor"
-                    >
-                      <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                    </svg>
-                  </div>
+                <div className="w-full h-full rounded-full overflow-hidden gradient-fade-edges">
+                  <img 
+                    src={profilePhoto} 
+                    alt="Tiago Coutinho" 
+                    className="w-full h-full object-cover object-center"
+                  />
                 </div>
                 
                 {/* Decorative particles */}
