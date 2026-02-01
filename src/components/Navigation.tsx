@@ -42,7 +42,7 @@ const Navigation = () => {
     >
       <div className="nav-blur border-b border-border/50">
         <div className="container mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col items-center gap-3">
             <Link 
               to="/" 
               className="text-lg font-semibold text-foreground hover:text-primary transition-colors"
@@ -50,7 +50,7 @@ const Navigation = () => {
               TC
             </Link>
             
-            <div className="flex items-center gap-8">
+            <div className="flex items-center gap-6">
               {isHomePage ? (
                 <>
                   <button
@@ -64,6 +64,12 @@ const Navigation = () => {
                     className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                   >
                     Experience
+                  </button>
+                  <button
+                    onClick={() => scrollToSection('education')}
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    Education
                   </button>
                   <button
                     onClick={() => scrollToSection('projects')}
@@ -89,6 +95,12 @@ const Navigation = () => {
                     }`}
                   >
                     Experience
+                  </Link>
+                  <Link
+                    to="/#education"
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    Education
                   </Link>
                   <Link
                     to="/projects"

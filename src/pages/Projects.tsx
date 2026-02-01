@@ -1,12 +1,14 @@
 import { useEffect, useRef } from 'react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
-import { ExternalLink, Github, Timer, Zap, Users, BarChart3 } from 'lucide-react';
+import ParticlesBackground from '@/components/ParticlesBackground';
+import { ExternalLink, Github, Timer, Zap, BarChart3, Code2, Wrench } from 'lucide-react';
 
 interface Project {
   title: string;
   description: string;
   longDescription: string;
+  howItWasBuilt: string;
   features: string[];
   technologies: string[];
   liveUrl?: string;
@@ -21,6 +23,12 @@ const projects: Project[] = [
     longDescription: `Speed Champion is a karting lap time tracking application designed for competitive friend groups. 
     The app leverages AI and OCR technology to automatically parse race classification sheets, eliminating manual data entry. 
     Track your performance, compare times with friends, and settle debates about who's really the fastest on the track.`,
+    howItWasBuilt: `The application was built with a modern stack focusing on performance and user experience. 
+    The frontend uses React with TypeScript for type safety and Tailwind CSS for rapid UI development. 
+    The backend is powered by FastAPI (Python) which handles the AI/OCR processing pipeline. 
+    Images are processed using computer vision techniques to extract lap times and driver information from race sheets. 
+    All data is stored in PostgreSQL with proper indexing for fast queries on historical data. 
+    The OCR pipeline uses a combination of image preprocessing, text detection, and custom parsing logic to accurately extract structured data from various race sheet formats.`,
     features: [
       'AI-powered OCR for automatic lap time extraction from race sheets',
       'Real-time leaderboards and performance tracking',
@@ -28,8 +36,9 @@ const projects: Project[] = [
       'Historical data analysis and performance trends',
       'Mobile-friendly interface for trackside use',
     ],
-    technologies: ['React', 'FastAPI', 'PostgreSQL', 'Python', 'OCR/AI', 'Tailwind CSS'],
+    technologies: ['React', 'TypeScript', 'FastAPI', 'Python', 'PostgreSQL', 'OCR/AI', 'Tailwind CSS', 'Docker'],
     liveUrl: 'https://karts.tiago-coutinho.com',
+    githubUrl: '#',
     status: 'Live',
   },
 ];
@@ -56,14 +65,15 @@ const Projects = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background" ref={pageRef}>
+    <div className="min-h-screen bg-background relative" ref={pageRef}>
+      <ParticlesBackground />
       <Navigation />
       
-      <main className="pt-32 pb-20">
+      <main className="relative z-10 pt-28 pb-16">
         <div className="container mx-auto px-6">
           {/* Header */}
-          <div className="reveal opacity-0 text-center mb-20">
-            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+          <div className="reveal opacity-0 text-center mb-12">
+            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-3">
               Projects
             </h1>
             <p className="text-muted-foreground max-w-lg mx-auto">
@@ -72,7 +82,7 @@ const Projects = () => {
           </div>
 
           {/* Projects Grid */}
-          <div className="space-y-12">
+          <div className="space-y-10">
             {projects.map((project, index) => (
               <div
                 key={project.title}
@@ -81,21 +91,21 @@ const Projects = () => {
               >
                 <div className="group overflow-hidden rounded-2xl border border-border bg-card card-hover">
                   {/* Project Hero */}
-                  <div className="relative h-64 md:h-80 bg-gradient-to-br from-secondary to-muted overflow-hidden">
+                  <div className="relative h-48 md:h-64 bg-gradient-to-br from-secondary to-muted overflow-hidden">
                     <div className="absolute inset-0 flex items-center justify-center">
                       <div className="text-center">
-                        <div className="w-24 h-24 mx-auto mb-6 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center">
-                          <Timer className="w-12 h-12 text-primary" />
+                        <div className="w-20 h-20 mx-auto mb-4 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center">
+                          <Timer className="w-10 h-10 text-primary" />
                         </div>
-                        <span className="text-muted-foreground">Project Screenshot</span>
+                        <span className="text-muted-foreground text-sm">Project Screenshot</span>
                       </div>
                     </div>
                     {/* Gradient overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t from-card via-card/50 to-transparent" />
                     
                     {/* Status badge */}
-                    <div className="absolute top-6 right-6">
-                      <span className={`px-4 py-1.5 text-sm font-medium rounded-full ${
+                    <div className="absolute top-4 right-4">
+                      <span className={`px-3 py-1 text-xs font-medium rounded-full ${
                         project.status === 'Live' 
                           ? 'bg-green-500/10 text-green-400 border border-green-500/20' 
                           : 'bg-primary/10 text-primary border border-primary/20'
@@ -106,10 +116,10 @@ const Projects = () => {
                   </div>
 
                   {/* Content */}
-                  <div className="p-8 md:p-10">
-                    <div className="flex flex-col md:flex-row md:items-start gap-6 mb-8">
+                  <div className="p-6 md:p-8">
+                    <div className="flex flex-col md:flex-row md:items-start gap-4 mb-6">
                       <div className="flex-1">
-                        <h2 className="text-3xl font-bold text-foreground group-hover:text-primary transition-colors mb-2">
+                        <h2 className="text-2xl md:text-3xl font-bold text-foreground group-hover:text-primary transition-colors mb-2">
                           {project.title}
                         </h2>
                         {project.liveUrl && (
@@ -117,10 +127,10 @@ const Projects = () => {
                             href={project.liveUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 text-primary hover:underline"
+                            className="inline-flex items-center gap-1 text-primary hover:underline text-sm"
                           >
                             {project.liveUrl.replace('https://', '')}
-                            <ExternalLink className="w-4 h-4" />
+                            <ExternalLink className="w-3 h-3" />
                           </a>
                         )}
                       </div>
@@ -131,18 +141,18 @@ const Projects = () => {
                             href={project.liveUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-primary-foreground font-medium rounded-lg hover:opacity-90 transition-opacity"
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground font-medium rounded-lg hover:opacity-90 transition-opacity text-sm"
                           >
                             <Zap className="w-4 h-4" />
                             View Live
                           </a>
                         )}
-                        {project.githubUrl && (
+                        {project.githubUrl && project.githubUrl !== '#' && (
                           <a
                             href={project.githubUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 px-5 py-2.5 border border-border text-foreground font-medium rounded-lg hover:border-primary/50 hover:bg-primary/5 transition-all"
+                            className="inline-flex items-center gap-2 px-4 py-2 border border-border text-foreground font-medium rounded-lg hover:border-primary/50 hover:bg-primary/5 transition-all text-sm"
                           >
                             <Github className="w-4 h-4" />
                             Source
@@ -151,20 +161,31 @@ const Projects = () => {
                       </div>
                     </div>
 
-                    <p className="text-lg text-secondary-foreground leading-relaxed mb-8">
+                    <p className="text-secondary-foreground leading-relaxed mb-6">
                       {project.longDescription}
                     </p>
 
+                    {/* How it was built */}
+                    <div className="mb-6">
+                      <h3 className="text-base font-semibold text-foreground mb-3 flex items-center gap-2">
+                        <Wrench className="w-4 h-4 text-primary" />
+                        How It Was Built
+                      </h3>
+                      <p className="text-secondary-foreground leading-relaxed text-sm">
+                        {project.howItWasBuilt}
+                      </p>
+                    </div>
+
                     {/* Features */}
-                    <div className="mb-8">
-                      <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
-                        <BarChart3 className="w-5 h-5 text-primary" />
+                    <div className="mb-6">
+                      <h3 className="text-base font-semibold text-foreground mb-3 flex items-center gap-2">
+                        <BarChart3 className="w-4 h-4 text-primary" />
                         Key Features
                       </h3>
-                      <ul className="grid md:grid-cols-2 gap-3">
+                      <ul className="grid md:grid-cols-2 gap-2">
                         {project.features.map((feature, i) => (
-                          <li key={i} className="flex items-start gap-2 text-secondary-foreground">
-                            <span className="w-1.5 h-1.5 bg-primary rounded-full mt-2 shrink-0" />
+                          <li key={i} className="flex items-start gap-2 text-secondary-foreground text-sm">
+                            <span className="w-1.5 h-1.5 bg-primary rounded-full mt-1.5 shrink-0" />
                             {feature}
                           </li>
                         ))}
@@ -173,15 +194,15 @@ const Projects = () => {
 
                     {/* Technologies */}
                     <div>
-                      <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
-                        <Users className="w-5 h-5 text-primary" />
+                      <h3 className="text-base font-semibold text-foreground mb-3 flex items-center gap-2">
+                        <Code2 className="w-4 h-4 text-primary" />
                         Technologies
                       </h3>
                       <div className="flex flex-wrap gap-2">
                         {project.technologies.map((tech) => (
                           <span
                             key={tech}
-                            className="px-4 py-2 bg-secondary text-secondary-foreground text-sm font-medium rounded-lg"
+                            className="px-3 py-1.5 bg-secondary text-secondary-foreground text-xs font-medium rounded-lg"
                           >
                             {tech}
                           </span>
@@ -195,8 +216,8 @@ const Projects = () => {
           </div>
 
           {/* More projects coming */}
-          <div className="reveal opacity-0 mt-16 text-center">
-            <div className="inline-flex items-center gap-2 px-6 py-3 bg-secondary/50 text-muted-foreground rounded-full border border-border">
+          <div className="reveal opacity-0 mt-12 text-center">
+            <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-secondary/50 text-muted-foreground rounded-full border border-border text-sm">
               <span className="w-2 h-2 bg-primary rounded-full animate-pulse" />
               More projects coming soon
             </div>

@@ -52,10 +52,10 @@ const TechStack = () => {
   }, []);
 
   return (
-    <section id="tech" ref={sectionRef} className="py-32 relative">
+    <section id="tech" ref={sectionRef} className="py-16 relative">
       <div className="container mx-auto px-6">
-        <div className="reveal opacity-0 text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+        <div className="reveal opacity-0 text-center mb-10">
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
             Tech Stack
           </h2>
           <p className="text-muted-foreground max-w-md mx-auto">
@@ -63,13 +63,13 @@ const TechStack = () => {
           </p>
         </div>
 
-        <div className="reveal opacity-0 relative max-w-2xl mx-auto" style={{ animationDelay: '0.2s' }}>
+        <div className="reveal opacity-0 relative max-w-lg mx-auto" style={{ animationDelay: '0.2s' }}>
           {/* Orbital container */}
           <div className="relative aspect-square">
             {/* Center circle */}
             <div className="absolute inset-0 flex items-center justify-center">
               <div 
-                className={`w-32 h-32 md:w-40 md:h-40 rounded-full border-2 border-border bg-card flex flex-col items-center justify-center transition-all duration-300 ${
+                className={`w-28 h-28 md:w-36 md:h-36 rounded-full border-2 border-border bg-card flex flex-col items-center justify-center transition-all duration-300 ${
                   activeTech ? 'border-primary/50 glow-primary-subtle' : ''
                 }`}
               >
@@ -91,23 +91,23 @@ const TechStack = () => {
             </div>
 
             {/* Orbital ring */}
-            <div className="absolute inset-8 md:inset-12 rounded-full border border-border/30" />
+            <div className="absolute inset-6 md:inset-8 rounded-full border border-border/30" />
 
             {/* Technology icons */}
             {technologies.map((tech, index) => {
               const angle = (index / technologies.length) * 2 * Math.PI - Math.PI / 2;
-              const radius = 42; // percentage from center
+              const radius = 44; // percentage from center
               const x = 50 + radius * Math.cos(angle);
               const y = 50 + radius * Math.sin(angle);
 
               return (
                 <button
                   key={tech.name}
-                  className="absolute orbit-item w-10 h-10 md:w-12 md:h-12 -translate-x-1/2 -translate-y-1/2 rounded-xl bg-card border border-border flex items-center justify-center text-xl md:text-2xl hover:border-primary/50 hover:glow-primary-subtle focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  className="absolute orbit-item w-12 h-12 md:w-14 md:h-14 -translate-x-1/2 -translate-y-1/2 rounded-xl bg-card border border-border flex items-center justify-center text-2xl md:text-3xl hover:border-primary/50 hover:glow-primary-subtle focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all duration-200"
                   style={{
                     left: `${x}%`,
                     top: `${y}%`,
-                    color: activeTech?.name === tech.name ? tech.color : 'hsl(var(--muted-foreground))',
+                    color: tech.color,
                   }}
                   onMouseEnter={() => setActiveTech(tech)}
                   onMouseLeave={() => setActiveTech(null)}

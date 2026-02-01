@@ -22,14 +22,14 @@ const Hero = () => {
   }, []);
 
   return (
-    <section id="hero" ref={heroRef} className="min-h-screen flex items-center relative overflow-hidden">
+    <section id="hero" ref={heroRef} className="min-h-[90vh] flex items-center relative overflow-hidden">
       {/* Background gradient */}
       <div className="absolute inset-0 gradient-radial pointer-events-none" />
       
-      <div className="container mx-auto px-6 py-20">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+      <div className="container mx-auto px-6 py-12">
+        <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
           {/* Left side - Content */}
-          <div className="order-2 lg:order-1 space-y-6">
+          <div className="order-2 lg:order-1 space-y-5">
             <div className="reveal opacity-0">
               <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-foreground">
                 Tiago
@@ -51,24 +51,6 @@ const Hero = () => {
                 and software development. Specialized in RAG-powered applications, 
                 machine learning pipelines, and scalable software architectures.
               </p>
-            </div>
-            
-            <div className="reveal opacity-0 flex gap-4 pt-4" style={{ animationDelay: '0.3s' }}>
-              <a
-                href="#journey"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-medium rounded-lg hover:opacity-90 transition-opacity glow-primary-subtle"
-              >
-                View Journey
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </a>
-              <a
-                href="#projects"
-                className="inline-flex items-center gap-2 px-6 py-3 border border-border text-foreground font-medium rounded-lg hover:border-primary/50 hover:bg-primary/5 transition-all"
-              >
-                See Projects
-              </a>
             </div>
           </div>
           
