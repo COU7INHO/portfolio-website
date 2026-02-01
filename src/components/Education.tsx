@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { GraduationCap, ArrowRight } from 'lucide-react';
 
 interface EducationEntry {
+  id: string;
   degree: string;
   institution: string;
   years: string;
@@ -10,11 +11,13 @@ interface EducationEntry {
 
 const educationData: EducationEntry[] = [
   {
+    id: 'masters',
     degree: "Master's Degree in Biomedical Engineering",
     institution: 'Universidade Católica Portuguesa',
     years: '2017 - 2019',
   },
   {
+    id: 'bachelors',
     degree: "Bachelor's Degree in Bioengineering",
     institution: 'Universidade Católica Portuguesa',
     years: '2014 - 2017',
@@ -82,7 +85,7 @@ const Education = () => {
                   }`}
                 >
                   <Link
-                    to="/experience#education"
+                    to={`/education#${entry.id}`}
                     className="group block p-5 bg-card border border-border rounded-xl card-hover"
                   >
                     <div className="flex items-start gap-4">

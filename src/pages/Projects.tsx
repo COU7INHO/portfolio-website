@@ -4,6 +4,7 @@ import BackButton from '@/components/BackButton';
 import Footer from '@/components/Footer';
 import ParticlesBackground from '@/components/ParticlesBackground';
 import ProjectCard, { Project } from '@/components/ProjectCard';
+import { useScrollToTop } from '@/hooks/useScrollToTop';
 
 import kartsMainPage from '@/assets/karts-main-page.png';
 import kartsRacePage from '@/assets/karts-race-page.png';
@@ -38,6 +39,7 @@ const projects: Project[] = [
 
 const Projects = () => {
   const pageRef = useRef<HTMLDivElement>(null);
+  useScrollToTop();
 
   useEffect(() => {
     const observer = new IntersectionObserver(

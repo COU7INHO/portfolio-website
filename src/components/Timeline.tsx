@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Building2, ArrowRight } from 'lucide-react';
 
 interface TimelineEntry {
+  id: string;
   company: string;
   position: string;
   years: string;
@@ -11,16 +12,19 @@ interface TimelineEntry {
 
 const timelineData: TimelineEntry[] = [
   {
+    id: 'glintt',
     company: 'Glintt Global',
     position: 'AI Data Engineer',
     years: '2023 - Present',
   },
   {
+    id: 'nonius',
     company: 'Nonius',
     position: 'Software Engineer',
     years: '2021 - 2023',
   },
   {
+    id: 'padrao',
     company: 'Padrão Ortopédico',
     position: 'Biomedical Engineer',
     years: '2019 - 2021',
@@ -88,7 +92,7 @@ const Timeline = () => {
                   }`}
                 >
                   <Link
-                    to="/experience"
+                    to={`/experience#${entry.id}`}
                     className="group block p-6 bg-card border border-border rounded-xl card-hover"
                   >
                     <div className="flex items-start gap-4">
