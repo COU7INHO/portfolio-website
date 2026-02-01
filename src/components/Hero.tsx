@@ -72,9 +72,9 @@ const Hero = () => {
   }, []);
 
   const scrollToNextSection = () => {
-    const timelineSection = document.getElementById('timeline');
-    if (timelineSection) {
-      timelineSection.scrollIntoView({ behavior: 'smooth' });
+    const journeySection = document.getElementById('journey');
+    if (journeySection) {
+      journeySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
 
