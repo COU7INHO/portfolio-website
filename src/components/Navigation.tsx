@@ -85,8 +85,12 @@ const Navigation = () => {
                 Experience
               </Link>
               <Link
-                to="/experience#education"
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                to="/education"
+                className={`text-sm transition-colors ${
+                  location.pathname === '/education' 
+                    ? 'text-primary' 
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
               >
                 Education
               </Link>
