@@ -52,11 +52,11 @@ const TechStack = () => {
   }, []);
 
   return (
-    <section id="tech" ref={sectionRef} className="py-16 relative">
+    <section id="skills" ref={sectionRef} className="py-16 relative">
       <div className="container mx-auto px-6">
         <div className="reveal opacity-0 text-center mb-10">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
-            Tech Stack
+            Skills
           </h2>
           <p className="text-muted-foreground max-w-md mx-auto">
             Technologies I work with daily to build intelligent solutions
