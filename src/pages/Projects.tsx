@@ -1,9 +1,12 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Navigation from '@/components/Navigation';
 import BackButton from '@/components/BackButton';
 import Footer from '@/components/Footer';
 import ParticlesBackground from '@/components/ParticlesBackground';
-import { ExternalLink, Github, Timer, Zap, BarChart3, Code2, Wrench } from 'lucide-react';
+import { ExternalLink, Github, Timer, Zap, BarChart3, Code2, Wrench, ChevronLeft, ChevronRight } from 'lucide-react';
+
+import kartsMainPage from '@/assets/karts-main-page.png';
+import kartsRacePage from '@/assets/karts-race-page.png';
 
 interface Project {
   title: string;
@@ -15,6 +18,7 @@ interface Project {
   liveUrl?: string;
   githubUrl?: string;
   status: 'Live' | 'In Development' | 'Archived';
+  screenshots?: string[];
 }
 
 const projects: Project[] = [
@@ -41,8 +45,77 @@ const projects: Project[] = [
     liveUrl: 'https://karts.tiago-coutinho.com',
     githubUrl: '#',
     status: 'Live',
+    screenshots: [kartsMainPage, kartsRacePage],
   },
 ];
+
+const ProjectScreenshots = ({ screenshots }: { screenshots: string[] }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const goToPrevious = () => {
+    setCurrentIndex((prev) => (prev === 0 ? screenshots.length - 1 : prev - 1));
+  };
+
+  const goToNext = () => {
+    setCurrentIndex((prev) => (prev === screenshots.length - 1 ? 0 : prev + 1));
+  };
+
+  if (!screenshots || screenshots.length === 0) {
+    return (
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-20 h-20 mx-auto mb-4 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center">
+            <Timer className="w-10 h-10 text-primary" />
+          </div>
+          <span className="text-muted-foreground text-sm">Project Screenshot</span>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="absolute inset-0">
+      <img
+        src={screenshots[currentIndex]}
+        alt={`Screenshot ${currentIndex + 1}`}
+        className="w-full h-full object-cover object-top transition-opacity duration-300"
+      />
+      
+      {screenshots.length > 1 && (
+        <>
+          {/* Navigation arrows */}
+          <button
+            onClick={goToPrevious}
+            className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-background/80 backdrop-blur-sm border border-border flex items-center justify-center text-foreground hover:bg-primary/20 hover:border-primary/50 transition-all z-10"
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </button>
+          <button
+            onClick={goToNext}
+            className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-background/80 backdrop-blur-sm border border-border flex items-center justify-center text-foreground hover:bg-primary/20 hover:border-primary/50 transition-all z-10"
+          >
+            <ChevronRight className="w-4 h-4" />
+          </button>
+
+          {/* Dots indicator */}
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+            {screenshots.map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => setCurrentIndex(idx)}
+                className={`w-2 h-2 rounded-full transition-all ${
+                  idx === currentIndex 
+                    ? 'bg-primary w-4' 
+                    : 'bg-foreground/30 hover:bg-foreground/50'
+                }`}
+              />
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
 
 const Projects = () => {
   const pageRef = useRef<HTMLDivElement>(null);
@@ -92,21 +165,14 @@ const Projects = () => {
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <div className="group overflow-hidden rounded-2xl border border-border bg-card card-hover">
-                  {/* Project Hero */}
-                  <div className="relative h-48 md:h-64 bg-gradient-to-br from-secondary to-muted overflow-hidden">
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="text-center">
-                        <div className="w-20 h-20 mx-auto mb-4 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center">
-                          <Timer className="w-10 h-10 text-primary" />
-                        </div>
-                        <span className="text-muted-foreground text-sm">Project Screenshot</span>
-                      </div>
-                    </div>
+                  {/* Project Hero with Screenshots */}
+                  <div className="relative h-48 md:h-72 bg-gradient-to-br from-secondary to-muted overflow-hidden">
+                    <ProjectScreenshots screenshots={project.screenshots || []} />
                     {/* Gradient overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-card via-card/50 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-card via-card/30 to-transparent pointer-events-none" />
                     
                     {/* Status badge */}
-                    <div className="absolute top-4 right-4">
+                    <div className="absolute top-4 right-4 z-10">
                       <span className={`px-3 py-1 text-xs font-medium rounded-full ${
                         project.status === 'Live' 
                           ? 'bg-green-500/10 text-green-400 border border-green-500/20' 
