@@ -50,23 +50,23 @@ export const ProjectGallery = ({ screenshots, isOpen, onClose, initialIndex = 0 
 
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 z-[100] flex flex-col items-center justify-center"
       onClick={onClose}
     >
-      {/* Dark overlay */}
-      <div className="absolute inset-0 bg-black/90 backdrop-blur-sm" />
+      {/* Dark overlay - covers everything including navbar */}
+      <div className="absolute inset-0 bg-black/95 backdrop-blur-sm" />
       
       {/* Close button */}
       <button
         onClick={onClose}
-        className="absolute top-4 right-4 z-50 w-10 h-10 rounded-full bg-background/20 backdrop-blur-sm border border-border/50 flex items-center justify-center text-foreground hover:bg-primary/20 hover:border-primary/50 transition-all"
+        className="absolute top-6 right-6 z-10 w-10 h-10 rounded-full bg-background/20 backdrop-blur-sm border border-border/50 flex items-center justify-center text-foreground hover:bg-primary/20 hover:border-primary/50 transition-all"
       >
         <X className="w-5 h-5" />
       </button>
 
-      {/* Image container - properly centered */}
+      {/* Image container - centered slightly towards top */}
       <div 
-        className="relative z-10 flex items-center justify-center"
+        className="relative z-10 flex items-center justify-center mb-16"
         onClick={(e) => e.stopPropagation()}
       >
         <img
@@ -75,7 +75,7 @@ export const ProjectGallery = ({ screenshots, isOpen, onClose, initialIndex = 0 
           className="rounded-lg shadow-2xl"
           style={{
             maxWidth: '90vw',
-            maxHeight: '80vh',
+            maxHeight: '75vh',
             objectFit: 'contain',
           }}
         />
