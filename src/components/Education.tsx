@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
-import { GraduationCap } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { GraduationCap, ArrowRight } from 'lucide-react';
 
 interface EducationEntry {
   degree: string;
@@ -80,13 +81,16 @@ const Education = () => {
                     index % 2 === 0 ? 'md:pr-8' : 'md:pl-8'
                   }`}
                 >
-                  <div className="p-5 bg-card border border-border rounded-xl card-hover">
+                  <Link
+                    to="/experience#education"
+                    className="group block p-5 bg-card border border-border rounded-xl card-hover"
+                  >
                     <div className="flex items-start gap-4">
                       <div className="w-12 h-12 bg-secondary rounded-lg flex items-center justify-center shrink-0">
                         <GraduationCap className="w-6 h-6 text-primary" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h3 className="text-lg font-semibold text-foreground">
+                        <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
                           {entry.degree}
                         </h3>
                         <p className="text-muted-foreground text-sm mt-1">
@@ -96,8 +100,9 @@ const Education = () => {
                           {entry.years}
                         </p>
                       </div>
+                      <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all opacity-0 group-hover:opacity-100" />
                     </div>
-                  </div>
+                  </Link>
                 </div>
               </div>
             ))}

@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import Navigation from '@/components/Navigation';
+import BackButton from '@/components/BackButton';
 import Footer from '@/components/Footer';
 import ParticlesBackground from '@/components/ParticlesBackground';
 import { ExternalLink, Github, Timer, Zap, BarChart3, Code2, Wrench } from 'lucide-react';
@@ -68,6 +69,7 @@ const Projects = () => {
     <div className="min-h-screen bg-background relative" ref={pageRef}>
       <ParticlesBackground />
       <Navigation />
+      <BackButton />
       
       <main className="relative z-10 pt-28 pb-16">
         <div className="container mx-auto px-6">

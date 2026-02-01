@@ -1,5 +1,7 @@
 import { useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
+import BackButton from '@/components/BackButton';
 import Footer from '@/components/Footer';
 import { Building2, GraduationCap, Calendar, MapPin } from 'lucide-react';
 
@@ -78,6 +80,7 @@ const education: EducationEntry[] = [
 
 const Experience = () => {
   const pageRef = useRef<HTMLDivElement>(null);
+  const location = useLocation();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -97,9 +100,22 @@ const Experience = () => {
     return () => observer.disconnect();
   }, []);
 
+  // Handle hash navigation for education section
+  useEffect(() => {
+    if (location.hash === '#education') {
+      setTimeout(() => {
+        const educationSection = document.getElementById('education-section');
+        if (educationSection) {
+          educationSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    }
+  }, [location]);
+
   return (
     <div className="min-h-screen bg-background" ref={pageRef}>
       <Navigation />
+      <BackButton />
       
       <main className="pt-32 pb-20">
         <div className="container mx-auto px-6">
@@ -184,7 +200,7 @@ const Experience = () => {
           </section>
 
           {/* Education */}
-          <section>
+          <section id="education-section">
             <h2 className="reveal opacity-0 text-2xl font-bold text-foreground mb-12 flex items-center gap-3">
               <GraduationCap className="w-6 h-6 text-primary" />
               Education
