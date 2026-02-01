@@ -50,7 +50,7 @@ export const ProjectGallery = ({ screenshots, isOpen, onClose, initialIndex = 0 
 
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
       onClick={onClose}
     >
       {/* Dark overlay */}
@@ -64,54 +64,67 @@ export const ProjectGallery = ({ screenshots, isOpen, onClose, initialIndex = 0 
         <X className="w-5 h-5" />
       </button>
 
-      {/* Image container */}
+      {/* Image container - properly centered */}
       <div 
-        className="relative max-w-5xl max-h-[85vh] mx-4"
+        className="relative z-10 flex items-center justify-center"
         onClick={(e) => e.stopPropagation()}
       >
         <img
           src={screenshots[currentIndex]}
           alt={`Screenshot ${currentIndex + 1}`}
-          className="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl"
+          className="rounded-lg shadow-2xl"
+          style={{
+            maxWidth: '90vw',
+            maxHeight: '80vh',
+            objectFit: 'contain',
+          }}
         />
 
         {screenshots.length > 1 && (
           <>
-            {/* Navigation arrows */}
+            {/* Navigation arrows - positioned outside image */}
             <button
               onClick={goToPrevious}
-              className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-background/80 backdrop-blur-sm border border-border flex items-center justify-center text-foreground hover:bg-primary/20 hover:border-primary/50 transition-all"
+              className="absolute -left-4 md:-left-14 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-background/80 backdrop-blur-sm border border-border flex items-center justify-center text-foreground hover:bg-primary/20 hover:border-primary/50 transition-all"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
             <button
               onClick={goToNext}
-              className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-background/80 backdrop-blur-sm border border-border flex items-center justify-center text-foreground hover:bg-primary/20 hover:border-primary/50 transition-all"
+              className="absolute -right-4 md:-right-14 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-background/80 backdrop-blur-sm border border-border flex items-center justify-center text-foreground hover:bg-primary/20 hover:border-primary/50 transition-all"
             >
               <ChevronRight className="w-5 h-5" />
             </button>
-
-            {/* Dots indicator */}
-            <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 flex gap-2">
-              {screenshots.map((_, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setCurrentIndex(idx)}
-                  className={`w-2.5 h-2.5 rounded-full transition-all ${
-                    idx === currentIndex 
-                      ? 'bg-primary w-6' 
-                      : 'bg-foreground/30 hover:bg-foreground/50'
-                  }`}
-                />
-              ))}
-            </div>
           </>
         )}
       </div>
 
-      {/* Image counter */}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-sm text-muted-foreground">
-        {currentIndex + 1} / {screenshots.length}
+      {/* Bottom controls */}
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 z-10">
+        {/* Dots indicator */}
+        {screenshots.length > 1 && (
+          <div className="flex gap-2">
+            {screenshots.map((_, idx) => (
+              <button
+                key={idx}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setCurrentIndex(idx);
+                }}
+                className={`w-2.5 h-2.5 rounded-full transition-all ${
+                  idx === currentIndex 
+                    ? 'bg-primary w-6' 
+                    : 'bg-foreground/30 hover:bg-foreground/50'
+                }`}
+              />
+            ))}
+          </div>
+        )}
+        
+        {/* Image counter */}
+        <div className="text-sm text-muted-foreground">
+          {currentIndex + 1} / {screenshots.length}
+        </div>
       </div>
     </div>
   );
@@ -124,6 +137,7 @@ interface ProjectImagePreviewProps {
 
 export const ProjectImagePreview = ({ screenshots, onOpenGallery }: ProjectImagePreviewProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
 
   const goToPrevious = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -138,8 +152,10 @@ export const ProjectImagePreview = ({ screenshots, onOpenGallery }: ProjectImage
   if (!screenshots || screenshots.length === 0) {
     return (
       <div 
-        className="relative h-48 md:h-64 bg-gradient-to-br from-secondary to-muted flex items-center justify-center cursor-pointer group"
+        className="relative h-48 md:h-64 bg-gradient-to-br from-secondary to-muted flex items-center justify-center cursor-pointer"
         onClick={() => onOpenGallery(0)}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
       >
         <div className="text-center">
           <div className="w-16 h-16 mx-auto mb-3 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
@@ -153,18 +169,20 @@ export const ProjectImagePreview = ({ screenshots, onOpenGallery }: ProjectImage
 
   return (
     <div 
-      className="relative h-48 md:h-64 bg-gradient-to-br from-secondary to-muted overflow-hidden cursor-pointer group"
+      className="relative h-48 md:h-64 bg-gradient-to-br from-secondary to-muted overflow-hidden cursor-pointer"
       onClick={() => onOpenGallery(currentIndex)}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
       <img
         src={screenshots[currentIndex]}
         alt={`Screenshot ${currentIndex + 1}`}
-        className="w-full h-full object-cover object-top transition-transform duration-300 group-hover:scale-105"
+        className={`w-full h-full object-cover object-top transition-transform duration-300 ${isHovered ? 'scale-105' : ''}`}
       />
       
-      {/* Hover overlay with zoom hint */}
-      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300 flex items-center justify-center">
-        <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center gap-2 px-4 py-2 bg-background/80 backdrop-blur-sm rounded-lg border border-border">
+      {/* Hover overlay with zoom hint - only shows when THIS element is hovered */}
+      <div className={`absolute inset-0 transition-all duration-300 flex items-center justify-center ${isHovered ? 'bg-black/40' : 'bg-black/0'}`}>
+        <div className={`transition-opacity duration-300 flex items-center gap-2 px-4 py-2 bg-background/80 backdrop-blur-sm rounded-lg border border-border ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
           <ZoomIn className="w-4 h-4 text-primary" />
           <span className="text-sm text-foreground">Click to view gallery</span>
         </div>
@@ -178,13 +196,13 @@ export const ProjectImagePreview = ({ screenshots, onOpenGallery }: ProjectImage
           {/* Navigation arrows */}
           <button
             onClick={goToPrevious}
-            className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-background/80 backdrop-blur-sm border border-border flex items-center justify-center text-foreground hover:bg-primary/20 hover:border-primary/50 transition-all z-10 opacity-0 group-hover:opacity-100"
+            className={`absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-background/80 backdrop-blur-sm border border-border flex items-center justify-center text-foreground hover:bg-primary/20 hover:border-primary/50 transition-all z-10 ${isHovered ? 'opacity-100' : 'opacity-0'}`}
           >
             <ChevronLeft className="w-4 h-4" />
           </button>
           <button
             onClick={goToNext}
-            className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-background/80 backdrop-blur-sm border border-border flex items-center justify-center text-foreground hover:bg-primary/20 hover:border-primary/50 transition-all z-10 opacity-0 group-hover:opacity-100"
+            className={`absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-background/80 backdrop-blur-sm border border-border flex items-center justify-center text-foreground hover:bg-primary/20 hover:border-primary/50 transition-all z-10 ${isHovered ? 'opacity-100' : 'opacity-0'}`}
           >
             <ChevronRight className="w-4 h-4" />
           </button>

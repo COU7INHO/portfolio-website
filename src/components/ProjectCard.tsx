@@ -30,11 +30,11 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
 
   return (
     <>
-      <div className="group overflow-hidden rounded-2xl border border-border bg-card card-hover">
+      <div className="overflow-hidden rounded-2xl border border-border bg-card card-hover">
         {/* Header: Title + Status */}
         <div className="flex items-center justify-between p-6 pb-4">
           <div>
-            <h2 className="text-2xl md:text-3xl font-bold text-foreground group-hover:text-primary transition-colors">
+            <h2 className="text-2xl md:text-3xl font-bold text-foreground hover:text-primary transition-colors">
               {project.title}
             </h2>
             {project.liveUrl && (
