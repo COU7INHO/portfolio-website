@@ -58,22 +58,17 @@ const Hero = () => {
           {/* Right side - Photo */}
           <div className="order-1 lg:order-2 flex justify-center lg:justify-end">
             <div className="reveal opacity-0 relative">
-              {/* Photo container with gradient fade edges */}
+              {/* Photo with soft gradient mask - no visible container */}
               <div className="relative w-72 h-80 md:w-96 md:h-[420px]">
-                <div className="w-full h-full rounded-xl overflow-hidden">
-                  <img 
-                    src={profilePhoto} 
-                    alt="Tiago Coutinho" 
-                    className="w-full h-full object-cover object-top"
-                  />
-                  {/* Gradient fade edges - blends into dark background */}
-                  <div className="absolute inset-0 pointer-events-none">
-                    <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-background to-transparent" />
-                    <div className="absolute inset-y-0 left-0 w-8 bg-gradient-to-r from-background to-transparent" />
-                    <div className="absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-background to-transparent" />
-                    <div className="absolute inset-x-0 top-0 h-8 bg-gradient-to-b from-background to-transparent" />
-                  </div>
-                </div>
+                <img 
+                  src={profilePhoto} 
+                  alt="Tiago Coutinho" 
+                  className="w-full h-full object-cover object-top"
+                  style={{
+                    maskImage: 'radial-gradient(ellipse 85% 80% at 50% 40%, black 50%, transparent 100%)',
+                    WebkitMaskImage: 'radial-gradient(ellipse 85% 80% at 50% 40%, black 50%, transparent 100%)',
+                  }}
+                />
               </div>
             </div>
           </div>
