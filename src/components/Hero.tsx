@@ -54,10 +54,6 @@ const Hero = () => {
     return () => observer.disconnect();
   }, []);
 
-  // Split name into first and last for styling
-  const firstName = displayedName.split(' ')[0] || '';
-  const lastName = displayedName.includes(' ') ? displayedName.split(' ').slice(1).join(' ') : '';
-
   return (
     <section id="hero" ref={heroRef} className="min-h-[90vh] flex items-center relative overflow-hidden">
       {/* Background gradient */}
@@ -68,14 +64,8 @@ const Hero = () => {
           {/* Left side - Content */}
           <div className="order-2 lg:order-1 space-y-5">
             <div className="reveal opacity-0">
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-foreground min-h-[1.2em] md:min-h-[2.4em]">
-                {firstName}
-                {lastName && (
-                  <>
-                    <br />
-                    <span className="text-glow">{lastName}</span>
-                  </>
-                )}
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-foreground min-h-[1.2em] whitespace-nowrap">
+                <span>{displayedName}</span>
                 {showCursor && (
                   <span className="animate-pulse text-primary ml-0.5">|</span>
                 )}
