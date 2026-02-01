@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { X, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react';
 
 interface ProjectGalleryProps {
@@ -48,13 +49,15 @@ export const ProjectGallery = ({ screenshots, isOpen, onClose, initialIndex = 0 
 
   if (!isOpen) return null;
 
-  return (
+  // Use portal to render at document.body level, ensuring it covers EVERYTHING
+  const lightboxContent = (
     <div 
-      className="fixed inset-0 z-[100] flex flex-col items-center justify-center"
+      className="fixed top-0 left-0 right-0 bottom-0 flex flex-col items-center justify-center"
+      style={{ zIndex: 9999 }}
       onClick={onClose}
     >
-      {/* Dark overlay - covers everything including navbar */}
-      <div className="absolute inset-0 bg-black/95 backdrop-blur-sm" />
+      {/* Dark overlay - covers everything including navbar and page header */}
+      <div className="absolute top-0 left-0 right-0 bottom-0 bg-black/95 backdrop-blur-sm" />
       
       {/* Close button */}
       <button
@@ -128,6 +131,8 @@ export const ProjectGallery = ({ screenshots, isOpen, onClose, initialIndex = 0 
       </div>
     </div>
   );
+
+  return createPortal(lightboxContent, document.body);
 };
 
 interface ProjectImagePreviewProps {
