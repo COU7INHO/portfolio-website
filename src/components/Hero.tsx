@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import profilePhoto from '@/assets/profile-photo.jpg';
+import profilePhoto from '@/assets/profile-photo.png';
 
 const Hero = () => {
   const heroRef = useRef<HTMLDivElement>(null);
