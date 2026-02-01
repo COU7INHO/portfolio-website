@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { ChevronDown } from 'lucide-react';
 import profilePhoto from '@/assets/profile-photo.png';
 
 const Hero = () => {
@@ -7,6 +8,8 @@ const Hero = () => {
   const [showCursor, setShowCursor] = useState(true);
   const [typingComplete, setTypingComplete] = useState(false);
   const [showContent, setShowContent] = useState(false);
+  const [showScrollIndicator, setShowScrollIndicator] = useState(false);
+  const [hasScrolled, setHasScrolled] = useState(false);
   
   const fullName = 'Tiago Coutinho';
 
@@ -27,6 +30,8 @@ const Hero = () => {
         setShowCursor(false);
         // Show content after 250ms delay
         setTimeout(() => setShowContent(true), 250);
+        // Show scroll indicator 500ms after content appears
+        setTimeout(() => setShowScrollIndicator(true), 750);
       }
     };
     
@@ -34,6 +39,18 @@ const Hero = () => {
     const startDelay = setTimeout(() => typeNextChar(), 300);
     
     return () => clearTimeout(startDelay);
+  }, []);
+
+  // Track scroll to hide indicator
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setHasScrolled(true);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   useEffect(() => {
@@ -53,6 +70,13 @@ const Hero = () => {
 
     return () => observer.disconnect();
   }, []);
+
+  const scrollToNextSection = () => {
+    const timelineSection = document.getElementById('timeline');
+    if (timelineSection) {
+      timelineSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
     <section id="hero" ref={heroRef} className="min-h-[90vh] flex items-center relative overflow-hidden">
@@ -111,6 +135,18 @@ const Hero = () => {
           </div>
         </div>
       </div>
+
+      {/* Scroll Indicator */}
+      <button
+        onClick={scrollToNextSection}
+        className={`absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-muted-foreground hover:text-primary transition-all duration-500 cursor-pointer group ${
+          showScrollIndicator && !hasScrolled ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        }`}
+        aria-label="Scroll to explore"
+      >
+        <span className="text-sm font-medium tracking-wide">Discover my journey</span>
+        <ChevronDown className="w-5 h-5 animate-bounce group-hover:text-primary" />
+      </button>
     </section>
   );
 };
