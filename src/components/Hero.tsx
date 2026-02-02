@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, Download } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import profilePhoto from '@/assets/profile-photo.png';
 
 const Hero = () => {
@@ -103,6 +104,22 @@ const Hero = () => {
                 <span className="text-primary">AI Data Engineer</span>
                 <span className="text-muted-foreground"> @ Glintt Global</span>
               </p>
+            </div>
+
+            <div 
+              className={`transition-opacity duration-500 ease-out delay-100 ${showContent ? 'opacity-100' : 'opacity-0'}`}
+            >
+              <Button
+                variant="outline"
+                size="lg"
+                asChild
+                className="group border-border hover:border-primary/50 hover:bg-primary/5"
+              >
+                <a href="/Tiago_Coutinho_CV.pdf" download>
+                  <Download className="w-4 h-4 mr-2 group-hover:text-primary transition-colors" />
+                  Download CV
+                </a>
+              </Button>
             </div>
             
           </div>
