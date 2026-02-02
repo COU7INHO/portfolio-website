@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import { fileSystem, projectUrls, socialLinks, FileSystemEntry } from '@/data/terminalFileSystem';
 
 export interface TerminalLine {
@@ -23,11 +23,21 @@ interface UseTerminalReturn {
 
 let lineIdCounter = 0;
 
-export const useTerminal = (onExit: () => void): UseTerminalReturn => {
+export const useTerminal = (onExit: () => void, isOpen: boolean): UseTerminalReturn => {
   const [lines, setLines] = useState<TerminalLine[]>([]);
   const [currentPath, setCurrentPath] = useState<string[]>([]);
   const [commandHistory, setCommandHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
+
+  // Reset terminal state when reopening
+  React.useEffect(() => {
+    if (isOpen) {
+      setLines([]);
+      setCurrentPath([]);
+      setCommandHistory([]);
+      setHistoryIndex(-1);
+    }
+  }, [isOpen]);
 
   const getPrompt = useCallback((path: string[]) => {
     const pathStr = path.length === 0 ? '~' : `~/${path.join('/')}`;
@@ -155,8 +165,45 @@ Available commands:
       .filter(c => c.type === 'file')
       .map(c => c.name);
 
-    const output = [...dirs.map(d => `\x1b[36m${d}\x1b[0m`), ...files].join('  ');
-    addLine({ type: 'directory', content: output || '(empty directory)' });
+    // Combine dirs (with color code) and files
+    const allItems = [...dirs.map(d => `\x1b[36m${d}\x1b[0m`), ...files];
+    
+    if (allItems.length === 0) {
+      addLine({ type: 'directory', content: '(empty directory)' });
+      return;
+    }
+
+    // Format into columns (max 5 columns)
+    const maxCols = 5;
+    const rows: string[][] = [];
+    for (let i = 0; i < allItems.length; i += maxCols) {
+      rows.push(allItems.slice(i, i + maxCols));
+    }
+    
+    // Calculate column widths for alignment
+    const colWidths: number[] = [];
+    for (let col = 0; col < maxCols; col++) {
+      let maxWidth = 0;
+      for (const row of rows) {
+        if (row[col]) {
+          // Remove ANSI codes for width calculation
+          const cleanName = row[col].replace(/\x1b\[\d+m/g, '');
+          maxWidth = Math.max(maxWidth, cleanName.length);
+        }
+      }
+      colWidths.push(maxWidth);
+    }
+    
+    // Build output with proper spacing
+    const output = rows.map(row => 
+      row.map((item, colIdx) => {
+        const cleanName = item.replace(/\x1b\[\d+m/g, '');
+        const padding = colWidths[colIdx] - cleanName.length + 2;
+        return item + ' '.repeat(Math.max(padding, 2));
+      }).join('')
+    ).join('\n');
+    
+    addLine({ type: 'directory', content: output });
   }, [getCurrentDirectory, addLine]);
 
   const handleCd = useCallback((target: string) => {

@@ -132,8 +132,7 @@ const Hero = ({ onDevModeClick }: HeroProps) => {
                 className="group border-border hover:border-primary/50 hover:bg-primary/5"
               >
                 <Terminal className="w-4 h-4 mr-2 group-hover:text-primary transition-colors" />
-                <span className="font-mono">&gt;_</span>
-                <span className="ml-1">Enter Dev Mode</span>
+                Enter Dev Mode
               </Button>
             </div>
             
