@@ -154,16 +154,23 @@ const DevModeTerminal = ({ isOpen, onClose }: DevModeTerminalProps) => {
         );
       case 'directory':
         return (
-          <div key={line.id} className="whitespace-pre-wrap">
-            {line.content.split('  ').map((item, i) => {
-              const isCyan = item.includes('\x1b[36m');
-              const cleanItem = item.replace(/\x1b\[\d+m/g, '');
-              return (
-                <span key={i} className={`${isCyan ? 'text-cyan-400' : 'text-foreground'} mr-4`}>
-                  {cleanItem}
-                </span>
-              );
-            })}
+          <div key={line.id} className="whitespace-pre font-mono">
+            {line.content.split('\n').map((rowLine, rowIdx) => (
+              <div key={rowIdx}>
+                {rowLine.split(/(\x1b\[36m[^\x1b]+\x1b\[0m|\S+)/).filter(Boolean).map((segment, segIdx) => {
+                  const isCyan = segment.includes('\x1b[36m');
+                  const cleanSegment = segment.replace(/\x1b\[\d+m/g, '');
+                  if (!cleanSegment.trim()) {
+                    return <span key={segIdx}>{cleanSegment}</span>;
+                  }
+                  return (
+                    <span key={segIdx} className={isCyan ? 'text-cyan-400' : 'text-foreground'}>
+                      {cleanSegment}
+                    </span>
+                  );
+                })}
+              </div>
+            ))}
           </div>
         );
       case 'json':
