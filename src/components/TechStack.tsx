@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { 
   SiPython, SiDjango, SiFastapi, SiElasticsearch, SiPandas, 
-  SiDocker, SiPostgresql, SiGit, SiRedis, SiLinux
+  SiDocker, SiPostgresql, SiGit, SiRedis, SiLinux, SiPostman,
+  SiJupyter, SiOpenai, SiGitlab, SiApachekafka, SiNginx, SiMysql, SiMongodb
 } from 'react-icons/si';
 import { Cloud, Box, Cpu, Layers, Workflow } from 'lucide-react';
 
@@ -11,7 +12,8 @@ interface Technology {
   color: string;
 }
 
-const technologies: Technology[] = [
+// Outer ring technologies (larger radius)
+const outerRingTech: Technology[] = [
   { name: 'Linux', icon: <SiLinux />, color: '#FCC624' },
   { name: 'Python', icon: <SiPython />, color: '#3776AB' },
   { name: 'Django', icon: <SiDjango />, color: '#092E20' },
@@ -27,6 +29,18 @@ const technologies: Technology[] = [
   { name: 'Git', icon: <SiGit />, color: '#F05032' },
   { name: 'LangChain', icon: <Workflow />, color: '#1C3C3C' },
   { name: 'Redis', icon: <SiRedis />, color: '#DC382D' },
+];
+
+// Inner ring technologies (smaller radius)
+const innerRingTech: Technology[] = [
+  { name: 'Postman', icon: <SiPostman />, color: '#FF6C37' },
+  { name: 'Jupyter', icon: <SiJupyter />, color: '#F37626' },
+  { name: 'OpenAI', icon: <SiOpenai />, color: '#412991' },
+  { name: 'GitLab', icon: <SiGitlab />, color: '#FC6D26' },
+  { name: 'Kafka', icon: <SiApachekafka />, color: '#231F20' },
+  { name: 'Nginx', icon: <SiNginx />, color: '#009639' },
+  { name: 'MySQL', icon: <SiMysql />, color: '#4479A1' },
+  { name: 'MongoDB', icon: <SiMongodb />, color: '#47A248' },
 ];
 
 const TechStack = () => {
@@ -63,19 +77,19 @@ const TechStack = () => {
           </p>
         </div>
 
-        <div className="reveal opacity-0 relative max-w-lg mx-auto" style={{ animationDelay: '0.2s' }}>
+        <div className="reveal opacity-0 relative max-w-2xl mx-auto" style={{ animationDelay: '0.2s' }}>
           {/* Orbital container */}
           <div className="relative aspect-square">
             {/* Center circle */}
             <div className="absolute inset-0 flex items-center justify-center">
               <div 
-                className={`w-28 h-28 md:w-36 md:h-36 rounded-full border-2 border-border bg-card flex flex-col items-center justify-center transition-all duration-300 ${
+                className={`w-32 h-32 md:w-40 md:h-40 rounded-full border-2 border-border bg-card flex flex-col items-center justify-center transition-all duration-300 ${
                   activeTech ? 'border-primary/50 glow-primary-subtle' : ''
                 }`}
               >
                 {activeTech ? (
                   <>
-                    <div className="text-4xl md:text-5xl mb-2" style={{ color: activeTech.color }}>
+                    <div className="text-5xl md:text-6xl mb-2" style={{ color: activeTech.color }}>
                       {activeTech.icon}
                     </div>
                     <span className="text-sm font-medium text-foreground">
@@ -90,13 +104,16 @@ const TechStack = () => {
               </div>
             </div>
 
-            {/* Orbital ring */}
-            <div className="absolute inset-6 md:inset-8 rounded-full border border-border/30" />
+            {/* Inner orbital ring */}
+            <div className="absolute inset-[28%] md:inset-[30%] rounded-full border border-border/30" />
+            
+            {/* Outer orbital ring */}
+            <div className="absolute inset-4 md:inset-6 rounded-full border border-border/30" />
 
-            {/* Technology icons */}
-            {technologies.map((tech, index) => {
-              const angle = (index / technologies.length) * 2 * Math.PI - Math.PI / 2;
-              const radius = 44; // percentage from center
+            {/* Inner ring technology icons */}
+            {innerRingTech.map((tech, index) => {
+              const angle = (index / innerRingTech.length) * 2 * Math.PI - Math.PI / 2;
+              const radius = 28; // percentage from center (inner ring)
               const x = 50 + radius * Math.cos(angle);
               const y = 50 + radius * Math.sin(angle);
 
@@ -104,6 +121,33 @@ const TechStack = () => {
                 <button
                   key={tech.name}
                   className="absolute orbit-item w-12 h-12 md:w-14 md:h-14 -translate-x-1/2 -translate-y-1/2 rounded-xl bg-card border border-border flex items-center justify-center text-2xl md:text-3xl hover:border-primary/50 hover:glow-primary-subtle focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all duration-200"
+                  style={{
+                    left: `${x}%`,
+                    top: `${y}%`,
+                    color: tech.color,
+                  }}
+                  onMouseEnter={() => setActiveTech(tech)}
+                  onMouseLeave={() => setActiveTech(null)}
+                  onFocus={() => setActiveTech(tech)}
+                  onBlur={() => setActiveTech(null)}
+                  aria-label={tech.name}
+                >
+                  {tech.icon}
+                </button>
+              );
+            })}
+
+            {/* Outer ring technology icons */}
+            {outerRingTech.map((tech, index) => {
+              const angle = (index / outerRingTech.length) * 2 * Math.PI - Math.PI / 2;
+              const radius = 44; // percentage from center (outer ring)
+              const x = 50 + radius * Math.cos(angle);
+              const y = 50 + radius * Math.sin(angle);
+
+              return (
+                <button
+                  key={tech.name}
+                  className="absolute orbit-item w-14 h-14 md:w-16 md:h-16 -translate-x-1/2 -translate-y-1/2 rounded-xl bg-card border border-border flex items-center justify-center text-3xl md:text-4xl hover:border-primary/50 hover:glow-primary-subtle focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all duration-200"
                   style={{
                     left: `${x}%`,
                     top: `${y}%`,
