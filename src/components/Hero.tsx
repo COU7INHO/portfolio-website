@@ -1,9 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
-import { ChevronDown, Download } from 'lucide-react';
+import { ChevronDown, Download, Terminal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import profilePhoto from '@/assets/profile-photo.png';
 
-const Hero = () => {
+interface HeroProps {
+  onDevModeClick: () => void;
+}
+
+const Hero = ({ onDevModeClick }: HeroProps) => {
   const heroRef = useRef<HTMLDivElement>(null);
   const [displayedName, setDisplayedName] = useState('');
   const [showCursor, setShowCursor] = useState(true);
@@ -107,7 +111,7 @@ const Hero = () => {
             </div>
 
             <div 
-              className={`transition-opacity duration-500 ease-out delay-100 ${showContent ? 'opacity-100' : 'opacity-0'}`}
+              className={`flex flex-wrap gap-3 transition-opacity duration-500 ease-out delay-100 ${showContent ? 'opacity-100' : 'opacity-0'}`}
             >
               <Button
                 variant="outline"
@@ -119,6 +123,17 @@ const Hero = () => {
                   <Download className="w-4 h-4 mr-2 group-hover:text-primary transition-colors" />
                   Download Resume
                 </a>
+              </Button>
+              
+              <Button
+                variant="outline"
+                size="lg"
+                onClick={onDevModeClick}
+                className="group border-border hover:border-primary/50 hover:bg-primary/5"
+              >
+                <Terminal className="w-4 h-4 mr-2 group-hover:text-primary transition-colors" />
+                <span className="font-mono">&gt;_</span>
+                <span className="ml-1">Enter Dev Mode</span>
               </Button>
             </div>
             
