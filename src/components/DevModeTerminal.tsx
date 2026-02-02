@@ -42,7 +42,7 @@ const DevModeTerminal = ({ isOpen, onClose }: DevModeTerminalProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const { lines, prompt, executeCommand, navigateHistory, autocomplete } = useTerminal(onClose);
+  const { lines, prompt, executeCommand, navigateHistory, autocomplete } = useTerminal(onClose, isOpen);
 
   // Boot sequence
   useEffect(() => {
