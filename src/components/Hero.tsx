@@ -72,9 +72,9 @@ const Hero = () => {
   }, []);
 
   const scrollToNextSection = () => {
-    const journeySection = document.getElementById('journey');
-    if (journeySection) {
-      journeySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const aboutSection = document.getElementById('about');
+    if (aboutSection) {
+      aboutSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
 
@@ -105,15 +105,6 @@ const Hero = () => {
               </p>
             </div>
             
-            <div 
-              className={`transition-opacity duration-500 ease-out delay-100 ${showContent ? 'opacity-100' : 'opacity-0'}`}
-            >
-              <p className="text-lg text-secondary-foreground leading-relaxed max-w-lg">
-                Building intelligent solutions at the intersection of AI, data engineering, 
-                and software development. Specialized in RAG-powered applications, 
-                machine learning pipelines, and scalable software architectures.
-              </p>
-            </div>
           </div>
           
           {/* Right side - Photo */}

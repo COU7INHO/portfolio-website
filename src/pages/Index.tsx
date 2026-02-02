@@ -1,5 +1,6 @@
 import Navigation from '@/components/Navigation';
 import Hero from '@/components/Hero';
+import AboutMe from '@/components/AboutMe';
 import Timeline from '@/components/Timeline';
 import Education from '@/components/Education';
 import TechStack from '@/components/TechStack';
@@ -14,6 +15,7 @@ const Index = () => {
       <Navigation />
       <main className="relative z-10">
         <Hero />
+        <AboutMe />
         <Timeline />
         <Education />
         <TechStack />
