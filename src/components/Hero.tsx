@@ -117,7 +117,7 @@ const Hero = () => {
               >
                 <a href="/Tiago_Coutinho_CV.pdf" download>
                   <Download className="w-4 h-4 mr-2 group-hover:text-primary transition-colors" />
-                  Download CV
+                  Download Resume
                 </a>
               </Button>
             </div>
