@@ -65,6 +65,12 @@ const TechStack = () => {
     return () => observer.disconnect();
   }, []);
 
+  // Ellipse radii (percentages from center)
+  const outerRadiusX = 46; // horizontal radius for outer ring
+  const outerRadiusY = 42; // vertical radius for outer ring
+  const innerRadiusX = 28; // horizontal radius for inner ring
+  const innerRadiusY = 24; // vertical radius for inner ring
+
   return (
     <section id="skills" ref={sectionRef} className="py-16 relative">
       <div className="container mx-auto px-6">
@@ -77,19 +83,19 @@ const TechStack = () => {
           </p>
         </div>
 
-        <div className="reveal opacity-0 relative max-w-2xl mx-auto" style={{ animationDelay: '0.2s' }}>
-          {/* Orbital container */}
-          <div className="relative aspect-square">
+        <div className="reveal opacity-0 relative max-w-4xl mx-auto" style={{ animationDelay: '0.2s' }}>
+          {/* Elliptical orbital container - wider than tall */}
+          <div className="relative w-full" style={{ paddingBottom: '55%' }}>
             {/* Center circle */}
             <div className="absolute inset-0 flex items-center justify-center">
               <div 
-                className={`w-32 h-32 md:w-40 md:h-40 rounded-full border-2 border-border bg-card flex flex-col items-center justify-center transition-all duration-300 ${
+                className={`w-28 h-28 md:w-36 md:h-36 rounded-full border-2 border-border bg-card flex flex-col items-center justify-center transition-all duration-300 ${
                   activeTech ? 'border-primary/50 glow-primary-subtle' : ''
                 }`}
               >
                 {activeTech ? (
                   <>
-                    <div className="text-5xl md:text-6xl mb-2" style={{ color: activeTech.color }}>
+                    <div className="text-4xl md:text-5xl mb-2" style={{ color: activeTech.color }}>
                       {activeTech.icon}
                     </div>
                     <span className="text-sm font-medium text-foreground">
@@ -104,23 +110,38 @@ const TechStack = () => {
               </div>
             </div>
 
-            {/* Inner orbital ring */}
-            <div className="absolute inset-[28%] md:inset-[30%] rounded-full border border-border/30" />
+            {/* Inner elliptical ring */}
+            <div 
+              className="absolute border border-border/30 rounded-[50%]"
+              style={{
+                left: `${50 - innerRadiusX}%`,
+                right: `${50 - innerRadiusX}%`,
+                top: `${50 - innerRadiusY}%`,
+                bottom: `${50 - innerRadiusY}%`,
+              }}
+            />
             
-            {/* Outer orbital ring */}
-            <div className="absolute inset-4 md:inset-6 rounded-full border border-border/30" />
+            {/* Outer elliptical ring */}
+            <div 
+              className="absolute border border-border/30 rounded-[50%]"
+              style={{
+                left: `${50 - outerRadiusX}%`,
+                right: `${50 - outerRadiusX}%`,
+                top: `${50 - outerRadiusY}%`,
+                bottom: `${50 - outerRadiusY}%`,
+              }}
+            />
 
             {/* Inner ring technology icons */}
             {innerRingTech.map((tech, index) => {
               const angle = (index / innerRingTech.length) * 2 * Math.PI - Math.PI / 2;
-              const radius = 28; // percentage from center (inner ring)
-              const x = 50 + radius * Math.cos(angle);
-              const y = 50 + radius * Math.sin(angle);
+              const x = 50 + innerRadiusX * Math.cos(angle);
+              const y = 50 + innerRadiusY * Math.sin(angle);
 
               return (
                 <button
                   key={tech.name}
-                  className="absolute orbit-item w-12 h-12 md:w-14 md:h-14 -translate-x-1/2 -translate-y-1/2 rounded-xl bg-card border border-border flex items-center justify-center text-2xl md:text-3xl hover:border-primary/50 hover:glow-primary-subtle focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all duration-200"
+                  className="absolute orbit-item w-11 h-11 md:w-14 md:h-14 -translate-x-1/2 -translate-y-1/2 rounded-xl bg-card border border-border flex items-center justify-center text-xl md:text-3xl hover:border-primary/50 hover:glow-primary-subtle focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all duration-200"
                   style={{
                     left: `${x}%`,
                     top: `${y}%`,
@@ -140,14 +161,13 @@ const TechStack = () => {
             {/* Outer ring technology icons */}
             {outerRingTech.map((tech, index) => {
               const angle = (index / outerRingTech.length) * 2 * Math.PI - Math.PI / 2;
-              const radius = 44; // percentage from center (outer ring)
-              const x = 50 + radius * Math.cos(angle);
-              const y = 50 + radius * Math.sin(angle);
+              const x = 50 + outerRadiusX * Math.cos(angle);
+              const y = 50 + outerRadiusY * Math.sin(angle);
 
               return (
                 <button
                   key={tech.name}
-                  className="absolute orbit-item w-14 h-14 md:w-16 md:h-16 -translate-x-1/2 -translate-y-1/2 rounded-xl bg-card border border-border flex items-center justify-center text-3xl md:text-4xl hover:border-primary/50 hover:glow-primary-subtle focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all duration-200"
+                  className="absolute orbit-item w-12 h-12 md:w-16 md:h-16 -translate-x-1/2 -translate-y-1/2 rounded-xl bg-card border border-border flex items-center justify-center text-2xl md:text-4xl hover:border-primary/50 hover:glow-primary-subtle focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all duration-200"
                   style={{
                     left: `${x}%`,
                     top: `${y}%`,
