@@ -24,6 +24,7 @@ const education: EducationEntry[] = [
     institution: 'Universidade Católica Portuguesa',
     degree: "Master's Degree in Biomedical Engineering",
     years: '2020 - 2022',
+    description: 'Advanced studies in biology, computational methods, and data processing applied to healthcare, with a thesis focused on developing a software solution for gait analysis in lower limb amputees using computer vision and signal processing',
     logo: ucpLogo,
   },
   {
@@ -31,6 +32,7 @@ const education: EducationEntry[] = [
     institution: 'Universidade Católica Portuguesa',
     degree: "Bachelor's Degree in Bioengineering",
     years: '2017 - 2020',
+    description: 'Foundations in biology, biomedical sciences, signal processing, and programming, building a multidisciplinary profile that bridges life sciences with technology and software development',
     logo: ucpLogo,
   },
 ];

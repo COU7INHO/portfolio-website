@@ -10,6 +10,7 @@ interface EducationEntry {
   degree: string;
   institution: string;
   years: string;
+  description: string;
   logo: string;
 }
 
@@ -19,6 +20,7 @@ const educationData: EducationEntry[] = [
     degree: "Master's Degree in Biomedical Engineering",
     institution: 'Universidade Católica Portuguesa',
     years: '2020 - 2022',
+    description: 'Advanced studies in biology, computational methods, and data processing applied to healthcare, with a thesis focused on developing a software solution for gait analysis in lower limb amputees using computer vision and signal processing',
     logo: ucpLogo,
   },
   {
@@ -26,6 +28,7 @@ const educationData: EducationEntry[] = [
     degree: "Bachelor's Degree in Bioengineering",
     institution: 'Universidade Católica Portuguesa',
     years: '2017 - 2020',
+    description: 'Foundations in biology, biomedical sciences, signal processing, and programming, building a multidisciplinary profile that bridges life sciences with technology and software development',
     logo: ucpLogo,
   },
 ];
@@ -108,6 +111,9 @@ const Education = () => {
                         </h3>
                         <p className="text-muted-foreground text-sm mt-1">
                           {entry.institution}
+                        </p>
+                        <p className="text-secondary-foreground text-sm mt-2 line-clamp-2">
+                          {entry.description}
                         </p>
                         <p className="text-primary/80 text-sm mt-2 font-medium">
                           {entry.years}
