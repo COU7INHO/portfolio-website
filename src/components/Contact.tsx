@@ -1,5 +1,6 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { Github, Linkedin } from 'lucide-react';
+import { Turnstile } from '@marsidev/react-turnstile';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -14,6 +15,7 @@ type SubmitState = 'idle' | 'submitting' | 'success' | 'error';
 const Contact = () => {
   const [hoveredLink, setHoveredLink] = useState<number | null>(null);
   const [submitState, setSubmitState] = useState<SubmitState>('idle');
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -21,6 +23,10 @@ const Contact = () => {
     setSubmitState('submitting');
 
     const formData = new FormData(e.currentTarget);
+    
+    if (turnstileToken) {
+      formData.append('cf-turnstile-response', turnstileToken);
+    }
 
     try {
       const response = await fetch('https://formspree.io/f/maqbgkjq', {
@@ -34,6 +40,7 @@ const Contact = () => {
       if (response.ok) {
         setSubmitState('success');
         formRef.current?.reset();
+        setTurnstileToken(null);
         setTimeout(() => setSubmitState('idle'), 3000);
       } else {
         setSubmitState('error');
@@ -159,9 +166,16 @@ const Contact = () => {
                 />
               </div>
 
+              <Turnstile
+                siteKey="0x4AAAAAACXVZnMb55dYrxut"
+                onSuccess={(token) => setTurnstileToken(token)}
+                onExpire={() => setTurnstileToken(null)}
+                options={{ theme: 'dark' }}
+              />
+
               <Button
                 type="submit"
-                disabled={submitState === 'submitting'}
+                disabled={submitState === 'submitting' || !turnstileToken}
                 className={`
                   w-full relative overflow-hidden
                   bg-primary text-primary-foreground
