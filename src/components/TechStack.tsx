@@ -1,51 +1,30 @@
 import { useState, useEffect, useRef } from 'react';
-import { 
-  SiPython, SiDjango, SiFastapi, SiElasticsearch, SiPandas, 
-  SiDocker, SiPostgresql, SiGit, SiRedis, SiLinux, SiPostman,
-  SiJupyter, SiOpenai, SiGitlab, SiApachekafka, SiNginx, SiMysql, SiMongodb
-} from 'react-icons/si';
-import { Cloud, Box, Cpu, Layers, Workflow } from 'lucide-react';
-
-interface Technology {
-  name: string;
-  icon: React.ReactNode;
-  color: string;
-}
-
-// Outer ring technologies (larger radius)
-const outerRingTech: Technology[] = [
-  { name: 'Linux', icon: <SiLinux />, color: '#FCC624' },
-  { name: 'Python', icon: <SiPython />, color: '#3776AB' },
-  { name: 'Django', icon: <SiDjango />, color: '#092E20' },
-  { name: 'FastAPI', icon: <SiFastapi />, color: '#009688' },
-  { name: 'Elasticsearch', icon: <SiElasticsearch />, color: '#005571' },
-  { name: 'OpenSearch', icon: <Layers />, color: '#005EB8' },
-  { name: 'YOLO', icon: <Cpu />, color: '#FF6F00' },
-  { name: 'Pandas', icon: <SiPandas />, color: '#150458' },
-  { name: 'Azure', icon: <Cloud />, color: '#0078D4' },
-  { name: 'Fusion360', icon: <Box />, color: '#FF6D00' },
-  { name: 'Docker', icon: <SiDocker />, color: '#2496ED' },
-  { name: 'PostgreSQL', icon: <SiPostgresql />, color: '#4169E1' },
-  { name: 'Git', icon: <SiGit />, color: '#F05032' },
-  { name: 'LangChain', icon: <Workflow />, color: '#1C3C3C' },
-  { name: 'Redis', icon: <SiRedis />, color: '#DC382D' },
-];
-
-// Inner ring technologies (smaller radius)
-const innerRingTech: Technology[] = [
-  { name: 'Postman', icon: <SiPostman />, color: '#FF6C37' },
-  { name: 'Jupyter', icon: <SiJupyter />, color: '#F37626' },
-  { name: 'OpenAI', icon: <SiOpenai />, color: '#412991' },
-  { name: 'GitLab', icon: <SiGitlab />, color: '#FC6D26' },
-  { name: 'Kafka', icon: <SiApachekafka />, color: '#231F20' },
-  { name: 'Nginx', icon: <SiNginx />, color: '#009639' },
-  { name: 'MySQL', icon: <SiMysql />, color: '#4479A1' },
-  { name: 'MongoDB', icon: <SiMongodb />, color: '#47A248' },
-];
+import Constellation, { constellationData } from './Constellation';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const TechStack = () => {
-  const [activeTech, setActiveTech] = useState<Technology | null>(null);
+  const [activeConstellation, setActiveConstellation] = useState<string | null>(null);
+  const [activeStarId, setActiveStarId] = useState<string | null>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [dimensions, setDimensions] = useState({ width: 800, height: 500 });
+  const isMobile = useIsMobile();
+
+  useEffect(() => {
+    const updateDimensions = () => {
+      if (containerRef.current) {
+        const rect = containerRef.current.getBoundingClientRect();
+        setDimensions({
+          width: rect.width,
+          height: isMobile ? 600 : Math.min(rect.width * 0.6, 500),
+        });
+      }
+    };
+
+    updateDimensions();
+    window.addEventListener('resize', updateDimensions);
+    return () => window.removeEventListener('resize', updateDimensions);
+  }, [isMobile]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -65,124 +44,127 @@ const TechStack = () => {
     return () => observer.disconnect();
   }, []);
 
-  // Ellipse radii (percentages from center)
-  const outerRadiusX = 46; // horizontal radius for outer ring
-  const outerRadiusY = 42; // vertical radius for outer ring
-  const innerRadiusX = 28; // horizontal radius for inner ring
-  const innerRadiusY = 24; // vertical radius for inner ring
+  const handleStarHover = (starId: string | null, constellationName: string | null) => {
+    setActiveStarId(starId);
+    setActiveConstellation(constellationName);
+  };
+
+  // Mobile-adjusted positions
+  const getMobileData = (): Record<string, { stars: { id: string; name: string; x: number; y: number }[]; connections: [number, number][] }> => ({
+    'Languages & Frameworks': {
+      stars: [
+        { id: 'python', name: 'Python', x: 0.2, y: 0.08 },
+        { id: 'django', name: 'Django', x: 0.12, y: 0.15 },
+        { id: 'fastapi', name: 'FastAPI', x: 0.28, y: 0.15 },
+      ],
+      connections: [[0, 1], [1, 2], [0, 2]],
+    },
+    'Data & AI': {
+      stars: [
+        { id: 'elasticsearch', name: 'Elasticsearch', x: 0.55, y: 0.06 },
+        { id: 'opensearch', name: 'OpenSearch', x: 0.68, y: 0.10 },
+        { id: 'yolo', name: 'YOLO', x: 0.80, y: 0.08 },
+        { id: 'pandas', name: 'Pandas', x: 0.75, y: 0.16 },
+        { id: 'langchain', name: 'LangChain', x: 0.62, y: 0.18 },
+        { id: 'openai', name: 'OpenAI', x: 0.50, y: 0.16 },
+        { id: 'jupyter', name: 'Jupyter', x: 0.45, y: 0.12 },
+      ],
+      connections: [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6]],
+    },
+    'Cloud & Infrastructure': {
+      stars: [
+        { id: 'azure', name: 'Azure', x: 0.15, y: 0.32 },
+        { id: 'docker', name: 'Docker', x: 0.28, y: 0.38 },
+        { id: 'nginx', name: 'Nginx', x: 0.42, y: 0.32 },
+        { id: 'kafka', name: 'Kafka', x: 0.56, y: 0.38 },
+        { id: 'linux', name: 'Linux', x: 0.70, y: 0.32 },
+      ],
+      connections: [[0, 1], [1, 2], [2, 3], [3, 4]],
+    },
+    'Databases': {
+      stars: [
+        { id: 'postgresql', name: 'PostgreSQL', x: 0.20, y: 0.55 },
+        { id: 'redis', name: 'Redis', x: 0.35, y: 0.60 },
+        { id: 'mysql', name: 'MySQL', x: 0.50, y: 0.55 },
+        { id: 'mongodb', name: 'MongoDB', x: 0.35, y: 0.68 },
+      ],
+      connections: [[0, 1], [1, 2], [1, 3], [0, 3]],
+    },
+    'Tools': {
+      stars: [
+        { id: 'git', name: 'Git', x: 0.60, y: 0.58 },
+        { id: 'gitlab', name: 'GitLab', x: 0.75, y: 0.62 },
+        { id: 'postman', name: 'Postman', x: 0.68, y: 0.72 },
+        { id: 'fusion360', name: 'Fusion360', x: 0.82, y: 0.70 },
+      ],
+      connections: [[0, 1], [1, 2], [2, 3], [1, 3]],
+    },
+  });
+
+  const data = isMobile ? getMobileData() : constellationData;
 
   return (
     <section id="skills" ref={sectionRef} className="py-16 relative">
       <div className="container mx-auto px-6">
-        <div className="reveal opacity-0 text-center mb-10">
+        <div className="reveal opacity-0 text-center mb-8">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
             Skills
           </h2>
           <p className="text-muted-foreground max-w-md mx-auto">
-            Technologies I work with daily to build intelligent solutions
+            Technologies I navigate daily
           </p>
         </div>
 
-        <div className="reveal opacity-0 relative max-w-4xl mx-auto" style={{ animationDelay: '0.2s' }}>
-          {/* Elliptical orbital container - wider than tall */}
-          <div className="relative w-full" style={{ paddingBottom: '55%' }}>
-            {/* Center circle */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div 
-                className={`w-28 h-28 md:w-36 md:h-36 rounded-full border-2 border-border bg-card flex flex-col items-center justify-center transition-all duration-300 ${
-                  activeTech ? 'border-primary/50 glow-primary-subtle' : ''
+        <div 
+          ref={containerRef}
+          className="reveal opacity-0 relative max-w-5xl mx-auto"
+          style={{ animationDelay: '0.2s' }}
+        >
+          <svg
+            width={dimensions.width}
+            height={dimensions.height}
+            viewBox={`0 0 ${dimensions.width} ${dimensions.height}`}
+            className="overflow-visible"
+          >
+            {/* Background subtle grid effect */}
+            <defs>
+              <radialGradient id="starGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.8" />
+                <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0" />
+              </radialGradient>
+            </defs>
+
+            {Object.entries(data).map(([name, { stars, connections }]) => (
+              <Constellation
+                key={name}
+                name={name}
+                stars={stars}
+                connections={connections}
+                isActive={activeConstellation === name}
+                activeStarId={activeConstellation === name ? activeStarId : null}
+                onStarHover={handleStarHover}
+                containerWidth={dimensions.width}
+                containerHeight={dimensions.height}
+              />
+            ))}
+          </svg>
+
+          {/* Legend */}
+          <div className="flex flex-wrap justify-center gap-4 mt-8 text-sm text-muted-foreground">
+            {Object.keys(data).map((name) => (
+              <button
+                key={name}
+                className={`px-3 py-1 rounded-full border transition-all duration-300 ${
+                  activeConstellation === name
+                    ? 'border-primary/50 text-primary bg-primary/10'
+                    : 'border-border/50 hover:border-primary/30 hover:text-foreground'
                 }`}
+                onMouseEnter={() => setActiveConstellation(name)}
+                onMouseLeave={() => setActiveConstellation(null)}
               >
-                {activeTech ? (
-                  <>
-                    <div className="text-4xl md:text-5xl mb-2" style={{ color: activeTech.color }}>
-                      {activeTech.icon}
-                    </div>
-                    <span className="text-sm font-medium text-foreground">
-                      {activeTech.name}
-                    </span>
-                  </>
-                ) : (
-                  <span className="text-sm text-muted-foreground text-center px-4">
-                    Hover to explore
-                  </span>
-                )}
-              </div>
-            </div>
-
-            {/* Inner elliptical ring */}
-            <div 
-              className="absolute border border-border/30 rounded-[50%]"
-              style={{
-                left: `${50 - innerRadiusX}%`,
-                right: `${50 - innerRadiusX}%`,
-                top: `${50 - innerRadiusY}%`,
-                bottom: `${50 - innerRadiusY}%`,
-              }}
-            />
-            
-            {/* Outer elliptical ring */}
-            <div 
-              className="absolute border border-border/30 rounded-[50%]"
-              style={{
-                left: `${50 - outerRadiusX}%`,
-                right: `${50 - outerRadiusX}%`,
-                top: `${50 - outerRadiusY}%`,
-                bottom: `${50 - outerRadiusY}%`,
-              }}
-            />
-
-            {/* Inner ring technology icons */}
-            {innerRingTech.map((tech, index) => {
-              const angle = (index / innerRingTech.length) * 2 * Math.PI - Math.PI / 2;
-              const x = 50 + innerRadiusX * Math.cos(angle);
-              const y = 50 + innerRadiusY * Math.sin(angle);
-
-              return (
-                <button
-                  key={tech.name}
-                  className="absolute orbit-item w-11 h-11 md:w-14 md:h-14 -translate-x-1/2 -translate-y-1/2 rounded-xl bg-card border border-border flex items-center justify-center text-xl md:text-3xl hover:border-primary/50 hover:glow-primary-subtle focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all duration-200"
-                  style={{
-                    left: `${x}%`,
-                    top: `${y}%`,
-                    color: tech.color,
-                  }}
-                  onMouseEnter={() => setActiveTech(tech)}
-                  onMouseLeave={() => setActiveTech(null)}
-                  onFocus={() => setActiveTech(tech)}
-                  onBlur={() => setActiveTech(null)}
-                  aria-label={tech.name}
-                >
-                  {tech.icon}
-                </button>
-              );
-            })}
-
-            {/* Outer ring technology icons */}
-            {outerRingTech.map((tech, index) => {
-              const angle = (index / outerRingTech.length) * 2 * Math.PI - Math.PI / 2;
-              const x = 50 + outerRadiusX * Math.cos(angle);
-              const y = 50 + outerRadiusY * Math.sin(angle);
-
-              return (
-                <button
-                  key={tech.name}
-                  className="absolute orbit-item w-12 h-12 md:w-16 md:h-16 -translate-x-1/2 -translate-y-1/2 rounded-xl bg-card border border-border flex items-center justify-center text-2xl md:text-4xl hover:border-primary/50 hover:glow-primary-subtle focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all duration-200"
-                  style={{
-                    left: `${x}%`,
-                    top: `${y}%`,
-                    color: tech.color,
-                  }}
-                  onMouseEnter={() => setActiveTech(tech)}
-                  onMouseLeave={() => setActiveTech(null)}
-                  onFocus={() => setActiveTech(tech)}
-                  onBlur={() => setActiveTech(null)}
-                  aria-label={tech.name}
-                >
-                  {tech.icon}
-                </button>
-              );
-            })}
+                {name}
+              </button>
+            ))}
           </div>
         </div>
       </div>

@@ -119,14 +119,18 @@
     box-shadow: 0 0 15px hsl(var(--primary) / 0.3);
   }
 
-  /* Orbital animation */
-  .orbit-item {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  /* Constellation twinkle animation */
+  .animate-twinkle {
+    animation: twinkle 3s ease-in-out infinite;
   }
 
-  .orbit-item:hover {
-    transform: scale(1.2);
-    z-index: 10;
+  @keyframes twinkle {
+    0%, 100% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 0.4;
+    }
   }
 
   /* Card hover effects */
