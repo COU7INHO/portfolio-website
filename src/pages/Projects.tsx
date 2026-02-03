@@ -13,25 +13,20 @@ const projects: Project[] = [
   {
     title: 'Speed Champion',
     description: 'A karting lap time tracking app that uses AI and OCR to parse race classifications.',
-    longDescription: `Speed Champion is a karting lap time tracking application designed for competitive friend groups. 
-    The app leverages AI and OCR technology to automatically parse race classification sheets, eliminating manual data entry. 
-    Track your performance, compare times with friends, and settle debates about who's really the fastest on the track.`,
-    howItWasBuilt: `The application was built with a modern stack focusing on performance and user experience. 
-    The frontend uses React with TypeScript for type safety and Tailwind CSS for rapid UI development. 
-    The backend is powered by FastAPI (Python) which handles the AI/OCR processing pipeline. 
-    Images are processed using computer vision techniques to extract lap times and driver information from race sheets. 
-    All data is stored in PostgreSQL with proper indexing for fast queries on historical data. 
-    The OCR pipeline uses a combination of image preprocessing, text detection, and custom parsing logic to accurately extract structured data from various race sheet formats.`,
+    longDescription: `Speed Champion is a karting lap time tracking app built for competitive friend groups. It uses AI-powered OCR (Mistral OCR) to automatically read and parse race classification sheets, eliminating the need for manual data entry. Track your performance, compare lap times with friends, and settle the debate about who's really the fastest on the track.`,
+    howItWasBuilt: `The frontend was built with React and TypeScript using Lovable, an AI-powered development tool, styled with Tailwind CSS for a clean and responsive interface. The backend runs on Django and Django REST Framework, handling the OCR processing pipeline powered by Mistral's OCR API to extract lap times and driver data from race sheet images. All data is stored in PostgreSQL with optimized queries for fast access to historical race data. The entire application is self-hosted on a Raspberry Pi 5, running behind Nginx as a reverse proxy — a compact and efficient home server setup that keeps the project running 24/7.`,
     features: [
-      'AI-powered OCR for automatic lap time extraction from race sheets',
+      'AI-powered OCR (Mistral) for automatic lap time extraction from race sheets',
       'Real-time leaderboards and performance tracking',
       'Head-to-head comparison between drivers',
       'Historical data analysis and performance trends',
       'Mobile-friendly interface for trackside use',
+      'Self-hosted on a Raspberry Pi 5',
     ],
-    technologies: ['React', 'TypeScript', 'FastAPI', 'Python', 'PostgreSQL', 'OCR/AI', 'Tailwind CSS', 'Docker'],
+    technologies: ['React', 'TypeScript', 'Django', 'Django REST Framework', 'Python', 'PostgreSQL', 'Mistral OCR', 'Tailwind CSS', 'Nginx', 'Raspberry Pi', 'Docker'],
     liveUrl: 'https://karts.tiago-coutinho.com',
-    githubUrl: '#',
+    githubBackendUrl: 'https://github.com/COU7INHO/karst-app-backend',
+    githubFrontendUrl: 'https://github.com/COU7INHO/speedway-stats',
     status: 'Live',
     screenshots: [kartsMainPage, kartsRacePage],
   },

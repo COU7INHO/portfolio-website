@@ -11,6 +11,8 @@ export interface Project {
   technologies: string[];
   liveUrl?: string;
   githubUrl?: string;
+  githubBackendUrl?: string;
+  githubFrontendUrl?: string;
   status: 'Live' | 'In Development' | 'Archived';
   screenshots?: string[];
 }
@@ -139,6 +141,28 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
               >
                 <Github className="w-4 h-4" />
                 Source
+              </a>
+            )}
+            {project.githubBackendUrl && (
+              <a
+                href={project.githubBackendUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2 border border-border text-foreground font-medium rounded-lg hover:border-primary/50 hover:bg-primary/5 transition-all text-sm"
+              >
+                <Github className="w-4 h-4" />
+                Backend
+              </a>
+            )}
+            {project.githubFrontendUrl && (
+              <a
+                href={project.githubFrontendUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2 border border-border text-foreground font-medium rounded-lg hover:border-primary/50 hover:bg-primary/5 transition-all text-sm"
+              >
+                <Github className="w-4 h-4" />
+                Frontend
               </a>
             )}
           </div>
