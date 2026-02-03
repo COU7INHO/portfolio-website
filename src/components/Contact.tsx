@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Github, Linkedin, Mail } from 'lucide-react';
+import { Github, Linkedin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -7,7 +7,6 @@ import { Textarea } from '@/components/ui/textarea';
 const socialLinks = [
   { icon: Github, label: 'GitHub', href: 'https://github.com/COU7INHO' },
   { icon: Linkedin, label: 'LinkedIn', href: 'https://www.linkedin.com/in/tiagocoutinho/?locale=en_US' },
-  { icon: Mail, label: 'Email', href: 'mailto:contact@example.com' },
 ];
 
 type SubmitState = 'idle' | 'submitting' | 'success' | 'error';
