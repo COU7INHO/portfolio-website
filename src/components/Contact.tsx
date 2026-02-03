@@ -166,12 +166,14 @@ const Contact = () => {
                 />
               </div>
 
-              <Turnstile
-                siteKey="0x4AAAAAACXVZnMb55dYrxut"
-                onSuccess={(token) => setTurnstileToken(token)}
-                onExpire={() => setTurnstileToken(null)}
-                options={{ theme: 'dark' }}
-              />
+              <div className="flex justify-center">
+                <Turnstile
+                  siteKey="0x4AAAAAACXVZnMb55dYrxut"
+                  onSuccess={(token) => setTurnstileToken(token)}
+                  onExpire={() => setTurnstileToken(null)}
+                  options={{ theme: 'dark' }}
+                />
+              </div>
 
               <Button
                 type="submit"
