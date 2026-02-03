@@ -1,9 +1,11 @@
-import { useState, useEffect, useRef } from 'react';
-import Constellation, { constellationData } from './Constellation';
+import { useState, useEffect, useRef, useMemo } from 'react';
+import { X } from 'lucide-react';
+import Constellation, { constellationData, iconMap } from './Constellation';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 const TechStack = () => {
-  const [activeConstellation, setActiveConstellation] = useState<string | null>(null);
+  const [hoveredConstellation, setHoveredConstellation] = useState<string | null>(null);
+  const [zoomedConstellation, setZoomedConstellation] = useState<string | null>(null);
   const [activeStarId, setActiveStarId] = useState<string | null>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -46,11 +48,51 @@ const TechStack = () => {
 
   const handleStarHover = (starId: string | null, constellationName: string | null) => {
     setActiveStarId(starId);
-    setActiveConstellation(constellationName);
+    if (!zoomedConstellation) {
+      setHoveredConstellation(constellationName);
+    }
   };
 
+  const handleCategoryClick = (category: string) => {
+    if (zoomedConstellation === category) {
+      setZoomedConstellation(null);
+    } else {
+      setZoomedConstellation(category);
+      setHoveredConstellation(null);
+    }
+  };
+
+  const handleBackdropClick = () => {
+    if (zoomedConstellation) {
+      setZoomedConstellation(null);
+    }
+  };
+
+  // Calculate zoom transform for centered view of a constellation
+  const getZoomTransform = useMemo(() => {
+    if (!zoomedConstellation) return { transform: 'scale(1) translate(0, 0)' };
+    
+    const constellation = constellationData[zoomedConstellation];
+    if (!constellation) return { transform: 'scale(1) translate(0, 0)' };
+    
+    const centerX = constellation.center.x;
+    const centerY = constellation.center.y;
+    
+    // Calculate translation to center the constellation
+    const translateX = (0.5 - centerX) * dimensions.width;
+    const translateY = (0.5 - centerY) * dimensions.height;
+    
+    return {
+      transform: `scale(2) translate(${translateX / 2}px, ${translateY / 2}px)`,
+    };
+  }, [zoomedConstellation, dimensions]);
+
   // Mobile-adjusted positions
-  const getMobileData = (): Record<string, { stars: { id: string; name: string; x: number; y: number }[]; connections: [number, number][] }> => ({
+  const getMobileData = (): Record<string, { 
+    stars: { id: string; name: string; x: number; y: number }[]; 
+    connections: [number, number][];
+    center: { x: number; y: number };
+  }> => ({
     'Languages & Frameworks': {
       stars: [
         { id: 'python', name: 'Python', x: 0.2, y: 0.08 },
@@ -58,6 +100,7 @@ const TechStack = () => {
         { id: 'fastapi', name: 'FastAPI', x: 0.28, y: 0.15 },
       ],
       connections: [[0, 1], [1, 2], [0, 2]],
+      center: { x: 0.2, y: 0.12 },
     },
     'Data & AI': {
       stars: [
@@ -70,6 +113,7 @@ const TechStack = () => {
         { id: 'jupyter', name: 'Jupyter', x: 0.45, y: 0.12 },
       ],
       connections: [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6]],
+      center: { x: 0.62, y: 0.12 },
     },
     'Cloud & Infrastructure': {
       stars: [
@@ -80,6 +124,7 @@ const TechStack = () => {
         { id: 'linux', name: 'Linux', x: 0.70, y: 0.32 },
       ],
       connections: [[0, 1], [1, 2], [2, 3], [3, 4]],
+      center: { x: 0.42, y: 0.35 },
     },
     'Databases': {
       stars: [
@@ -89,6 +134,7 @@ const TechStack = () => {
         { id: 'mongodb', name: 'MongoDB', x: 0.35, y: 0.68 },
       ],
       connections: [[0, 1], [1, 2], [1, 3], [0, 3]],
+      center: { x: 0.35, y: 0.60 },
     },
     'Tools': {
       stars: [
@@ -98,10 +144,13 @@ const TechStack = () => {
         { id: 'fusion360', name: 'Fusion360', x: 0.82, y: 0.70 },
       ],
       connections: [[0, 1], [1, 2], [2, 3], [1, 3]],
+      center: { x: 0.71, y: 0.65 },
     },
   });
 
   const data = isMobile ? getMobileData() : constellationData;
+
+  const activeConstellation = zoomedConstellation || hoveredConstellation;
 
   return (
     <section id="skills" ref={sectionRef} className="py-16 relative">
@@ -120,52 +169,92 @@ const TechStack = () => {
           className="reveal opacity-0 relative max-w-5xl mx-auto"
           style={{ animationDelay: '0.2s' }}
         >
-          <svg
-            width={dimensions.width}
-            height={dimensions.height}
-            viewBox={`0 0 ${dimensions.width} ${dimensions.height}`}
-            className="overflow-visible"
+          {/* Zoom backdrop - click to close */}
+          {zoomedConstellation && (
+            <div 
+              className="absolute inset-0 z-10 cursor-pointer"
+              onClick={handleBackdropClick}
+            />
+          )}
+
+          {/* Close button when zoomed */}
+          {zoomedConstellation && (
+            <button
+              onClick={() => setZoomedConstellation(null)}
+              className="absolute top-2 right-2 z-20 p-2 rounded-full bg-card/80 border border-border/50 text-muted-foreground hover:text-foreground hover:border-primary/50 transition-all duration-300"
+              aria-label="Close zoom"
+            >
+              <X size={18} />
+            </button>
+          )}
+
+          <div 
+            className="overflow-hidden rounded-lg"
+            style={{ height: dimensions.height }}
           >
-            {/* Background subtle grid effect */}
-            <defs>
-              <radialGradient id="starGlow" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.8" />
-                <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0" />
-              </radialGradient>
-            </defs>
+            <svg
+              width={dimensions.width}
+              height={dimensions.height}
+              viewBox={`0 0 ${dimensions.width} ${dimensions.height}`}
+              className="overflow-visible transition-transform duration-600 ease-out"
+              style={{
+                ...getZoomTransform,
+                transformOrigin: 'center center',
+                transition: 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
+              }}
+            >
+              <defs>
+                <radialGradient id="starGlow" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.8" />
+                  <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0" />
+                </radialGradient>
+              </defs>
 
-            {Object.entries(data).map(([name, { stars, connections }]) => (
-              <Constellation
-                key={name}
-                name={name}
-                stars={stars}
-                connections={connections}
-                isActive={activeConstellation === name}
-                activeStarId={activeConstellation === name ? activeStarId : null}
-                onStarHover={handleStarHover}
-                containerWidth={dimensions.width}
-                containerHeight={dimensions.height}
-              />
-            ))}
-          </svg>
+              {Object.entries(data).map(([name, { stars, connections }]) => (
+                <Constellation
+                  key={name}
+                  name={name}
+                  stars={stars}
+                  connections={connections}
+                  isActive={activeConstellation === name}
+                  activeStarId={activeConstellation === name ? activeStarId : null}
+                  onStarHover={handleStarHover}
+                  containerWidth={dimensions.width}
+                  containerHeight={dimensions.height}
+                  isZoomed={zoomedConstellation === name}
+                  isHidden={zoomedConstellation !== null && zoomedConstellation !== name}
+                />
+              ))}
+            </svg>
+          </div>
 
-          {/* Legend */}
-          <div className="flex flex-wrap justify-center gap-4 mt-8 text-sm text-muted-foreground">
+          {/* Category buttons */}
+          <div className="flex flex-wrap justify-center gap-3 mt-8 text-sm">
             {Object.keys(data).map((name) => (
               <button
                 key={name}
-                className={`px-3 py-1 rounded-full border transition-all duration-300 ${
-                  activeConstellation === name
-                    ? 'border-primary/50 text-primary bg-primary/10'
-                    : 'border-border/50 hover:border-primary/30 hover:text-foreground'
+                onClick={() => handleCategoryClick(name)}
+                className={`px-4 py-1.5 rounded-full border transition-all duration-300 ${
+                  zoomedConstellation === name
+                    ? 'border-primary text-primary bg-primary/20 shadow-lg shadow-primary/20'
+                    : activeConstellation === name
+                      ? 'border-primary/50 text-primary bg-primary/10'
+                      : 'border-border/50 text-muted-foreground hover:border-primary/30 hover:text-foreground'
                 }`}
-                onMouseEnter={() => setActiveConstellation(name)}
-                onMouseLeave={() => setActiveConstellation(null)}
+                onMouseEnter={() => !zoomedConstellation && setHoveredConstellation(name)}
+                onMouseLeave={() => !zoomedConstellation && setHoveredConstellation(null)}
               >
                 {name}
               </button>
             ))}
           </div>
+
+          {/* Zoom instruction hint */}
+          {!zoomedConstellation && (
+            <p className="text-center text-xs text-muted-foreground/60 mt-4">
+              Click a category to zoom in
+            </p>
+          )}
         </div>
       </div>
     </section>
