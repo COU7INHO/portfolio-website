@@ -2,9 +2,10 @@ import React from 'react';
 import { 
   SiPython, SiDjango, SiFastapi, SiElasticsearch, SiPandas, 
   SiDocker, SiPostgresql, SiGit, SiRedis, SiLinux, SiPostman,
-  SiJupyter, SiOpenai, SiGitlab, SiApachekafka, SiNginx, SiMysql, SiMongodb
+  SiOpenai, SiGitlab, SiApachekafka, SiNginx, SiMysql,
+  SiScikitlearn, SiOpencv, SiCelery, SiSocketdotio
 } from 'react-icons/si';
-import { Cloud, Box, Cpu, Layers, Workflow } from 'lucide-react';
+import { Cloud, Cpu, Layers, Workflow, Sparkles } from 'lucide-react';
 
 interface Star {
   id: string;
@@ -31,6 +32,7 @@ interface ConstellationProps {
 export const iconMap: Record<string, React.ReactNode> = {
   'Python': <SiPython />,
   'Django': <SiDjango />,
+  'Django REST Framework': <SiDjango />,
   'FastAPI': <SiFastapi />,
   'Elasticsearch': <SiElasticsearch />,
   'OpenSearch': <Layers size={16} />,
@@ -38,20 +40,22 @@ export const iconMap: Record<string, React.ReactNode> = {
   'Pandas': <SiPandas />,
   'LangChain': <Workflow size={16} />,
   'OpenAI': <SiOpenai />,
-  'Jupyter': <SiJupyter />,
+  'Scikit-learn': <SiScikitlearn />,
+  'OpenCV': <SiOpencv />,
+  'Hugging Face': <Sparkles size={16} />,
   'Azure': <Cloud size={16} />,
   'Docker': <SiDocker />,
   'Nginx': <SiNginx />,
   'Kafka': <SiApachekafka />,
   'Linux': <SiLinux />,
+  'Celery': <SiCelery />,
   'PostgreSQL': <SiPostgresql />,
   'Redis': <SiRedis />,
   'MySQL': <SiMysql />,
-  'MongoDB': <SiMongodb />,
   'Git': <SiGit />,
   'GitLab': <SiGitlab />,
   'Postman': <SiPostman />,
-  'Fusion360': <Box size={16} />,
+  'Socket.IO': <SiSocketdotio />,
 };
 
 const Constellation = ({
@@ -227,51 +231,54 @@ export const constellationData: Record<string, {
 }> = {
   'Languages & Frameworks': {
     stars: [
-      { id: 'python', name: 'Python', x: 0.12, y: 0.25 },
-      { id: 'django', name: 'Django', x: 0.08, y: 0.45 },
-      { id: 'fastapi', name: 'FastAPI', x: 0.16, y: 0.55 },
+      { id: 'python', name: 'Python', x: 0.12, y: 0.22 },
+      { id: 'django', name: 'Django', x: 0.06, y: 0.38 },
+      { id: 'drf', name: 'Django REST Framework', x: 0.18, y: 0.38 },
+      { id: 'fastapi', name: 'FastAPI', x: 0.12, y: 0.54 },
     ],
-    connections: [[0, 1], [1, 2], [0, 2]],
+    connections: [[0, 1], [0, 2], [1, 3], [2, 3]],
   },
   'Data & AI': {
     stars: [
-      { id: 'elasticsearch', name: 'Elasticsearch', x: 0.28, y: 0.18 },
-      { id: 'opensearch', name: 'OpenSearch', x: 0.35, y: 0.22 },
-      { id: 'yolo', name: 'YOLO', x: 0.42, y: 0.28 },
-      { id: 'pandas', name: 'Pandas', x: 0.38, y: 0.38 },
-      { id: 'langchain', name: 'LangChain', x: 0.32, y: 0.48 },
-      { id: 'openai', name: 'OpenAI', x: 0.26, y: 0.55 },
-      { id: 'jupyter', name: 'Jupyter', x: 0.22, y: 0.65 },
+      { id: 'yolo', name: 'YOLO', x: 0.28, y: 0.12 },
+      { id: 'opencv', name: 'OpenCV', x: 0.38, y: 0.16 },
+      { id: 'pandas', name: 'Pandas', x: 0.32, y: 0.26 },
+      { id: 'scikitlearn', name: 'Scikit-learn', x: 0.42, y: 0.30 },
+      { id: 'elasticsearch', name: 'Elasticsearch', x: 0.26, y: 0.40 },
+      { id: 'opensearch', name: 'OpenSearch', x: 0.36, y: 0.44 },
+      { id: 'langchain', name: 'LangChain', x: 0.30, y: 0.56 },
+      { id: 'openai', name: 'OpenAI', x: 0.40, y: 0.58 },
+      { id: 'huggingface', name: 'Hugging Face', x: 0.35, y: 0.68 },
     ],
-    connections: [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6]],
+    connections: [[0, 1], [0, 2], [1, 3], [2, 3], [2, 4], [3, 5], [4, 5], [4, 6], [5, 7], [6, 7], [6, 8], [7, 8]],
   },
   'Cloud & Infrastructure': {
     stars: [
-      { id: 'azure', name: 'Azure', x: 0.52, y: 0.15 },
-      { id: 'docker', name: 'Docker', x: 0.58, y: 0.28 },
-      { id: 'nginx', name: 'Nginx', x: 0.65, y: 0.18 },
-      { id: 'kafka', name: 'Kafka', x: 0.72, y: 0.30 },
-      { id: 'linux', name: 'Linux', x: 0.78, y: 0.20 },
+      { id: 'azure', name: 'Azure', x: 0.56, y: 0.14 },
+      { id: 'docker', name: 'Docker', x: 0.66, y: 0.18 },
+      { id: 'kafka', name: 'Kafka', x: 0.76, y: 0.14 },
+      { id: 'nginx', name: 'Nginx', x: 0.60, y: 0.30 },
+      { id: 'celery', name: 'Celery', x: 0.70, y: 0.34 },
+      { id: 'linux', name: 'Linux', x: 0.80, y: 0.28 },
     ],
-    connections: [[0, 1], [1, 2], [2, 3], [3, 4]],
+    connections: [[0, 1], [1, 2], [0, 3], [1, 4], [2, 5], [3, 4], [4, 5]],
   },
   'Databases': {
     stars: [
-      { id: 'postgresql', name: 'PostgreSQL', x: 0.68, y: 0.50 },
-      { id: 'redis', name: 'Redis', x: 0.75, y: 0.58 },
-      { id: 'mysql', name: 'MySQL', x: 0.82, y: 0.52 },
-      { id: 'mongodb', name: 'MongoDB', x: 0.75, y: 0.68 },
+      { id: 'postgresql', name: 'PostgreSQL', x: 0.72, y: 0.52 },
+      { id: 'mysql', name: 'MySQL', x: 0.82, y: 0.58 },
+      { id: 'redis', name: 'Redis', x: 0.77, y: 0.70 },
     ],
-    connections: [[0, 1], [1, 2], [1, 3], [0, 3]],
+    connections: [[0, 1], [1, 2], [0, 2]],
   },
   'Tools': {
     stars: [
-      { id: 'git', name: 'Git', x: 0.48, y: 0.62 },
-      { id: 'gitlab', name: 'GitLab', x: 0.55, y: 0.70 },
-      { id: 'postman', name: 'Postman', x: 0.52, y: 0.82 },
-      { id: 'fusion360', name: 'Fusion360', x: 0.62, y: 0.78 },
+      { id: 'git', name: 'Git', x: 0.52, y: 0.58 },
+      { id: 'gitlab', name: 'GitLab', x: 0.62, y: 0.62 },
+      { id: 'postman', name: 'Postman', x: 0.54, y: 0.74 },
+      { id: 'socketio', name: 'Socket.IO', x: 0.64, y: 0.78 },
     ],
-    connections: [[0, 1], [1, 2], [2, 3], [1, 3]],
+    connections: [[0, 1], [0, 2], [1, 3], [2, 3]],
   },
 };
 
