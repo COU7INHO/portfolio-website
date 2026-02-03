@@ -247,9 +247,10 @@ const TechStack = () => {
                 fill="transparent"
               />
 
+              {/* First pass: render all lines (behind) */}
               {Object.entries(data).map(([name, { stars, connections }]) => (
                 <Constellation
-                  key={name}
+                  key={`${name}-lines`}
                   name={name}
                   stars={stars}
                   connections={connections}
@@ -260,6 +261,25 @@ const TechStack = () => {
                   containerHeight={dimensions.height}
                   isZoomed={zoomedConstellation === name}
                   isHidden={zoomedConstellation !== null && zoomedConstellation !== name}
+                  renderMode="lines"
+                />
+              ))}
+
+              {/* Second pass: render all icons (on top) */}
+              {Object.entries(data).map(([name, { stars, connections }]) => (
+                <Constellation
+                  key={`${name}-icons`}
+                  name={name}
+                  stars={stars}
+                  connections={connections}
+                  isActive={activeConstellation === name}
+                  activeStarId={activeStarId}
+                  onStarHover={handleStarHover}
+                  containerWidth={dimensions.width}
+                  containerHeight={dimensions.height}
+                  isZoomed={zoomedConstellation === name}
+                  isHidden={zoomedConstellation !== null && zoomedConstellation !== name}
+                  renderMode="icons"
                 />
               ))}
             </svg>
