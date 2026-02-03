@@ -95,17 +95,22 @@ const bachelorsContent = JSON.stringify({
 const speedChampionContent = JSON.stringify({
   name: "Speed Champion",
   description: "A karting lap time tracking app that uses AI and OCR to parse race classifications.",
-  longDescription: "Speed Champion is a karting lap time tracking application designed for competitive friend groups. The app leverages AI and OCR technology to automatically parse race classification sheets, eliminating manual data entry. Track your performance, compare times with friends, and settle debates about who's really the fastest on the track.",
+  longDescription: "Speed Champion is a karting lap time tracking app built for competitive friend groups. It uses AI-powered OCR (Mistral OCR) to automatically read and parse race classification sheets, eliminating the need for manual data entry. Track your performance, compare lap times with friends, and settle the debate about who's really the fastest on the track.",
   url: "karts.tiago-coutinho.com",
   status: "Live",
   features: [
-    "AI-powered OCR for automatic lap time extraction",
+    "AI-powered OCR (Mistral) for automatic lap time extraction from race sheets",
     "Real-time leaderboards and performance tracking",
     "Head-to-head comparison between drivers",
     "Historical data analysis and performance trends",
-    "Mobile-friendly interface for trackside use"
+    "Mobile-friendly interface for trackside use",
+    "Self-hosted on a Raspberry Pi 5"
   ],
-  technologies: ["React", "TypeScript", "FastAPI", "Python", "PostgreSQL", "OCR/AI", "Tailwind CSS", "Docker"]
+  technologies: ["React", "TypeScript", "Django", "Django REST Framework", "Python", "PostgreSQL", "Mistral OCR", "Tailwind CSS", "Nginx", "Raspberry Pi", "Docker"],
+  github: {
+    backend: "https://github.com/COU7INHO/karst-app-backend",
+    frontend: "https://github.com/COU7INHO/speedway-stats"
+  }
 }, null, 2);
 
 export const fileSystem: FileSystemEntry = {
