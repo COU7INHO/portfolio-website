@@ -268,7 +268,6 @@ const DevModeTerminal = ({ isOpen, onClose }: DevModeTerminalProps) => {
                   autoCapitalize="off"
                   spellCheck={false}
                 />
-                <span className="animate-pulse text-primary">▋</span>
               </div>
             </div>
           )}
