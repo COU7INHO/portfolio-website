@@ -33,18 +33,20 @@ const AboutMe = () => {
         <div className="reveal opacity-0 max-w-2xl mx-auto">
           <div className="space-y-5 text-center">
             <p className="text-lg text-secondary-foreground leading-relaxed font-light">
-              I build intelligent solutions at the intersection of AI, data engineering, 
-              and software development.
+              I'm a Software Engineer turned AI Data Engineer with a background in Biomedical Engineering. 
+              My journey started in biology and healthcare, where I discovered a passion for building 
+              software that turns complex data into meaningful insights.
             </p>
             
             <p className="text-lg text-secondary-foreground leading-relaxed font-light">
-              My expertise lies in RAG-powered applications, machine learning pipelines, 
-              and designing scalable software architectures that solve real-world problems.
+              From developing computer vision applications for clinical gait analysis to optimizing 
+              high-performance APIs handling thousands of daily requests, I've always been drawn to 
+              solving real-world problems through code.
             </p>
             
             <p className="text-lg text-secondary-foreground leading-relaxed font-light">
-              I'm passionate about leveraging cutting-edge technology to create 
-              meaningful impact through clean, efficient, and maintainable code.
+              Currently at Glintt Global, I work on AI-powered solutions involving RAG architectures, 
+              machine learning pipelines, and intelligent data orchestration.
             </p>
           </div>
         </div>
