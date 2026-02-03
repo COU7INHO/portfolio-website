@@ -167,11 +167,17 @@ const DevModeTerminal = ({ isOpen, onClose }: DevModeTerminalProps) => {
   const [bootPhase, setBootPhase] = useState<'booting' | 'welcome' | 'ready'>('booting');
   const [bootStep, setBootStep] = useState(0);
   const [inputValue, setInputValue] = useState('');
+  const [htopVisible, setHtopVisible] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const { lines, prompt, executeCommand, navigateHistory, autocomplete, showHtop, closeHtop } = useTerminal(onClose, isOpen);
+
+  // Sync htop visibility with hook state
+  useEffect(() => {
+    setHtopVisible(showHtop);
+  }, [showHtop]);
 
   // Boot sequence
   useEffect(() => {
@@ -346,8 +352,11 @@ const DevModeTerminal = ({ isOpen, onClose }: DevModeTerminalProps) => {
         </div>
 
         {/* Htop display */}
-        {showHtop ? (
-          <HtopDisplay onClose={closeHtop} />
+        {htopVisible ? (
+          <HtopDisplay onClose={() => {
+            closeHtop();
+            setHtopVisible(false);
+          }} />
         ) : (
           /* Terminal content */
           <div 
