@@ -48,20 +48,16 @@ const HtopDisplay = ({ onClose }: { onClose: () => void }) => {
     return () => clearInterval(interval);
   }, []);
 
-  // Close on any key press
+  // Close only on ESC key press
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      e.preventDefault();
-      onClose();
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        onClose();
+      }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [onClose]);
-
-  // Auto-close after 4 seconds
-  useEffect(() => {
-    const timer = setTimeout(onClose, 4000);
-    return () => clearTimeout(timer);
   }, [onClose]);
 
   const cpuFilled = Math.floor(cpuPercent / 5);
@@ -157,7 +153,7 @@ const HtopDisplay = ({ onClose }: { onClose: () => void }) => {
 
       {/* Footer hint */}
       <div className="bg-[#1a1a2e] px-2 py-2 text-center text-muted-foreground border-t border-cyan-800">
-        <span className="text-cyan-400">Press any key to exit</span>
+        <span className="text-cyan-400">Press ESC to exit</span>
       </div>
     </div>
   );
