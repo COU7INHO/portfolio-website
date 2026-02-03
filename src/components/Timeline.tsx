@@ -1,13 +1,18 @@
 import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { Building2, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
+
+// Import company logos
+import glinttLogo from '@/assets/logos/glintt.png';
+import noniusLogo from '@/assets/logos/nonius.png';
+import padraoLogo from '@/assets/logos/padrao-ortopedico.png';
 
 interface TimelineEntry {
   id: string;
   company: string;
   position: string;
   years: string;
-  logo?: string;
+  logo: string;
 }
 
 const timelineData: TimelineEntry[] = [
@@ -16,18 +21,21 @@ const timelineData: TimelineEntry[] = [
     company: 'Glintt Global',
     position: 'AI Data Engineer',
     years: '2023 - Present',
+    logo: glinttLogo,
   },
   {
     id: 'nonius',
     company: 'Nonius',
     position: 'Software Engineer',
     years: '2021 - 2023',
+    logo: noniusLogo,
   },
   {
     id: 'padrao',
     company: 'Padrão Ortopédico',
     position: 'Biomedical Engineer',
     years: '2019 - 2021',
+    logo: padraoLogo,
   },
 ];
 
@@ -96,8 +104,12 @@ const Timeline = () => {
                     className="group block p-6 bg-card border border-border rounded-xl card-hover"
                   >
                     <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 bg-secondary rounded-lg flex items-center justify-center shrink-0">
-                        <Building2 className="w-6 h-6 text-primary" />
+                      <div className="w-12 h-12 rounded-lg flex items-center justify-center shrink-0 bg-white/90 border border-border/50 overflow-hidden">
+                        <img 
+                          src={entry.logo} 
+                          alt={`${entry.company} logo`}
+                          className="w-10 h-10 object-contain"
+                        />
                       </div>
                       <div className="flex-1 min-w-0">
                         <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">

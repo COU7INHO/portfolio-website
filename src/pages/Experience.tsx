@@ -3,8 +3,13 @@ import Navigation from '@/components/Navigation';
 import BackButton from '@/components/BackButton';
 import Footer from '@/components/Footer';
 import ParticlesBackground from '@/components/ParticlesBackground';
-import { Building2, Calendar, MapPin } from 'lucide-react';
+import { Calendar, MapPin } from 'lucide-react';
 import { useScrollToTop } from '@/hooks/useScrollToTop';
+
+// Import company logos
+import glinttLogo from '@/assets/logos/glintt.png';
+import noniusLogo from '@/assets/logos/nonius.png';
+import padraoLogo from '@/assets/logos/padrao-ortopedico.png';
 
 interface ExperienceEntry {
   id: string;
@@ -14,6 +19,7 @@ interface ExperienceEntry {
   location?: string;
   description: string[];
   technologies: string[];
+  logo: string;
 }
 
 const experiences: ExperienceEntry[] = [
@@ -30,6 +36,7 @@ const experiences: ExperienceEntry[] = [
       'Implementing LLM integrations with LangChain and custom frameworks',
     ],
     technologies: ['Python', 'LangChain', 'FastAPI', 'Elasticsearch', 'Docker', 'Azure'],
+    logo: glinttLogo,
   },
   {
     id: 'nonius',
@@ -44,6 +51,7 @@ const experiences: ExperienceEntry[] = [
       'Collaborated on CI/CD pipelines and deployment automation',
     ],
     technologies: ['Python', 'Django', 'PostgreSQL', 'Redis', 'Docker', 'Git'],
+    logo: noniusLogo,
   },
   {
     id: 'padrao',
@@ -58,6 +66,7 @@ const experiences: ExperienceEntry[] = [
       'Collaborated with medical professionals on patient-specific solutions',
     ],
     technologies: ['Fusion360', 'YOLO', 'Python', 'CAD/CAM'],
+    logo: padraoLogo,
   },
 ];
 
@@ -112,9 +121,13 @@ const Experience = () => {
               >
                 <div className="p-6 md:p-8 bg-card border border-border rounded-xl card-hover">
                   <div className="flex flex-col md:flex-row md:items-start gap-6">
-                    {/* Icon */}
-                    <div className="w-16 h-16 bg-secondary rounded-xl flex items-center justify-center shrink-0">
-                      <Building2 className="w-8 h-8 text-primary" />
+                    {/* Logo */}
+                    <div className="w-16 h-16 rounded-xl flex items-center justify-center shrink-0 bg-white/90 border border-border/50 overflow-hidden">
+                      <img 
+                        src={exp.logo} 
+                        alt={`${exp.company} logo`}
+                        className="w-12 h-12 object-contain"
+                      />
                     </div>
 
                     <div className="flex-1">

@@ -1,12 +1,16 @@
 import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { GraduationCap, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
+
+// Import university logo
+import ucpLogo from '@/assets/logos/universidade-catolica.jpg';
 
 interface EducationEntry {
   id: string;
   degree: string;
   institution: string;
   years: string;
+  logo: string;
 }
 
 const educationData: EducationEntry[] = [
@@ -15,12 +19,14 @@ const educationData: EducationEntry[] = [
     degree: "Master's Degree in Biomedical Engineering",
     institution: 'Universidade Católica Portuguesa',
     years: '2017 - 2019',
+    logo: ucpLogo,
   },
   {
     id: 'bachelors',
     degree: "Bachelor's Degree in Bioengineering",
     institution: 'Universidade Católica Portuguesa',
     years: '2014 - 2017',
+    logo: ucpLogo,
   },
 ];
 
@@ -89,8 +95,12 @@ const Education = () => {
                     className="group block p-5 bg-card border border-border rounded-xl card-hover"
                   >
                     <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 bg-secondary rounded-lg flex items-center justify-center shrink-0">
-                        <GraduationCap className="w-6 h-6 text-primary" />
+                      <div className="w-12 h-12 rounded-lg flex items-center justify-center shrink-0 bg-white/90 border border-border/50 overflow-hidden">
+                        <img 
+                          src={entry.logo} 
+                          alt={`${entry.institution} logo`}
+                          className="w-10 h-10 object-contain"
+                        />
                       </div>
                       <div className="flex-1 min-w-0">
                         <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
