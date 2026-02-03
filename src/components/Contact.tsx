@@ -5,14 +5,9 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 
 const socialLinks = [
-  { icon: Github, label: 'GitHub', href: 'https://github.com', x: 20, y: 30 },
-  { icon: Linkedin, label: 'LinkedIn', href: 'https://linkedin.com', x: 60, y: 10 },
-  { icon: Mail, label: 'Email', href: 'mailto:contact@example.com', x: 80, y: 50 },
-];
-
-const constellationLines = [
-  { from: 0, to: 1 },
-  { from: 1, to: 2 },
+  { icon: Github, label: 'GitHub', href: 'https://github.com/COU7INHO' },
+  { icon: Linkedin, label: 'LinkedIn', href: 'https://www.linkedin.com/in/tiagocoutinho/?locale=en_US' },
+  { icon: Mail, label: 'Email', href: 'mailto:contact@example.com' },
 ];
 
 type SubmitState = 'idle' | 'submitting' | 'success' | 'error';
@@ -79,35 +74,8 @@ const Contact = () => {
               </p>
             </div>
 
-            {/* Mini Constellation Social Links */}
-            <div className="relative h-32 w-full max-w-xs">
-              <svg
-                className="absolute inset-0 w-full h-full"
-                viewBox="0 0 100 60"
-                preserveAspectRatio="xMidYMid meet"
-              >
-                {/* Constellation Lines */}
-                {constellationLines.map((line, idx) => {
-                  const from = socialLinks[line.from];
-                  const to = socialLinks[line.to];
-                  const isHighlighted = hoveredLink === line.from || hoveredLink === line.to;
-                  return (
-                    <line
-                      key={idx}
-                      x1={from.x}
-                      y1={from.y}
-                      x2={to.x}
-                      y2={to.y}
-                      stroke="hsl(var(--primary))"
-                      strokeWidth={isHighlighted ? 1 : 0.5}
-                      strokeOpacity={isHighlighted ? 0.8 : 0.3}
-                      className="transition-all duration-300"
-                    />
-                  );
-                })}
-              </svg>
-
-              {/* Social Link Icons */}
+            {/* Social Links Row */}
+            <div className="flex items-center gap-4">
               {socialLinks.map((link, idx) => {
                 const Icon = link.icon;
                 const isHovered = hoveredLink === idx;
@@ -117,19 +85,14 @@ const Contact = () => {
                     href={link.href}
                     target={link.href.startsWith('mailto:') ? undefined : '_blank'}
                     rel="noopener noreferrer"
-                    className="absolute group"
-                    style={{
-                      left: `${link.x}%`,
-                      top: `${link.y}%`,
-                      transform: 'translate(-50%, -50%)',
-                    }}
+                    className="group"
                     onMouseEnter={() => setHoveredLink(idx)}
                     onMouseLeave={() => setHoveredLink(null)}
                     aria-label={link.label}
                   >
                     <div
                       className={`
-                        w-10 h-10 rounded-full flex items-center justify-center
+                        w-12 h-12 rounded-full flex items-center justify-center
                         bg-background/50 border border-border/50
                         transition-all duration-300
                         ${isHovered 
@@ -144,17 +107,6 @@ const Contact = () => {
                         }`} 
                       />
                     </div>
-                    {/* Tooltip */}
-                    <span
-                      className={`
-                        absolute -bottom-8 left-1/2 -translate-x-1/2
-                        text-xs text-muted-foreground whitespace-nowrap
-                        transition-all duration-300
-                        ${isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-1'}
-                      `}
-                    >
-                      {link.label}
-                    </span>
                   </a>
                 );
               })}
