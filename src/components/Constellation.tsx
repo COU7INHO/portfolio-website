@@ -26,6 +26,7 @@ interface ConstellationProps {
   containerHeight: number;
   isZoomed: boolean;
   isHidden: boolean;
+  renderMode: 'lines' | 'icons';
 }
 
 // Icon mapping
@@ -69,6 +70,7 @@ const Constellation = ({
   containerHeight,
   isZoomed,
   isHidden,
+  renderMode,
 }: ConstellationProps) => {
   // Check if the currently hovered star belongs to this constellation
   const isStarInThisConstellation = (starId: string | null): boolean => {
@@ -101,38 +103,52 @@ const Constellation = ({
     return startIdx === hoveredIndex || endIdx === hoveredIndex;
   };
 
+  // Render lines only
+  if (renderMode === 'lines') {
+    return (
+      <g 
+        className="constellation-lines"
+        style={{
+          opacity: isHidden ? 0 : 1,
+          pointerEvents: 'none',
+          transition: 'opacity 0.4s ease-out',
+        }}
+      >
+        {connections.map(([startIdx, endIdx], idx) => {
+          const startStar = stars[startIdx];
+          const endStar = stars[endIdx];
+          if (!startStar || !endStar) return null;
+          
+          const isHighlighted = isConnectionHighlighted(startIdx, endIdx);
+          
+          return (
+            <line
+              key={`line-${idx}`}
+              x1={startStar.x * containerWidth}
+              y1={startStar.y * containerHeight}
+              x2={endStar.x * containerWidth}
+              y2={endStar.y * containerHeight}
+              stroke="hsl(var(--primary))"
+              strokeWidth={isHighlighted ? 2 : isActive || isZoomed ? 1.5 : 1}
+              strokeOpacity={isHighlighted ? 0.8 : isActive || isZoomed ? 0.5 : 0.1}
+              style={{ transition: 'all 0.3s ease-out' }}
+            />
+          );
+        })}
+      </g>
+    );
+  }
+
+  // Render icons only
   return (
     <g 
-      className="constellation-group"
+      className="constellation-icons"
       style={{
         opacity: isHidden ? 0 : 1,
         pointerEvents: isHidden ? 'none' : 'auto',
         transition: 'opacity 0.4s ease-out',
       }}
     >
-      {/* Connection lines */}
-      {connections.map(([startIdx, endIdx], idx) => {
-        const startStar = stars[startIdx];
-        const endStar = stars[endIdx];
-        if (!startStar || !endStar) return null;
-        
-        const isHighlighted = isConnectionHighlighted(startIdx, endIdx);
-        
-        return (
-          <line
-            key={`line-${idx}`}
-            x1={startStar.x * containerWidth}
-            y1={startStar.y * containerHeight}
-            x2={endStar.x * containerWidth}
-            y2={endStar.y * containerHeight}
-            stroke="hsl(var(--primary))"
-            strokeWidth={isHighlighted ? 2 : isActive || isZoomed ? 1.5 : 1}
-            strokeOpacity={isHighlighted ? 0.8 : isActive || isZoomed ? 0.5 : 0.1}
-            style={{ transition: 'all 0.3s ease-out' }}
-          />
-        );
-      })}
-
       {/* Stars with icons */}
       {stars.map((star) => {
         const isHovered = activeStarId === star.id;
