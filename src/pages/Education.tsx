@@ -7,7 +7,7 @@ import { Calendar } from 'lucide-react';
 import { useScrollToTop } from '@/hooks/useScrollToTop';
 
 // Import university logo
-import ucpLogo from '@/assets/logos/universidade-catolica.jpg';
+import ucpLogo from '@/assets/logos/universidade-catolica.png';
 
 interface EducationEntry {
   id: string;

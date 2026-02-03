@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 
 // Import university logo
-import ucpLogo from '@/assets/logos/universidade-catolica.jpg';
+import ucpLogo from '@/assets/logos/universidade-catolica.png';
 
 interface EducationEntry {
   id: string;
