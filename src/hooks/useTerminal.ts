@@ -14,11 +14,13 @@ interface UseTerminalReturn {
   prompt: string;
   commandHistory: string[];
   historyIndex: number;
+  showHtop: boolean;
   addLine: (line: Omit<TerminalLine, 'id'>) => void;
   executeCommand: (command: string) => void;
   clearTerminal: () => void;
   navigateHistory: (direction: 'up' | 'down') => string;
   autocomplete: (partial: string) => string;
+  closeHtop: () => void;
 }
 
 let lineIdCounter = 0;
@@ -28,6 +30,7 @@ export const useTerminal = (onExit: () => void, isOpen: boolean): UseTerminalRet
   const [currentPath, setCurrentPath] = useState<string[]>([]);
   const [commandHistory, setCommandHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
+  const [showHtop, setShowHtop] = useState(false);
 
   // Reset terminal state when reopening
   React.useEffect(() => {
@@ -36,8 +39,13 @@ export const useTerminal = (onExit: () => void, isOpen: boolean): UseTerminalRet
       setCurrentPath([]);
       setCommandHistory([]);
       setHistoryIndex(-1);
+      setShowHtop(false);
     }
   }, [isOpen]);
+
+  const closeHtop = useCallback(() => {
+    setShowHtop(false);
+  }, []);
 
   const getPrompt = useCallback((path: string[]) => {
     const pathStr = path.length === 0 ? '~' : `~/${path.join('/')}`;
@@ -114,6 +122,9 @@ export const useTerminal = (onExit: () => void, isOpen: boolean): UseTerminalRet
         break;
       case 'rm':
         handleRm();
+        break;
+      case 'htop':
+        setShowHtop(true);
         break;
       default:
         addLine({
@@ -408,10 +419,12 @@ Available commands:
     prompt,
     commandHistory,
     historyIndex,
+    showHtop,
     addLine,
     executeCommand,
     clearTerminal,
     navigateHistory,
-    autocomplete
+    autocomplete,
+    closeHtop
   };
 };
