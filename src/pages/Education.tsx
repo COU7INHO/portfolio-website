@@ -23,16 +23,14 @@ const education: EducationEntry[] = [
     id: 'masters',
     institution: 'Universidade Católica Portuguesa',
     degree: "Master's Degree in Biomedical Engineering",
-    years: '2017 - 2019',
-    description: 'Thesis focused on machine learning applications in medical imaging and diagnostics.',
+    years: '2020 - 2022',
     logo: ucpLogo,
   },
   {
     id: 'bachelors',
     institution: 'Universidade Católica Portuguesa',
     degree: "Bachelor's Degree in Bioengineering",
-    years: '2014 - 2017',
-    description: 'Foundation in engineering principles applied to biological and medical systems.',
+    years: '2017 - 2020',
     logo: ucpLogo,
   },
 ];

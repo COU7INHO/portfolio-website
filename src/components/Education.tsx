@@ -18,14 +18,14 @@ const educationData: EducationEntry[] = [
     id: 'masters',
     degree: "Master's Degree in Biomedical Engineering",
     institution: 'Universidade Católica Portuguesa',
-    years: '2017 - 2019',
+    years: '2020 - 2022',
     logo: ucpLogo,
   },
   {
     id: 'bachelors',
     degree: "Bachelor's Degree in Bioengineering",
     institution: 'Universidade Católica Portuguesa',
-    years: '2014 - 2017',
+    years: '2017 - 2020',
     logo: ucpLogo,
   },
 ];
