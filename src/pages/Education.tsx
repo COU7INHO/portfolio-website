@@ -89,11 +89,11 @@ const EducationPage = () => {
                 <div className="p-6 md:p-8 bg-card border border-border rounded-xl card-hover">
                   <div className="flex flex-col md:flex-row md:items-start gap-6">
                     {/* Logo */}
-                    <div className="w-16 h-16 rounded-xl flex items-center justify-center shrink-0 bg-white/90 border border-border/50 overflow-hidden">
+                    <div className="w-16 h-16 flex items-center justify-center shrink-0">
                       <img 
                         src={edu.logo} 
                         alt={`${edu.institution} logo`}
-                        className="w-12 h-12 object-contain"
+                        className="w-16 h-16 object-contain mix-blend-screen brightness-110"
                       />
                     </div>
 
