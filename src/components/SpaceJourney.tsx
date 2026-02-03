@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Building2, GraduationCap, ArrowRight } from 'lucide-react';
 
@@ -67,23 +67,14 @@ const journeyData: JourneyEntry[] = [
 ].sort((a, b) => b.startYear - a.startYear);
 
 const SpaceJourney = () => {
-  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [animatedDotProgress, setAnimatedDotProgress] = useState(0);
   const sectionRef = useRef<HTMLDivElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  // Calculate planet sizes based on duration
-  const getPlanetSize = (entry: JourneyEntry) => {
-    const duration = (entry.endYear || 2024) - entry.startYear;
-    const baseSize = 48;
-    const sizeMultiplier = Math.min(1 + duration * 0.1, 1.5);
-    return baseSize * sizeMultiplier;
-  };
 
   // Animate the traveling dot
   useEffect(() => {
     const interval = setInterval(() => {
-      setAnimatedDotProgress((prev) => (prev >= 100 ? 0 : prev + 0.3));
+      setAnimatedDotProgress((prev) => (prev >= 100 ? 0 : prev + 0.5));
     }, 50);
     return () => clearInterval(interval);
   }, []);
@@ -107,97 +98,16 @@ const SpaceJourney = () => {
     return () => observer.disconnect();
   }, []);
 
-  // Generate curved path for desktop
-  const generatePath = useMemo(() => {
-    const points: { x: number; y: number }[] = [];
-    const totalEntries = journeyData.length;
-    
-    journeyData.forEach((_, index) => {
-      const progress = index / (totalEntries - 1);
-      const x = 10 + progress * 80; // 10% to 90% of width
-      const y = 15 + index * (70 / (totalEntries - 1)); // Distribute vertically
-      // Add wave effect
-      const wave = Math.sin(progress * Math.PI * 2) * 8;
-      points.push({ x: x + wave, y });
-    });
-
-    if (points.length < 2) return '';
-
-    // Create smooth curve through points
-    let path = `M ${points[0].x} ${points[0].y}`;
-    
-    for (let i = 0; i < points.length - 1; i++) {
-      const current = points[i];
-      const next = points[i + 1];
-      const midX = (current.x + next.x) / 2;
-      const midY = (current.y + next.y) / 2;
-      
-      // Control points for smooth curves
-      const cp1x = current.x + (midX - current.x) * 0.5;
-      const cp1y = current.y;
-      const cp2x = midX - (midX - current.x) * 0.5;
-      const cp2y = midY;
-      
-      path += ` C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${midX} ${midY}`;
-      
-      if (i < points.length - 2) {
-        const cp3x = midX + (next.x - midX) * 0.5;
-        const cp3y = midY;
-        const cp4x = next.x - (next.x - midX) * 0.5;
-        const cp4y = next.y;
-        path += ` C ${cp3x} ${cp3y}, ${cp4x} ${cp4y}, ${next.x} ${next.y}`;
-      } else {
-        path += ` L ${next.x} ${next.y}`;
-      }
-    }
-
-    return path;
-  }, []);
-
-  // Get position for each planet
-  const getPlanetPosition = (index: number) => {
-    const totalEntries = journeyData.length;
-    const progress = index / (totalEntries - 1);
-    const x = 10 + progress * 80;
-    const y = 15 + index * (70 / (totalEntries - 1));
-    const wave = Math.sin(progress * Math.PI * 2) * 8;
-    return { x: x + wave, y };
-  };
-
-  // Get position along path for animated dot
-  const getAnimatedDotPosition = () => {
-    const totalEntries = journeyData.length;
-    const progress = animatedDotProgress / 100;
-    const index = progress * (totalEntries - 1);
-    const lowerIndex = Math.floor(index);
-    const upperIndex = Math.min(lowerIndex + 1, totalEntries - 1);
-    const t = index - lowerIndex;
-
-    const pos1 = getPlanetPosition(lowerIndex);
-    const pos2 = getPlanetPosition(upperIndex);
-
-    return {
-      x: pos1.x + (pos2.x - pos1.x) * t,
-      y: pos1.y + (pos2.y - pos1.y) * t,
-    };
-  };
-
-  const handlePlanetClick = (id: string) => {
-    setExpandedId(expandedId === id ? null : id);
-  };
-
-  const dotPos = getAnimatedDotPosition();
-
   return (
-    <section id="journey" ref={sectionRef} className="py-20 relative overflow-hidden">
+    <section id="journey" ref={sectionRef} className="py-12 relative overflow-hidden">
       {/* Subtle nebula effects */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/3 right-1/4 w-80 h-80 bg-blue-500/5 rounded-full blur-3xl" />
+        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/3 right-1/4 w-48 h-48 bg-blue-500/5 rounded-full blur-3xl" />
       </div>
 
       <div className="container mx-auto px-6">
-        <div className="reveal opacity-0 text-center mb-16">
+        <div className="reveal opacity-0 text-center mb-10">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
             Journey Through Space & Time
           </h2>
@@ -206,188 +116,156 @@ const SpaceJourney = () => {
           </p>
         </div>
 
-        {/* Desktop Journey Map */}
-        <div 
-          ref={containerRef}
-          className="relative hidden md:block h-[600px] max-w-6xl mx-auto"
-        >
-          {/* SVG Route */}
-          <svg 
-            className="absolute inset-0 w-full h-full" 
-            viewBox="0 0 100 100" 
-            preserveAspectRatio="none"
-          >
-            <defs>
-              <linearGradient id="routeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.3" />
-                <stop offset="50%" stopColor="hsl(var(--primary))" stopOpacity="0.6" />
-                <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0.3" />
-              </linearGradient>
-              <filter id="routeGlow">
-                <feGaussianBlur stdDeviation="0.3" result="blur" />
-                <feMerge>
-                  <feMergeNode in="blur" />
-                  <feMergeNode in="SourceGraphic" />
-                </feMerge>
-              </filter>
-            </defs>
-            
-            {/* Main route line */}
-            <path
-              d={generatePath}
-              fill="none"
-              stroke="url(#routeGradient)"
-              strokeWidth="0.3"
-              strokeDasharray="1 0.5"
-              filter="url(#routeGlow)"
-              className="opacity-60"
-            />
-
+        {/* Desktop Journey - Alternating Timeline */}
+        <div className="relative hidden md:block max-w-5xl mx-auto">
+          {/* Central vertical route line */}
+          <div className="absolute left-1/2 top-0 bottom-0 w-px -translate-x-1/2">
+            <div className="h-full w-full bg-gradient-to-b from-primary/10 via-primary/40 to-primary/10" 
+                 style={{ boxShadow: '0 0 8px hsl(var(--primary) / 0.3)' }} />
             {/* Animated traveling dot */}
-            <circle
-              cx={dotPos.x}
-              cy={dotPos.y}
-              r="0.8"
-              fill="hsl(var(--primary))"
-              className="animate-pulse"
-            >
-              <animate
-                attributeName="opacity"
-                values="0.5;1;0.5"
-                dur="2s"
-                repeatCount="indefinite"
-              />
-            </circle>
-          </svg>
+            <div 
+              className="absolute left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-primary"
+              style={{ 
+                top: `${animatedDotProgress}%`,
+                boxShadow: '0 0 12px hsl(var(--primary))',
+              }}
+            />
+          </div>
 
-          {/* Planets */}
-          {journeyData.map((entry, index) => {
-            const pos = getPlanetPosition(index);
-            const size = getPlanetSize(entry);
-            const isExpanded = expandedId === entry.id;
-            const isWork = entry.type === 'work';
-            const linkPath = isWork ? `/experience#${entry.id}` : `/education#${entry.id}`;
+          <div className="space-y-4">
+            {journeyData.map((entry, index) => {
+              const isWork = entry.type === 'work';
+              const isLeft = index % 2 === 0;
+              const isHovered = hoveredId === entry.id;
+              const linkPath = isWork ? `/experience#${entry.id}` : `/education#${entry.id}`;
 
-            return (
-              <div
-                key={entry.id}
-                className="reveal opacity-0 absolute transform -translate-x-1/2 -translate-y-1/2 z-10"
-                style={{
-                  left: `${pos.x}%`,
-                  top: `${pos.y}%`,
-                  animationDelay: `${index * 0.1}s`,
-                }}
-              >
-                {/* Planet container */}
+              return (
                 <div
-                  className={`relative cursor-pointer transition-all duration-500 ${
-                    isExpanded ? 'scale-110' : 'hover:scale-105'
-                  }`}
-                  onClick={() => handlePlanetClick(entry.id)}
+                  key={entry.id}
+                  className="reveal opacity-0 relative flex items-center"
+                  style={{ animationDelay: `${index * 0.1}s` }}
                 >
-                  {/* Orbit ring */}
-                  <div
-                    className={`absolute inset-0 rounded-full border transition-all duration-500 ${
-                      isWork 
-                        ? 'border-amber-500/30' 
-                        : 'border-blue-500/30'
-                    } ${isExpanded ? 'scale-150 opacity-100' : 'scale-125 opacity-50'}`}
-                    style={{
-                      width: size + 20,
-                      height: size + 20,
-                      left: -10,
-                      top: -10,
-                    }}
-                  />
-
-                  {/* Planet glow */}
-                  <div
-                    className={`absolute rounded-full blur-xl transition-all duration-500 ${
-                      isWork 
-                        ? 'bg-amber-500/40' 
-                        : 'bg-blue-500/40'
-                    } ${isExpanded ? 'opacity-80 scale-125' : 'opacity-40'}`}
-                    style={{
-                      width: size,
-                      height: size,
-                    }}
-                  />
-
-                  {/* Planet body */}
-                  <div
-                    className={`relative rounded-full flex items-center justify-center transition-all duration-500 ${
-                      isWork
-                        ? 'bg-gradient-to-br from-amber-600/90 to-amber-800/90 shadow-amber-500/30'
-                        : 'bg-gradient-to-br from-blue-600/90 to-blue-800/90 shadow-blue-500/30'
-                    } shadow-lg ${isExpanded ? 'shadow-2xl' : ''}`}
-                    style={{
-                      width: size,
-                      height: size,
-                    }}
-                  >
-                    {isWork ? (
-                      <Building2 className="w-1/2 h-1/2 text-white/90" />
-                    ) : (
-                      <GraduationCap className="w-1/2 h-1/2 text-white/90" />
+                  {/* Left side content */}
+                  <div className={`w-[calc(50%-32px)] ${isLeft ? '' : 'opacity-0 pointer-events-none'}`}>
+                    {isLeft && (
+                      <Link
+                        to={linkPath}
+                        className={`block p-4 rounded-xl border backdrop-blur-sm transition-all duration-300 group ${
+                          isWork
+                            ? 'bg-amber-950/20 border-amber-500/20 hover:border-amber-500/40 hover:bg-amber-950/30'
+                            : 'bg-blue-950/20 border-blue-500/20 hover:border-blue-500/40 hover:bg-blue-950/30'
+                        } ${isHovered ? 'scale-[1.02]' : ''}`}
+                        onMouseEnter={() => setHoveredId(entry.id)}
+                        onMouseLeave={() => setHoveredId(null)}
+                      >
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="flex-1 text-right">
+                            <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
+                              {entry.title}
+                            </h3>
+                            <p className={`text-sm mt-0.5 ${isWork ? 'text-amber-400' : 'text-blue-400'}`}>
+                              {entry.subtitle}
+                            </p>
+                            <p className="text-xs text-muted-foreground mt-1">
+                              {entry.years}
+                            </p>
+                            {entry.description && (
+                              <p className="text-xs text-muted-foreground/80 mt-2 leading-relaxed">
+                                {entry.description}
+                              </p>
+                            )}
+                          </div>
+                          <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all shrink-0 mt-1" />
+                        </div>
+                      </Link>
                     )}
                   </div>
 
-                  {/* Year label */}
-                  <div
-                    className={`absolute left-1/2 -translate-x-1/2 text-xs font-medium whitespace-nowrap transition-all duration-300 ${
-                      isExpanded ? 'opacity-0' : 'opacity-80'
-                    } ${isWork ? 'text-amber-400' : 'text-blue-400'}`}
-                    style={{ top: size + 8 }}
-                  >
-                    {entry.years.split(' - ')[0]}
-                  </div>
-                </div>
+                  {/* Center planet */}
+                  <div className="w-16 flex justify-center z-10">
+                    <div
+                      className={`relative transition-all duration-300 ${isHovered ? 'scale-110' : ''}`}
+                      onMouseEnter={() => setHoveredId(entry.id)}
+                      onMouseLeave={() => setHoveredId(null)}
+                    >
+                      {/* Orbit ring */}
+                      <div
+                        className={`absolute -inset-2 rounded-full border transition-all duration-300 ${
+                          isWork ? 'border-amber-500/30' : 'border-blue-500/30'
+                        } ${isHovered ? 'scale-125 opacity-100' : 'opacity-40'}`}
+                      />
+                      
+                      {/* Planet glow */}
+                      <div
+                        className={`absolute inset-0 rounded-full blur-lg transition-all duration-300 ${
+                          isWork ? 'bg-amber-500/50' : 'bg-blue-500/50'
+                        } ${isHovered ? 'opacity-80 scale-125' : 'opacity-30'}`}
+                      />
 
-                {/* Expanded info card */}
-                <div
-                  className={`absolute left-1/2 transform -translate-x-1/2 transition-all duration-500 ${
-                    isExpanded
-                      ? 'opacity-100 translate-y-0 pointer-events-auto'
-                      : 'opacity-0 -translate-y-4 pointer-events-none'
-                  }`}
-                  style={{ top: size + 16, width: 280 }}
-                >
-                  <Link
-                    to={linkPath}
-                    className={`block p-4 rounded-xl border backdrop-blur-sm transition-all duration-300 group ${
-                      isWork
-                        ? 'bg-amber-950/50 border-amber-500/30 hover:border-amber-500/50'
-                        : 'bg-blue-950/50 border-blue-500/30 hover:border-blue-500/50'
-                    }`}
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <div className="flex items-start justify-between gap-2">
-                      <div>
-                        <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
-                          {entry.title}
-                        </h3>
-                        <p className={`text-sm mt-1 ${isWork ? 'text-amber-400' : 'text-blue-400'}`}>
-                          {entry.subtitle}
-                        </p>
-                        <p className="text-xs text-muted-foreground mt-1">
-                          {entry.years}
-                        </p>
-                        {entry.description && (
-                          <p className="text-xs text-muted-foreground mt-2 leading-relaxed">
-                            {entry.description}
-                          </p>
+                      {/* Planet body */}
+                      <div
+                        className={`relative w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
+                          isWork
+                            ? 'bg-gradient-to-br from-amber-600 to-amber-800'
+                            : 'bg-gradient-to-br from-blue-600 to-blue-800'
+                        }`}
+                        style={{
+                          boxShadow: isHovered 
+                            ? `0 0 20px ${isWork ? 'rgba(245, 158, 11, 0.5)' : 'rgba(59, 130, 246, 0.5)'}`
+                            : `0 0 10px ${isWork ? 'rgba(245, 158, 11, 0.3)' : 'rgba(59, 130, 246, 0.3)'}`,
+                        }}
+                      >
+                        {isWork ? (
+                          <Building2 className="w-5 h-5 text-white/90" />
+                        ) : (
+                          <GraduationCap className="w-5 h-5 text-white/90" />
                         )}
                       </div>
-                      <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all shrink-0 mt-1" />
                     </div>
-                  </Link>
+                  </div>
+
+                  {/* Right side content */}
+                  <div className={`w-[calc(50%-32px)] ${!isLeft ? '' : 'opacity-0 pointer-events-none'}`}>
+                    {!isLeft && (
+                      <Link
+                        to={linkPath}
+                        className={`block p-4 rounded-xl border backdrop-blur-sm transition-all duration-300 group ${
+                          isWork
+                            ? 'bg-amber-950/20 border-amber-500/20 hover:border-amber-500/40 hover:bg-amber-950/30'
+                            : 'bg-blue-950/20 border-blue-500/20 hover:border-blue-500/40 hover:bg-blue-950/30'
+                        } ${isHovered ? 'scale-[1.02]' : ''}`}
+                        onMouseEnter={() => setHoveredId(entry.id)}
+                        onMouseLeave={() => setHoveredId(null)}
+                      >
+                        <div className="flex items-start gap-3">
+                          <div className="flex-1">
+                            <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
+                              {entry.title}
+                            </h3>
+                            <p className={`text-sm mt-0.5 ${isWork ? 'text-amber-400' : 'text-blue-400'}`}>
+                              {entry.subtitle}
+                            </p>
+                            <p className="text-xs text-muted-foreground mt-1">
+                              {entry.years}
+                            </p>
+                            {entry.description && (
+                              <p className="text-xs text-muted-foreground/80 mt-2 leading-relaxed">
+                                {entry.description}
+                              </p>
+                            )}
+                          </div>
+                          <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all shrink-0 mt-1" />
+                        </div>
+                      </Link>
+                    )}
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
 
           {/* Legend */}
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-6 text-sm">
+          <div className="flex items-center justify-center gap-6 text-sm mt-8">
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-gradient-to-br from-amber-600 to-amber-800" />
               <span className="text-muted-foreground">Work Experience</span>
@@ -402,18 +280,19 @@ const SpaceJourney = () => {
         {/* Mobile Journey */}
         <div className="md:hidden relative">
           {/* Vertical route line */}
-          <div className="absolute left-8 top-0 bottom-0 w-px">
+          <div className="absolute left-6 top-0 bottom-0 w-px">
             <div className="h-full w-full bg-gradient-to-b from-primary/20 via-primary/40 to-primary/20" />
-            {/* Animated dot for mobile */}
             <div 
-              className="absolute left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-primary animate-pulse"
-              style={{ top: `${animatedDotProgress}%` }}
+              className="absolute left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-primary"
+              style={{ 
+                top: `${animatedDotProgress}%`,
+                boxShadow: '0 0 8px hsl(var(--primary))',
+              }}
             />
           </div>
 
-          <div className="space-y-6 pl-16">
+          <div className="space-y-3 pl-14">
             {journeyData.map((entry, index) => {
-              const isExpanded = expandedId === entry.id;
               const isWork = entry.type === 'work';
               const linkPath = isWork ? `/experience#${entry.id}` : `/education#${entry.id}`;
 
@@ -423,70 +302,53 @@ const SpaceJourney = () => {
                   className="reveal opacity-0 relative"
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
-                  {/* Planet dot on the line */}
+                  {/* Planet on the line */}
                   <div
-                    className={`absolute -left-16 top-4 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${
+                    className={`absolute -left-14 top-3 w-7 h-7 rounded-full flex items-center justify-center ${
                       isWork
-                        ? 'bg-gradient-to-br from-amber-600 to-amber-800 shadow-amber-500/30'
-                        : 'bg-gradient-to-br from-blue-600 to-blue-800 shadow-blue-500/30'
-                    } shadow-lg ${isExpanded ? 'scale-125 shadow-xl' : ''}`}
-                    onClick={() => handlePlanetClick(entry.id)}
+                        ? 'bg-gradient-to-br from-amber-600 to-amber-800'
+                        : 'bg-gradient-to-br from-blue-600 to-blue-800'
+                    }`}
+                    style={{
+                      boxShadow: `0 0 10px ${isWork ? 'rgba(245, 158, 11, 0.4)' : 'rgba(59, 130, 246, 0.4)'}`,
+                    }}
                   >
                     {isWork ? (
-                      <Building2 className="w-4 h-4 text-white/90" />
+                      <Building2 className="w-3.5 h-3.5 text-white/90" />
                     ) : (
-                      <GraduationCap className="w-4 h-4 text-white/90" />
+                      <GraduationCap className="w-3.5 h-3.5 text-white/90" />
                     )}
                   </div>
 
                   {/* Card */}
-                  <div
-                    className={`p-4 rounded-xl border backdrop-blur-sm cursor-pointer transition-all duration-300 ${
+                  <Link
+                    to={linkPath}
+                    className={`block p-3 rounded-xl border backdrop-blur-sm transition-all duration-300 group ${
                       isWork
-                        ? 'bg-amber-950/30 border-amber-500/20'
-                        : 'bg-blue-950/30 border-blue-500/20'
-                    } ${isExpanded ? 'border-opacity-50' : ''}`}
-                    onClick={() => handlePlanetClick(entry.id)}
+                        ? 'bg-amber-950/20 border-amber-500/20 active:bg-amber-950/30'
+                        : 'bg-blue-950/20 border-blue-500/20 active:bg-blue-950/30'
+                    }`}
                   >
-                    <div className="flex items-start justify-between">
+                    <div className="flex items-start justify-between gap-2">
                       <div>
-                        <h3 className="font-semibold text-foreground">
+                        <h3 className="font-semibold text-foreground text-sm">
                           {entry.title}
                         </h3>
-                        <p className={`text-sm mt-1 ${isWork ? 'text-amber-400' : 'text-blue-400'}`}>
+                        <p className={`text-xs mt-0.5 ${isWork ? 'text-amber-400' : 'text-blue-400'}`}>
                           {entry.subtitle}
                         </p>
                         <p className="text-xs text-muted-foreground mt-1">
                           {entry.years}
                         </p>
+                        {entry.description && (
+                          <p className="text-xs text-muted-foreground/80 mt-1.5 leading-relaxed">
+                            {entry.description}
+                          </p>
+                        )}
                       </div>
+                      <ArrowRight className="w-4 h-4 text-muted-foreground shrink-0 mt-0.5" />
                     </div>
-
-                    {/* Expanded content */}
-                    <div
-                      className={`overflow-hidden transition-all duration-500 ${
-                        isExpanded ? 'max-h-40 mt-3 opacity-100' : 'max-h-0 opacity-0'
-                      }`}
-                    >
-                      {entry.description && (
-                        <p className="text-sm text-muted-foreground mb-3">
-                          {entry.description}
-                        </p>
-                      )}
-                      <Link
-                        to={linkPath}
-                        className={`inline-flex items-center gap-1 text-sm font-medium transition-colors ${
-                          isWork 
-                            ? 'text-amber-400 hover:text-amber-300' 
-                            : 'text-blue-400 hover:text-blue-300'
-                        }`}
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        View details
-                        <ArrowRight className="w-3 h-3" />
-                      </Link>
-                    </div>
-                  </div>
+                  </Link>
                 </div>
               );
             })}
