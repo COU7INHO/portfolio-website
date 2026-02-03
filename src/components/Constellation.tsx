@@ -66,9 +66,17 @@ const Constellation = ({
   isZoomed,
   isHidden,
 }: ConstellationProps) => {
+  // Check if the currently hovered star belongs to this constellation
+  const isStarInThisConstellation = (starId: string | null): boolean => {
+    if (!starId) return false;
+    return stars.some(s => s.id === starId);
+  };
+
+  const hasHoveredStar = isStarInThisConstellation(activeStarId);
+
   // Find which star indices are connected to the hovered star
   const getConnectedStarIds = (hoveredStarId: string | null): Set<string> => {
-    if (!hoveredStarId) return new Set();
+    if (!hoveredStarId || !isStarInThisConstellation(hoveredStarId)) return new Set();
     const hoveredIndex = stars.findIndex(s => s.id === hoveredStarId);
     if (hoveredIndex === -1) return new Set();
     
@@ -84,7 +92,7 @@ const Constellation = ({
 
   // Check if a connection involves the hovered star
   const isConnectionHighlighted = (startIdx: number, endIdx: number): boolean => {
-    if (!activeStarId) return false;
+    if (!activeStarId || !isStarInThisConstellation(activeStarId)) return false;
     const hoveredIndex = stars.findIndex(s => s.id === activeStarId);
     return startIdx === hoveredIndex || endIdx === hoveredIndex;
   };
@@ -128,12 +136,25 @@ const Constellation = ({
         const cy = star.y * containerHeight;
         const icon = iconMap[star.name];
         
-        // Size calculations
-        const iconSize = isZoomed ? 24 : isHovered ? 22 : isActive || isConnected ? 18 : 16;
+        // Size calculations - larger when zoomed
+        const baseIconSize = isZoomed ? 20 : 16;
+        const iconSize = isHovered ? baseIconSize + 6 : isActive || isConnected ? baseIconSize + 2 : baseIconSize;
         const glowSize = isHovered ? 30 : isActive || isConnected ? 20 : 12;
         
+        // Tooltip positioning - ensure it stays within bounds
+        const tooltipWidth = 100;
+        const tooltipHeight = 28;
+        const tooltipY = cy + iconSize / 2 + 12;
+        let tooltipX = cx - tooltipWidth / 2;
+        
+        // Adjust horizontal position if near edges
+        if (tooltipX < 10) tooltipX = 10;
+        if (tooltipX + tooltipWidth > containerWidth - 10) {
+          tooltipX = containerWidth - tooltipWidth - 10;
+        }
+        
         return (
-          <g key={star.id}>
+          <g key={star.id} style={{ zIndex: isHovered ? 100 : 1 }}>
             {/* Outer glow effect */}
             <circle
               cx={cx}
@@ -144,13 +165,14 @@ const Constellation = ({
               className="transition-all duration-300"
             />
             
-            {/* Icon container */}
+            {/* Icon container - using a larger hit area for better hover detection */}
             <foreignObject
-              x={cx - iconSize / 2}
-              y={cy - iconSize / 2}
-              width={iconSize}
-              height={iconSize}
+              x={cx - iconSize}
+              y={cy - iconSize}
+              width={iconSize * 2}
+              height={iconSize * 2}
               className="overflow-visible"
+              style={{ pointerEvents: 'none' }}
             >
               <div
                 className="w-full h-full flex items-center justify-center cursor-pointer transition-all duration-300"
@@ -159,66 +181,72 @@ const Constellation = ({
                   opacity: isHovered ? 1 : isActive || isConnected ? 0.85 : 0.45,
                   transform: isHovered ? 'scale(1.3)' : 'scale(1)',
                   filter: isHovered 
-                    ? 'drop-shadow(0 0 8px hsl(var(--primary))) drop-shadow(0 0 12px white)' 
+                    ? 'drop-shadow(0 0 8px hsl(187 85% 53%)) drop-shadow(0 0 12px white)' 
                     : isActive || isConnected
-                      ? 'drop-shadow(0 0 4px hsl(var(--primary)))' 
-                      : 'drop-shadow(0 0 2px hsl(var(--primary) / 0.5))',
+                      ? 'drop-shadow(0 0 4px hsl(187 85% 53%))' 
+                      : 'drop-shadow(0 0 2px hsl(187 85% 53% / 0.5))',
+                  pointerEvents: 'auto',
                 }}
                 onMouseEnter={() => onStarHover(star.id, name)}
                 onMouseLeave={() => onStarHover(null, null)}
               >
-                <div style={{ fontSize: iconSize * 0.85 }}>
+                <div style={{ fontSize: iconSize * 0.9 }}>
                   {icon}
                 </div>
               </div>
             </foreignObject>
 
-            {/* Tooltip below icon */}
+            {/* Issue 3: Tooltip - always visible on hover regardless of zoom state */}
             {isHovered && (
-              <g className="animate-fade-in">
-                <rect
-                  x={cx - 50}
-                  y={cy + iconSize / 2 + 8}
-                  width={100}
-                  height={26}
-                  rx={6}
-                  fill="hsl(var(--card) / 0.95)"
-                  stroke="hsl(var(--primary) / 0.3)"
-                  strokeWidth={1}
+              <foreignObject
+                x={tooltipX}
+                y={tooltipY}
+                width={tooltipWidth}
+                height={tooltipHeight + 10}
+                className="overflow-visible pointer-events-none"
+                style={{ zIndex: 1000 }}
+              >
+                <div
+                  className="flex items-center justify-center"
                   style={{
-                    filter: 'drop-shadow(0 2px 8px hsl(var(--background) / 0.5))',
+                    width: tooltipWidth,
+                    height: tooltipHeight,
+                    background: 'hsl(var(--card) / 0.95)',
+                    border: '1px solid hsl(var(--primary) / 0.4)',
+                    borderRadius: '6px',
+                    boxShadow: '0 4px 12px hsl(var(--background) / 0.8)',
                   }}
-                />
-                <text
-                  x={cx}
-                  y={cy + iconSize / 2 + 25}
-                  textAnchor="middle"
-                  fill="hsl(var(--foreground))"
-                  fontSize={12}
-                  fontWeight={500}
-                  className="pointer-events-none"
                 >
-                  {star.name}
-                </text>
-              </g>
+                  <span
+                    style={{
+                      color: 'hsl(var(--foreground))',
+                      fontSize: '12px',
+                      fontWeight: 500,
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {star.name}
+                  </span>
+                </div>
+              </foreignObject>
             )}
           </g>
         );
       })}
 
       {/* Constellation name - show when active or zoomed */}
-      {(isActive || isZoomed) && (
+      {(isActive || isZoomed) && !hasHoveredStar && (
         <text
           x={stars.reduce((acc, s) => acc + s.x, 0) / stars.length * containerWidth}
           y={Math.min(...stars.map(s => s.y)) * containerHeight - 30}
           textAnchor="middle"
           fill="hsl(var(--foreground))"
-          fontSize={isZoomed ? 18 : 14}
+          fontSize={isZoomed ? 16 : 14}
           fontWeight={600}
           opacity={0.9}
           className="transition-all duration-300 pointer-events-none"
           style={{ 
-            textShadow: '0 0 10px hsl(var(--primary) / 0.5)',
+            textShadow: '0 0 10px hsl(187 85% 53% / 0.5)',
           }}
         >
           {name}
@@ -232,7 +260,6 @@ const Constellation = ({
 export const constellationData: Record<string, { 
   stars: { id: string; name: string; x: number; y: number; icon?: React.ReactNode }[]; 
   connections: [number, number][];
-  center: { x: number; y: number };
 }> = {
   'Languages & Frameworks': {
     stars: [
@@ -241,7 +268,6 @@ export const constellationData: Record<string, {
       { id: 'fastapi', name: 'FastAPI', x: 0.16, y: 0.55 },
     ],
     connections: [[0, 1], [1, 2], [0, 2]],
-    center: { x: 0.12, y: 0.42 },
   },
   'Data & AI': {
     stars: [
@@ -254,7 +280,6 @@ export const constellationData: Record<string, {
       { id: 'jupyter', name: 'Jupyter', x: 0.22, y: 0.65 },
     ],
     connections: [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6]],
-    center: { x: 0.32, y: 0.40 },
   },
   'Cloud & Infrastructure': {
     stars: [
@@ -265,7 +290,6 @@ export const constellationData: Record<string, {
       { id: 'linux', name: 'Linux', x: 0.78, y: 0.20 },
     ],
     connections: [[0, 1], [1, 2], [2, 3], [3, 4]],
-    center: { x: 0.65, y: 0.22 },
   },
   'Databases': {
     stars: [
@@ -275,7 +299,6 @@ export const constellationData: Record<string, {
       { id: 'mongodb', name: 'MongoDB', x: 0.75, y: 0.68 },
     ],
     connections: [[0, 1], [1, 2], [1, 3], [0, 3]],
-    center: { x: 0.75, y: 0.57 },
   },
   'Tools': {
     stars: [
@@ -285,7 +308,6 @@ export const constellationData: Record<string, {
       { id: 'fusion360', name: 'Fusion360', x: 0.62, y: 0.78 },
     ],
     connections: [[0, 1], [1, 2], [2, 3], [1, 3]],
-    center: { x: 0.54, y: 0.73 },
   },
 };
 
