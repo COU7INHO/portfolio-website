@@ -74,66 +74,6 @@ export const useTerminal = (onExit: () => void, isOpen: boolean): UseTerminalRet
     setLines([]);
   }, []);
 
-  const executeCommand = useCallback((input: string) => {
-    const trimmed = input.trim();
-    if (!trimmed) return;
-
-    // Add to history
-    setCommandHistory(prev => [...prev, trimmed]);
-    setHistoryIndex(-1);
-
-    // Add the input line
-    addLine({ type: 'input', content: trimmed, prompt });
-
-    const parts = trimmed.split(/\s+/);
-    const command = parts[0].toLowerCase();
-    const args = parts.slice(1);
-
-    switch (command) {
-      case 'help':
-        handleHelp();
-        break;
-      case 'ls':
-        handleLs();
-        break;
-      case 'cd':
-        handleCd(args[0] || '');
-        break;
-      case 'pwd':
-        handlePwd();
-        break;
-      case 'cat':
-        handleCat(args.join(' '));
-        break;
-      case 'clear':
-        clearTerminal();
-        break;
-      case 'exit':
-        onExit();
-        break;
-      case 'github':
-        handleGithub();
-        break;
-      case 'linkedin':
-        handleLinkedin();
-        break;
-      case 'open':
-        handleOpen(args.join(' '));
-        break;
-      case 'rm':
-        handleRm();
-        break;
-      case 'htop':
-        setShowHtop(true);
-        break;
-      default:
-        addLine({
-          type: 'error',
-          content: `bash: ${command}: command not found\nType 'help' to see available commands.`
-        });
-    }
-  }, [addLine, prompt, currentPath, onExit]);
-
   const handleHelp = useCallback(() => {
     addLine({
       type: 'output',
@@ -154,6 +94,7 @@ Available commands:
     clear                 Clear terminal screen
     help                  Show this help message
     exit                  Exit Dev Mode and return to normal site
+    htop                  Check what's running in my brain
 
   Tips:
     - Use TAB for autocomplete
@@ -359,6 +300,66 @@ Available commands:
     });
   }, [addLine]);
 
+  const executeCommand = useCallback((input: string) => {
+    const trimmed = input.trim();
+    if (!trimmed) return;
+
+    // Add to history
+    setCommandHistory(prev => [...prev, trimmed]);
+    setHistoryIndex(-1);
+
+    // Add the input line
+    addLine({ type: 'input', content: trimmed, prompt });
+
+    const parts = trimmed.split(/\s+/);
+    const command = parts[0].toLowerCase();
+    const args = parts.slice(1);
+
+    switch (command) {
+      case 'help':
+        handleHelp();
+        break;
+      case 'ls':
+        handleLs();
+        break;
+      case 'cd':
+        handleCd(args[0] || '');
+        break;
+      case 'pwd':
+        handlePwd();
+        break;
+      case 'cat':
+        handleCat(args.join(' '));
+        break;
+      case 'clear':
+        clearTerminal();
+        break;
+      case 'exit':
+        onExit();
+        break;
+      case 'github':
+        handleGithub();
+        break;
+      case 'linkedin':
+        handleLinkedin();
+        break;
+      case 'open':
+        handleOpen(args.join(' '));
+        break;
+      case 'rm':
+        handleRm();
+        break;
+      case 'htop':
+        setShowHtop(true);
+        break;
+      default:
+        addLine({
+          type: 'error',
+          content: `bash: ${command}: command not found\nType 'help' to see available commands.`
+        });
+    }
+  }, [addLine, prompt, onExit, clearTerminal, handleHelp, handleLs, handleCd, handlePwd, handleCat, handleGithub, handleLinkedin, handleOpen, handleRm]);
+
   const navigateHistory = useCallback((direction: 'up' | 'down'): string => {
     if (commandHistory.length === 0) return '';
 
@@ -382,7 +383,7 @@ Available commands:
     
     // Command autocomplete
     if (parts.length === 1) {
-      const commands = ['ls', 'cd', 'pwd', 'cat', 'clear', 'help', 'exit', 'github', 'linkedin', 'open'];
+      const commands = ['ls', 'cd', 'pwd', 'cat', 'clear', 'help', 'exit', 'github', 'linkedin', 'open', 'htop'];
       const match = commands.find(c => c.startsWith(parts[0].toLowerCase()));
       if (match) return match;
     }
