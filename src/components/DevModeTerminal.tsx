@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useTerminal, TerminalLine } from '@/hooks/useTerminal';
+import RebootAnimation from './RebootAnimation';
 
 interface DevModeTerminalProps {
   isOpen: boolean;
@@ -170,12 +171,18 @@ const DevModeTerminal = ({ isOpen, onClose }: DevModeTerminalProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const { lines, prompt, executeCommand, navigateHistory, autocomplete, showHtop, closeHtop } = useTerminal(onClose, isOpen);
+  const { lines, prompt, executeCommand, navigateHistory, autocomplete, showHtop, closeHtop, rebootPhase } = useTerminal(onClose, isOpen);
 
   // Sync htop visibility with hook state
   useEffect(() => {
     setHtopVisible(showHtop);
   }, [showHtop]);
+
+  // Handle reboot completion
+  const handleRebootComplete = useCallback(() => {
+    onClose();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [onClose]);
 
   // Boot sequence
   useEffect(() => {
@@ -320,17 +327,25 @@ const DevModeTerminal = ({ isOpen, onClose }: DevModeTerminalProps) => {
   if (!isOpen) return null;
 
   return (
-    <div
-      ref={containerRef}
-      className="fixed inset-0 z-[100] bg-[#0d0d0d] font-mono text-sm overflow-hidden transition-opacity duration-300"
-      onClick={handleContainerClick}
-    >
-      {/* Scanline effect */}
-      <div className="absolute inset-0 pointer-events-none opacity-5">
-        <div className="h-full w-full" style={{ 
-          backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.03) 2px, rgba(255,255,255,0.03) 4px)' 
-        }} />
-      </div>
+    <>
+      {/* Reboot animation overlay */}
+      <RebootAnimation phase={rebootPhase} onComplete={handleRebootComplete} />
+      
+      <div
+        ref={containerRef}
+        className="fixed inset-0 z-[100] bg-[#0d0d0d] font-mono text-sm overflow-hidden transition-opacity duration-300"
+        style={{ 
+          opacity: rebootPhase === 'imploding' || rebootPhase === 'pause' || rebootPhase === 'exploding' ? 0 : 1,
+          transition: 'opacity 0.5s ease-out'
+        }}
+        onClick={handleContainerClick}
+      >
+        {/* Scanline effect */}
+        <div className="absolute inset-0 pointer-events-none opacity-5">
+          <div className="h-full w-full" style={{ 
+            backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.03) 2px, rgba(255,255,255,0.03) 4px)' 
+          }} />
+        </div>
 
       <div className="h-full flex flex-col p-4 md:p-6 relative">
         {/* Terminal header bar */}
@@ -417,6 +432,7 @@ const DevModeTerminal = ({ isOpen, onClose }: DevModeTerminalProps) => {
         )}
       </div>
     </div>
+    </>
   );
 };
 
