@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useTerminal, TerminalLine } from '@/hooks/useTerminal';
-import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface DevModeTerminalProps {
   isOpen: boolean;
@@ -34,6 +33,136 @@ const ProgressBar = ({ progress }: { progress: number }) => {
   );
 };
 
+// Htop display component
+const HtopDisplay = ({ onClose }: { onClose: () => void }) => {
+  const [cpuPercent, setCpuPercent] = useState(62);
+  
+  // Animate CPU percentage slightly
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCpuPercent(prev => {
+        const delta = Math.random() * 6 - 3;
+        return Math.min(85, Math.max(55, prev + delta));
+      });
+    }, 800);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Close on any key press
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      e.preventDefault();
+      onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
+
+  // Auto-close after 4 seconds
+  useEffect(() => {
+    const timer = setTimeout(onClose, 4000);
+    return () => clearTimeout(timer);
+  }, [onClose]);
+
+  const cpuFilled = Math.floor(cpuPercent / 5);
+  const cpuEmpty = 20 - cpuFilled;
+  const memFilled = 10;
+  const memEmpty = 10;
+
+  const processes = [
+    { pid: 1, cpu: '0.0', mem: '1.2', time: '999:59', cmd: 'curiosity --infinite' },
+    { pid: 42, cpu: '89.2', mem: '12.4', time: '42:00', cmd: 'coffee.exe --strong --loop' },
+    { pid: 100, cpu: '12.4', mem: '2.1', time: '23:15', cmd: 'code-ideas --generate' },
+    { pid: 101, cpu: '8.7', mem: '1.0', time: '15:30', cmd: 'learning.py --mode=always' },
+    { pid: 200, cpu: '4.2', mem: '0.5', time: '08:45', cmd: 'debugging --patience=high' },
+    { pid: 201, cpu: '3.1', mem: '4.0', time: '12:20', cmd: 'stackoverflow --read-only' },
+    { pid: 300, cpu: '1.5', mem: '0.2', time: '04:10', cmd: 'sleep --when="never"' },
+    { pid: 301, cpu: '0.8', mem: '8.0', time: '99:99', cmd: 'side-projects --status=wip' },
+    { pid: 400, cpu: '0.1', mem: '0.1', time: '00:05', cmd: 'humble.sh' },
+  ];
+
+  return (
+    <div className="h-full flex flex-col bg-[#0a0a0a] text-sm">
+      {/* Header */}
+      <div className="bg-[#1a1a2e] px-2 py-1 text-center text-cyan-400 font-bold border-b border-cyan-800">
+        htop - tiago@portfolio
+      </div>
+
+      {/* System stats */}
+      <div className="p-3 space-y-1 border-b border-border/30">
+        <div className="flex gap-4 flex-wrap">
+          <span>
+            <span className="text-cyan-400">CPU</span>
+            <span className="text-green-400">[{'|'.repeat(cpuFilled)}</span>
+            <span className="text-muted-foreground">{' '.repeat(cpuEmpty)}]</span>
+            <span className="text-foreground ml-1">{Math.round(cpuPercent)}%</span>
+          </span>
+          <span className="text-muted-foreground">Tasks: <span className="text-foreground">15</span>, 142 thr; <span className="text-green-400">1 running</span></span>
+        </div>
+        <div className="flex gap-4 flex-wrap">
+          <span>
+            <span className="text-cyan-400">Mem</span>
+            <span className="text-green-400">[{'|'.repeat(memFilled)}</span>
+            <span className="text-muted-foreground">{' '.repeat(memEmpty)}]</span>
+            <span className="text-foreground ml-1">48%</span>
+          </span>
+          <span className="text-muted-foreground">Load average: <span className="text-foreground">0.42 0.38 0.35</span></span>
+        </div>
+        <div className="flex gap-4 flex-wrap">
+          <span>
+            <span className="text-cyan-400">Swp</span>
+            <span className="text-muted-foreground">[{' '.repeat(20)}]</span>
+            <span className="text-foreground ml-1">0%</span>
+          </span>
+          <span className="text-muted-foreground">Uptime: <span className="text-yellow-400">∞</span> <span className="text-foreground">(running on coffee)</span></span>
+        </div>
+      </div>
+
+      {/* Process table header */}
+      <div className="bg-cyan-900/50 px-2 py-1 font-bold text-cyan-300 text-xs">
+        <div className="grid grid-cols-[50px_60px_45px_45px_50px_50px_50px_50px_1fr] gap-1">
+          <span>PID</span>
+          <span>USER</span>
+          <span>PRI</span>
+          <span>NI</span>
+          <span>CPU%</span>
+          <span>MEM%</span>
+          <span>TIME+</span>
+          <span>S</span>
+          <span>Command</span>
+        </div>
+      </div>
+
+      {/* Process list */}
+      <div className="flex-1 overflow-auto px-2 py-1 text-xs">
+        {processes.map((p, i) => (
+          <div 
+            key={p.pid} 
+            className={`grid grid-cols-[50px_60px_45px_45px_50px_50px_50px_50px_1fr] gap-1 py-0.5 ${
+              p.pid === 42 ? 'bg-green-900/30 text-green-300' : 'text-foreground'
+            }`}
+          >
+            <span className="text-cyan-400">{p.pid}</span>
+            <span>tiago</span>
+            <span>20</span>
+            <span>0</span>
+            <span className={parseFloat(p.cpu) > 50 ? 'text-red-400' : ''}>{p.cpu}</span>
+            <span>{p.mem}</span>
+            <span>{p.time}</span>
+            <span className={p.pid === 42 ? 'text-green-400' : ''}>{p.pid === 42 ? 'R' : 'S'}</span>
+            <span className="truncate">{p.cmd}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* Footer hint */}
+      <div className="bg-[#1a1a2e] px-2 py-2 text-center text-muted-foreground border-t border-cyan-800">
+        <span className="text-cyan-400">Press any key to exit</span>
+      </div>
+    </div>
+  );
+};
+
 const DevModeTerminal = ({ isOpen, onClose }: DevModeTerminalProps) => {
   const [bootPhase, setBootPhase] = useState<'booting' | 'welcome' | 'ready'>('booting');
   const [bootStep, setBootStep] = useState(0);
@@ -42,7 +171,7 @@ const DevModeTerminal = ({ isOpen, onClose }: DevModeTerminalProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const { lines, prompt, executeCommand, navigateHistory, autocomplete } = useTerminal(onClose, isOpen);
+  const { lines, prompt, executeCommand, navigateHistory, autocomplete, showHtop, closeHtop } = useTerminal(onClose, isOpen);
 
   // Boot sequence
   useEffect(() => {
@@ -211,67 +340,74 @@ const DevModeTerminal = ({ isOpen, onClose }: DevModeTerminalProps) => {
             <div className="w-3 h-3 rounded-full bg-yellow-500" />
             <div className="w-3 h-3 rounded-full bg-green-500" />
           </div>
-          <span className="text-muted-foreground text-xs ml-3">tiago@portfolio — bash</span>
+          <span className="text-muted-foreground text-xs ml-3">
+            {showHtop ? 'htop - tiago@portfolio' : 'tiago@portfolio — bash'}
+          </span>
         </div>
 
-        {/* Terminal content */}
-        <div 
-          ref={scrollRef}
-          className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-border scrollbar-track-transparent"
-        >
-          {bootPhase === 'booting' && (
-            <div className="space-y-2">
-              {bootSequence.slice(0, bootStep + 1).map((step, i) => (
-                <div key={i} className="flex items-center gap-3">
-                  <ProgressBar progress={step.progress} />
-                  <span className="text-muted-foreground">{step.text}</span>
+        {/* Htop display */}
+        {showHtop ? (
+          <HtopDisplay onClose={closeHtop} />
+        ) : (
+          /* Terminal content */
+          <div 
+            ref={scrollRef}
+            className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-border scrollbar-track-transparent"
+          >
+            {bootPhase === 'booting' && (
+              <div className="space-y-2">
+                {bootSequence.slice(0, bootStep + 1).map((step, i) => (
+                  <div key={i} className="flex items-center gap-3">
+                    <ProgressBar progress={step.progress} />
+                    <span className="text-muted-foreground">{step.text}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {bootPhase === 'welcome' && (
+              <div className="text-primary animate-fade-in">
+                <pre className="text-xs md:text-sm leading-tight">{asciiLogo}</pre>
+                <div className="mt-4 space-y-1 text-secondary-foreground">
+                  <p>Welcome! Type '<span className="text-primary">help</span>' to see available commands.</p>
+                  <p>Press <span className="text-primary">ESC</span> or type '<span className="text-primary">exit</span>' to return to the normal site.</p>
                 </div>
-              ))}
-            </div>
-          )}
-
-          {bootPhase === 'welcome' && (
-            <div className="text-primary animate-fade-in">
-              <pre className="text-xs md:text-sm leading-tight">{asciiLogo}</pre>
-              <div className="mt-4 space-y-1 text-secondary-foreground">
-                <p>Welcome! Type '<span className="text-primary">help</span>' to see available commands.</p>
-                <p>Press <span className="text-primary">ESC</span> or type '<span className="text-primary">exit</span>' to return to the normal site.</p>
               </div>
-            </div>
-          )}
+            )}
 
-          {bootPhase === 'ready' && (
-            <div className="space-y-1">
-              {/* Welcome message */}
-              <pre className="text-primary text-xs md:text-sm leading-tight mb-4">{asciiLogo}</pre>
-              <div className="mb-4 space-y-1 text-secondary-foreground">
-                <p>Welcome! Type '<span className="text-primary">help</span>' to see available commands.</p>
-                <p>Press <span className="text-primary">ESC</span> or type '<span className="text-primary">exit</span>' to return to the normal site.</p>
+            {bootPhase === 'ready' && (
+              <div className="space-y-1">
+                {/* Welcome message */}
+                <pre className="text-primary text-xs md:text-sm leading-tight mb-4">{asciiLogo}</pre>
+                <div className="mb-4 space-y-1 text-secondary-foreground">
+                  <p>Welcome! Type '<span className="text-primary">help</span>' to see available commands.</p>
+                  <p>Press <span className="text-primary">ESC</span> or type '<span className="text-primary">exit</span>' to return to the normal site.</p>
+                </div>
+
+                {/* Command history */}
+                {lines.map(renderLine)}
+
+                {/* Current input */}
+                <div className="flex gap-2 items-center">
+                  <span className="text-primary shrink-0">{prompt}</span>
+                  <input
+                    ref={inputRef}
+                    type="text"
+                    value={inputValue}
+                    onChange={(e) => setInputValue(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    className="flex-1 bg-transparent outline-none text-foreground caret-primary"
+                    autoFocus
+                    autoComplete="off"
+                    autoCorrect="off"
+                    autoCapitalize="off"
+                    spellCheck={false}
+                  />
+                </div>
               </div>
-
-              {/* Command history */}
-              {lines.map(renderLine)}
-
-              {/* Current input */}
-              <div className="flex gap-2 items-center">
-                <span className="text-primary shrink-0">{prompt}</span>
-                <input
-                  ref={inputRef}
-                  type="text"
-                  value={inputValue}
-                  onChange={(e) => setInputValue(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  className="flex-1 bg-transparent outline-none text-foreground caret-primary"
-                  autoFocus
-                  autoComplete="off"
-                  autoCorrect="off"
-                  autoCapitalize="off"
-                  spellCheck={false}
-                />
-              </div>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
