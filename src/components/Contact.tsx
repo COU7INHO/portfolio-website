@@ -1,11 +1,8 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Github, Linkedin } from 'lucide-react';
-import { Turnstile } from '@marsidev/react-turnstile';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-
-const TURNSTILE_SITE_KEY = '0x4AAAAAACXVZnMb55dYrxut';
 
 const socialLinks = [
   { icon: Github, label: 'GitHub', href: 'https://github.com/COU7INHO' },
@@ -17,18 +14,13 @@ type SubmitState = 'idle' | 'submitting' | 'success' | 'error';
 const Contact = () => {
   const [hoveredLink, setHoveredLink] = useState<number | null>(null);
   const [submitState, setSubmitState] = useState<SubmitState>('idle');
-  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
-    if (!turnstileToken) return;
-    
     setSubmitState('submitting');
 
     const formData = new FormData(e.currentTarget);
-    formData.append('cf-turnstile-response', turnstileToken);
 
     try {
       const response = await fetch('https://formspree.io/f/maqbgkjq', {
@@ -42,7 +34,6 @@ const Contact = () => {
       if (response.ok) {
         setSubmitState('success');
         formRef.current?.reset();
-        setTurnstileToken(null);
         setTimeout(() => setSubmitState('idle'), 3000);
       } else {
         setSubmitState('error');
@@ -66,8 +57,6 @@ const Contact = () => {
         return 'Send Transmission';
     }
   };
-
-  const isButtonDisabled = submitState === 'submitting' || !turnstileToken;
 
   return (
     <section id="contact" className="py-20 relative">
@@ -170,35 +159,19 @@ const Contact = () => {
                 />
               </div>
 
-              {/* Cloudflare Turnstile CAPTCHA */}
-              <div className="flex justify-center">
-                <Turnstile
-                  siteKey={TURNSTILE_SITE_KEY}
-                  onSuccess={(token) => setTurnstileToken(token)}
-                  onExpire={() => setTurnstileToken(null)}
-                  onError={() => setTurnstileToken(null)}
-                  options={{
-                    theme: 'dark',
-                  }}
-                />
-              </div>
-
               <Button
                 type="submit"
-                disabled={isButtonDisabled}
+                disabled={submitState === 'submitting'}
                 className={`
                   w-full relative overflow-hidden
                   bg-primary text-primary-foreground
+                  hover:bg-primary/90
                   transition-all duration-300
-                  ${isButtonDisabled 
-                    ? 'opacity-50 cursor-not-allowed' 
-                    : 'hover:bg-primary/90 hover:shadow-[0_0_20px_hsl(var(--primary)/0.4)]'
-                  }
                   ${submitState === 'success' 
-                    ? 'bg-green-600 hover:bg-green-600 opacity-100' 
+                    ? 'bg-green-600 hover:bg-green-600' 
                     : submitState === 'error' 
-                      ? 'bg-destructive hover:bg-destructive opacity-100' 
-                      : ''
+                      ? 'bg-destructive hover:bg-destructive' 
+                      : 'hover:shadow-[0_0_20px_hsl(var(--primary)/0.4)]'
                   }
                 `}
               >
