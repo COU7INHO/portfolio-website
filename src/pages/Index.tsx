@@ -2,7 +2,8 @@ import { useState } from 'react';
 import Navigation from '@/components/Navigation';
 import Hero from '@/components/Hero';
 import AboutMe from '@/components/AboutMe';
-import SpaceJourney from '@/components/SpaceJourney';
+import Timeline from '@/components/Timeline';
+import Education from '@/components/Education';
 import TechStack from '@/components/TechStack';
 import ProjectsPreview from '@/components/ProjectsPreview';
 import Footer from '@/components/Footer';
@@ -20,7 +21,8 @@ const Index = () => {
       <main className="relative z-10">
         <Hero onDevModeClick={() => setIsDevMode(true)} />
         <AboutMe />
-        <SpaceJourney />
+        <Timeline />
+        <Education />
         <TechStack />
         <ProjectsPreview />
       </main>
