@@ -53,11 +53,13 @@ const HtopDisplay = ({ onClose }: { onClose: () => void }) => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         e.preventDefault();
+        e.stopImmediatePropagation();
         onClose();
       }
     };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    // Use capture phase to handle before other listeners
+    window.addEventListener('keydown', handleKeyDown, true);
+    return () => window.removeEventListener('keydown', handleKeyDown, true);
   }, [onClose]);
 
   const cpuFilled = Math.floor(cpuPercent / 5);
