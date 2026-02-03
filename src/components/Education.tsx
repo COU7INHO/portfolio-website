@@ -95,11 +95,11 @@ const Education = () => {
                     className="group block p-5 bg-card border border-border rounded-xl card-hover"
                   >
                     <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 rounded-lg flex items-center justify-center shrink-0 bg-white/90 border border-border/50 overflow-hidden">
+                      <div className="w-12 h-12 flex items-center justify-center shrink-0">
                         <img 
                           src={entry.logo} 
                           alt={`${entry.institution} logo`}
-                          className="w-10 h-10 object-contain"
+                          className="w-12 h-12 object-contain mix-blend-screen brightness-110"
                         />
                       </div>
                       <div className="flex-1 min-w-0">
