@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import React from 'react';
 import { 
   SiPython, SiDjango, SiFastapi, SiElasticsearch, SiPandas, 
   SiDocker, SiPostgresql, SiGit, SiRedis, SiLinux, SiPostman,
@@ -23,7 +23,36 @@ interface ConstellationProps {
   onStarHover: (starId: string | null, constellationName: string | null) => void;
   containerWidth: number;
   containerHeight: number;
+  isZoomed: boolean;
+  isHidden: boolean;
 }
+
+// Icon mapping
+export const iconMap: Record<string, React.ReactNode> = {
+  'Python': <SiPython />,
+  'Django': <SiDjango />,
+  'FastAPI': <SiFastapi />,
+  'Elasticsearch': <SiElasticsearch />,
+  'OpenSearch': <Layers size={16} />,
+  'YOLO': <Cpu size={16} />,
+  'Pandas': <SiPandas />,
+  'LangChain': <Workflow size={16} />,
+  'OpenAI': <SiOpenai />,
+  'Jupyter': <SiJupyter />,
+  'Azure': <Cloud size={16} />,
+  'Docker': <SiDocker />,
+  'Nginx': <SiNginx />,
+  'Kafka': <SiApachekafka />,
+  'Linux': <SiLinux />,
+  'PostgreSQL': <SiPostgresql />,
+  'Redis': <SiRedis />,
+  'MySQL': <SiMysql />,
+  'MongoDB': <SiMongodb />,
+  'Git': <SiGit />,
+  'GitLab': <SiGitlab />,
+  'Postman': <SiPostman />,
+  'Fusion360': <Box size={16} />,
+};
 
 const Constellation = ({
   name,
@@ -34,14 +63,47 @@ const Constellation = ({
   onStarHover,
   containerWidth,
   containerHeight,
+  isZoomed,
+  isHidden,
 }: ConstellationProps) => {
+  // Find which star indices are connected to the hovered star
+  const getConnectedStarIds = (hoveredStarId: string | null): Set<string> => {
+    if (!hoveredStarId) return new Set();
+    const hoveredIndex = stars.findIndex(s => s.id === hoveredStarId);
+    if (hoveredIndex === -1) return new Set();
+    
+    const connectedIds = new Set<string>();
+    connections.forEach(([a, b]) => {
+      if (a === hoveredIndex) connectedIds.add(stars[b]?.id || '');
+      if (b === hoveredIndex) connectedIds.add(stars[a]?.id || '');
+    });
+    return connectedIds;
+  };
+
+  const connectedStarIds = getConnectedStarIds(activeStarId);
+
+  // Check if a connection involves the hovered star
+  const isConnectionHighlighted = (startIdx: number, endIdx: number): boolean => {
+    if (!activeStarId) return false;
+    const hoveredIndex = stars.findIndex(s => s.id === activeStarId);
+    return startIdx === hoveredIndex || endIdx === hoveredIndex;
+  };
+
   return (
-    <g className="constellation-group">
+    <g 
+      className="constellation-group transition-all duration-500"
+      style={{
+        opacity: isHidden ? 0 : 1,
+        pointerEvents: isHidden ? 'none' : 'auto',
+      }}
+    >
       {/* Connection lines */}
       {connections.map(([startIdx, endIdx], idx) => {
         const startStar = stars[startIdx];
         const endStar = stars[endIdx];
         if (!startStar || !endStar) return null;
+        
+        const isHighlighted = isConnectionHighlighted(startIdx, endIdx);
         
         return (
           <line
@@ -51,76 +113,85 @@ const Constellation = ({
             x2={endStar.x * containerWidth}
             y2={endStar.y * containerHeight}
             stroke="hsl(var(--primary))"
-            strokeWidth={isActive ? 1.5 : 1}
-            strokeOpacity={isActive ? 0.6 : 0.1}
-            className="transition-all duration-500"
+            strokeWidth={isHighlighted ? 2 : isActive || isZoomed ? 1.5 : 1}
+            strokeOpacity={isHighlighted ? 0.8 : isActive || isZoomed ? 0.5 : 0.1}
+            className="transition-all duration-300"
           />
         );
       })}
 
-      {/* Stars */}
+      {/* Stars with icons */}
       {stars.map((star) => {
         const isHovered = activeStarId === star.id;
+        const isConnected = connectedStarIds.has(star.id);
         const cx = star.x * containerWidth;
         const cy = star.y * containerHeight;
+        const icon = iconMap[star.name];
+        
+        // Size calculations
+        const iconSize = isZoomed ? 24 : isHovered ? 22 : isActive || isConnected ? 18 : 16;
+        const glowSize = isHovered ? 30 : isActive || isConnected ? 20 : 12;
         
         return (
           <g key={star.id}>
-            {/* Glow effect */}
+            {/* Outer glow effect */}
             <circle
               cx={cx}
               cy={cy}
-              r={isHovered ? 20 : isActive ? 12 : 8}
+              r={glowSize}
               fill="hsl(var(--primary))"
-              opacity={isHovered ? 0.3 : isActive ? 0.15 : 0.05}
+              opacity={isHovered ? 0.3 : isActive || isConnected ? 0.15 : 0.05}
               className="transition-all duration-300"
             />
             
-            {/* Main star */}
-            <circle
-              cx={cx}
-              cy={cy}
-              r={isHovered ? 6 : isActive ? 4 : 3}
-              fill={isActive ? "hsl(var(--primary))" : "hsl(var(--primary) / 0.4)"}
-              className="transition-all duration-300 cursor-pointer"
-              style={{
-                filter: isHovered 
-                  ? 'drop-shadow(0 0 8px hsl(var(--primary))) drop-shadow(0 0 15px white)' 
-                  : isActive 
-                    ? 'drop-shadow(0 0 4px hsl(var(--primary)))' 
-                    : 'none',
-              }}
-              onMouseEnter={() => onStarHover(star.id, name)}
-              onMouseLeave={() => onStarHover(null, null)}
-            />
-            
-            {/* Twinkle animation overlay */}
-            <circle
-              cx={cx}
-              cy={cy}
-              r={isActive ? 4 : 3}
-              fill="white"
-              opacity={0}
-              className="animate-twinkle"
-              style={{ animationDelay: `${Math.random() * 3}s` }}
-            />
+            {/* Icon container */}
+            <foreignObject
+              x={cx - iconSize / 2}
+              y={cy - iconSize / 2}
+              width={iconSize}
+              height={iconSize}
+              className="overflow-visible"
+            >
+              <div
+                className="w-full h-full flex items-center justify-center cursor-pointer transition-all duration-300"
+                style={{
+                  color: 'hsl(var(--primary))',
+                  opacity: isHovered ? 1 : isActive || isConnected ? 0.85 : 0.45,
+                  transform: isHovered ? 'scale(1.3)' : 'scale(1)',
+                  filter: isHovered 
+                    ? 'drop-shadow(0 0 8px hsl(var(--primary))) drop-shadow(0 0 12px white)' 
+                    : isActive || isConnected
+                      ? 'drop-shadow(0 0 4px hsl(var(--primary)))' 
+                      : 'drop-shadow(0 0 2px hsl(var(--primary) / 0.5))',
+                }}
+                onMouseEnter={() => onStarHover(star.id, name)}
+                onMouseLeave={() => onStarHover(null, null)}
+              >
+                <div style={{ fontSize: iconSize * 0.85 }}>
+                  {icon}
+                </div>
+              </div>
+            </foreignObject>
 
-            {/* Tooltip */}
+            {/* Tooltip below icon */}
             {isHovered && (
-              <g>
+              <g className="animate-fade-in">
                 <rect
                   x={cx - 50}
-                  y={cy - 35}
+                  y={cy + iconSize / 2 + 8}
                   width={100}
-                  height={24}
-                  rx={4}
-                  fill="hsl(var(--card))"
-                  stroke="hsl(var(--border))"
+                  height={26}
+                  rx={6}
+                  fill="hsl(var(--card) / 0.95)"
+                  stroke="hsl(var(--primary) / 0.3)"
                   strokeWidth={1}
+                  style={{
+                    filter: 'drop-shadow(0 2px 8px hsl(var(--background) / 0.5))',
+                  }}
                 />
                 <text
                   x={cx}
-                  y={cy - 19}
+                  y={cy + iconSize / 2 + 25}
                   textAnchor="middle"
                   fill="hsl(var(--foreground))"
                   fontSize={12}
@@ -135,18 +206,20 @@ const Constellation = ({
         );
       })}
 
-      {/* Constellation name */}
-      {isActive && (
+      {/* Constellation name - show when active or zoomed */}
+      {(isActive || isZoomed) && (
         <text
           x={stars.reduce((acc, s) => acc + s.x, 0) / stars.length * containerWidth}
-          y={Math.min(...stars.map(s => s.y)) * containerHeight - 25}
+          y={Math.min(...stars.map(s => s.y)) * containerHeight - 30}
           textAnchor="middle"
           fill="hsl(var(--foreground))"
-          fontSize={14}
+          fontSize={isZoomed ? 18 : 14}
           fontWeight={600}
           opacity={0.9}
-          className="transition-opacity duration-300"
-          style={{ textShadow: '0 0 10px hsl(var(--primary) / 0.5)' }}
+          className="transition-all duration-300 pointer-events-none"
+          style={{ 
+            textShadow: '0 0 10px hsl(var(--primary) / 0.5)',
+          }}
         >
           {name}
         </text>
@@ -155,46 +228,22 @@ const Constellation = ({
   );
 };
 
-// Icon mapping
-const iconMap: Record<string, React.ReactNode> = {
-  'Python': <SiPython />,
-  'Django': <SiDjango />,
-  'FastAPI': <SiFastapi />,
-  'Elasticsearch': <SiElasticsearch />,
-  'OpenSearch': <Layers />,
-  'YOLO': <Cpu />,
-  'Pandas': <SiPandas />,
-  'LangChain': <Workflow />,
-  'OpenAI': <SiOpenai />,
-  'Jupyter': <SiJupyter />,
-  'Azure': <Cloud />,
-  'Docker': <SiDocker />,
-  'Nginx': <SiNginx />,
-  'Kafka': <SiApachekafka />,
-  'Linux': <SiLinux />,
-  'PostgreSQL': <SiPostgresql />,
-  'Redis': <SiRedis />,
-  'MySQL': <SiMysql />,
-  'MongoDB': <SiMongodb />,
-  'Git': <SiGit />,
-  'GitLab': <SiGitlab />,
-  'Postman': <SiPostman />,
-  'Fusion360': <Box />,
-};
-
 // Constellation definitions with normalized positions (0-1)
-export const constellationData = {
+export const constellationData: Record<string, { 
+  stars: { id: string; name: string; x: number; y: number; icon?: React.ReactNode }[]; 
+  connections: [number, number][];
+  center: { x: number; y: number };
+}> = {
   'Languages & Frameworks': {
-    // Orion-like shape
     stars: [
       { id: 'python', name: 'Python', x: 0.12, y: 0.25 },
       { id: 'django', name: 'Django', x: 0.08, y: 0.45 },
       { id: 'fastapi', name: 'FastAPI', x: 0.16, y: 0.55 },
     ],
-    connections: [[0, 1], [1, 2], [0, 2]] as [number, number][],
+    connections: [[0, 1], [1, 2], [0, 2]],
+    center: { x: 0.12, y: 0.42 },
   },
   'Data & AI': {
-    // Big Dipper shape
     stars: [
       { id: 'elasticsearch', name: 'Elasticsearch', x: 0.28, y: 0.18 },
       { id: 'opensearch', name: 'OpenSearch', x: 0.35, y: 0.22 },
@@ -204,10 +253,10 @@ export const constellationData = {
       { id: 'openai', name: 'OpenAI', x: 0.26, y: 0.55 },
       { id: 'jupyter', name: 'Jupyter', x: 0.22, y: 0.65 },
     ],
-    connections: [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6]] as [number, number][],
+    connections: [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6]],
+    center: { x: 0.32, y: 0.40 },
   },
   'Cloud & Infrastructure': {
-    // Cassiopeia W shape
     stars: [
       { id: 'azure', name: 'Azure', x: 0.52, y: 0.15 },
       { id: 'docker', name: 'Docker', x: 0.58, y: 0.28 },
@@ -215,37 +264,29 @@ export const constellationData = {
       { id: 'kafka', name: 'Kafka', x: 0.72, y: 0.30 },
       { id: 'linux', name: 'Linux', x: 0.78, y: 0.20 },
     ],
-    connections: [[0, 1], [1, 2], [2, 3], [3, 4]] as [number, number][],
+    connections: [[0, 1], [1, 2], [2, 3], [3, 4]],
+    center: { x: 0.65, y: 0.22 },
   },
   'Databases': {
-    // Southern Cross shape
     stars: [
       { id: 'postgresql', name: 'PostgreSQL', x: 0.68, y: 0.50 },
       { id: 'redis', name: 'Redis', x: 0.75, y: 0.58 },
       { id: 'mysql', name: 'MySQL', x: 0.82, y: 0.52 },
       { id: 'mongodb', name: 'MongoDB', x: 0.75, y: 0.68 },
     ],
-    connections: [[0, 1], [1, 2], [1, 3], [0, 3]] as [number, number][],
+    connections: [[0, 1], [1, 2], [1, 3], [0, 3]],
+    center: { x: 0.75, y: 0.57 },
   },
   'Tools': {
-    // Leo-like shape
     stars: [
       { id: 'git', name: 'Git', x: 0.48, y: 0.62 },
       { id: 'gitlab', name: 'GitLab', x: 0.55, y: 0.70 },
       { id: 'postman', name: 'Postman', x: 0.52, y: 0.82 },
       { id: 'fusion360', name: 'Fusion360', x: 0.62, y: 0.78 },
     ],
-    connections: [[0, 1], [1, 2], [2, 3], [1, 3]] as [number, number][],
+    connections: [[0, 1], [1, 2], [2, 3], [1, 3]],
+    center: { x: 0.54, y: 0.73 },
   },
 };
-
-// Add icons to stars
-Object.keys(constellationData).forEach((key) => {
-  const constellation = constellationData[key as keyof typeof constellationData];
-  constellation.stars = constellation.stars.map((star) => ({
-    ...star,
-    icon: iconMap[star.name] || null,
-  }));
-});
 
 export default Constellation;
