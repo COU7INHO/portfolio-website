@@ -3,6 +3,21 @@ import { X } from 'lucide-react';
 import Constellation, { constellationData, iconMap } from './Constellation';
 import { useIsMobile } from '@/hooks/use-mobile';
 
+// Helper to calculate constellation bounds
+const getConstellationBounds = (stars: { x: number; y: number }[]) => {
+  const minX = Math.min(...stars.map(s => s.x));
+  const maxX = Math.max(...stars.map(s => s.x));
+  const minY = Math.min(...stars.map(s => s.y));
+  const maxY = Math.max(...stars.map(s => s.y));
+  return { 
+    minX, maxX, minY, maxY, 
+    width: maxX - minX, 
+    height: maxY - minY,
+    centerX: (minX + maxX) / 2,
+    centerY: (minY + maxY) / 2,
+  };
+};
+
 const TechStack = () => {
   const [hoveredConstellation, setHoveredConstellation] = useState<string | null>(null);
   const [zoomedConstellation, setZoomedConstellation] = useState<string | null>(null);
@@ -48,15 +63,19 @@ const TechStack = () => {
 
   const handleStarHover = (starId: string | null, constellationName: string | null) => {
     setActiveStarId(starId);
+    // Allow hover constellation highlight even when zoomed (for tooltip display)
     if (!zoomedConstellation) {
       setHoveredConstellation(constellationName);
     }
   };
 
+  // Issue 1 & 2: Direct switching between categories, toggle same category to zoom out
   const handleCategoryClick = (category: string) => {
     if (zoomedConstellation === category) {
+      // Clicking same category = zoom out
       setZoomedConstellation(null);
     } else {
+      // Clicking different category = zoom directly to it (even if already zoomed)
       setZoomedConstellation(category);
       setHoveredConstellation(null);
     }
@@ -68,30 +87,10 @@ const TechStack = () => {
     }
   };
 
-  // Calculate zoom transform for centered view of a constellation
-  const getZoomTransform = useMemo(() => {
-    if (!zoomedConstellation) return { transform: 'scale(1) translate(0, 0)' };
-    
-    const constellation = constellationData[zoomedConstellation];
-    if (!constellation) return { transform: 'scale(1) translate(0, 0)' };
-    
-    const centerX = constellation.center.x;
-    const centerY = constellation.center.y;
-    
-    // Calculate translation to center the constellation
-    const translateX = (0.5 - centerX) * dimensions.width;
-    const translateY = (0.5 - centerY) * dimensions.height;
-    
-    return {
-      transform: `scale(2) translate(${translateX / 2}px, ${translateY / 2}px)`,
-    };
-  }, [zoomedConstellation, dimensions]);
-
   // Mobile-adjusted positions
   const getMobileData = (): Record<string, { 
     stars: { id: string; name: string; x: number; y: number }[]; 
     connections: [number, number][];
-    center: { x: number; y: number };
   }> => ({
     'Languages & Frameworks': {
       stars: [
@@ -100,7 +99,6 @@ const TechStack = () => {
         { id: 'fastapi', name: 'FastAPI', x: 0.28, y: 0.15 },
       ],
       connections: [[0, 1], [1, 2], [0, 2]],
-      center: { x: 0.2, y: 0.12 },
     },
     'Data & AI': {
       stars: [
@@ -113,7 +111,6 @@ const TechStack = () => {
         { id: 'jupyter', name: 'Jupyter', x: 0.45, y: 0.12 },
       ],
       connections: [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6]],
-      center: { x: 0.62, y: 0.12 },
     },
     'Cloud & Infrastructure': {
       stars: [
@@ -124,7 +121,6 @@ const TechStack = () => {
         { id: 'linux', name: 'Linux', x: 0.70, y: 0.32 },
       ],
       connections: [[0, 1], [1, 2], [2, 3], [3, 4]],
-      center: { x: 0.42, y: 0.35 },
     },
     'Databases': {
       stars: [
@@ -134,7 +130,6 @@ const TechStack = () => {
         { id: 'mongodb', name: 'MongoDB', x: 0.35, y: 0.68 },
       ],
       connections: [[0, 1], [1, 2], [1, 3], [0, 3]],
-      center: { x: 0.35, y: 0.60 },
     },
     'Tools': {
       stars: [
@@ -144,11 +139,44 @@ const TechStack = () => {
         { id: 'fusion360', name: 'Fusion360', x: 0.82, y: 0.70 },
       ],
       connections: [[0, 1], [1, 2], [2, 3], [1, 3]],
-      center: { x: 0.71, y: 0.65 },
     },
   });
 
   const data = isMobile ? getMobileData() : constellationData;
+
+  // Issue 4: Calculate dynamic zoom level based on constellation size
+  const getZoomTransform = useMemo(() => {
+    if (!zoomedConstellation) return { transform: 'scale(1) translate(0, 0)' };
+    
+    const constellation = data[zoomedConstellation];
+    if (!constellation) return { transform: 'scale(1) translate(0, 0)' };
+    
+    const bounds = getConstellationBounds(constellation.stars);
+    
+    // Calculate zoom level that fits the constellation with padding
+    const paddingRatio = 0.25; // 25% padding on each side
+    const availableWidth = 1 - (paddingRatio * 2);
+    const availableHeight = 1 - (paddingRatio * 2);
+    
+    // Ensure minimum bounds size to avoid division issues
+    const boundsWidth = Math.max(bounds.width, 0.1);
+    const boundsHeight = Math.max(bounds.height, 0.1);
+    
+    const scaleX = availableWidth / boundsWidth;
+    const scaleY = availableHeight / boundsHeight;
+    
+    // Use the smaller scale to ensure it fits both dimensions
+    // Cap at maximum of 2.5x, minimum of 1.3x
+    const zoom = Math.min(Math.max(Math.min(scaleX, scaleY), 1.3), 2.5);
+    
+    // Calculate translation to center the constellation
+    const translateX = (0.5 - bounds.centerX) * dimensions.width;
+    const translateY = (0.5 - bounds.centerY) * dimensions.height;
+    
+    return {
+      transform: `scale(${zoom}) translate(${translateX / zoom}px, ${translateY / zoom}px)`,
+    };
+  }, [zoomedConstellation, dimensions, data]);
 
   const activeConstellation = zoomedConstellation || hoveredConstellation;
 
@@ -196,7 +224,7 @@ const TechStack = () => {
               width={dimensions.width}
               height={dimensions.height}
               viewBox={`0 0 ${dimensions.width} ${dimensions.height}`}
-              className="overflow-visible transition-transform duration-600 ease-out"
+              className="overflow-visible"
               style={{
                 ...getZoomTransform,
                 transformOrigin: 'center center',
@@ -217,7 +245,7 @@ const TechStack = () => {
                   stars={stars}
                   connections={connections}
                   isActive={activeConstellation === name}
-                  activeStarId={activeConstellation === name ? activeStarId : null}
+                  activeStarId={activeStarId}
                   onStarHover={handleStarHover}
                   containerWidth={dimensions.width}
                   containerHeight={dimensions.height}
