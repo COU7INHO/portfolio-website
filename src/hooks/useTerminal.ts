@@ -18,6 +18,7 @@ interface UseTerminalReturn {
   historyIndex: number;
   showHtop: boolean;
   rebootPhase: RebootPhase;
+  wasCleared: boolean;
   addLine: (line: Omit<TerminalLine, 'id'>) => void;
   executeCommand: (command: string) => void;
   clearTerminal: () => void;
@@ -35,6 +36,7 @@ export const useTerminal = (onExit: () => void, isOpen: boolean): UseTerminalRet
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [showHtop, setShowHtop] = useState(false);
   const [rebootPhase, setRebootPhase] = useState<RebootPhase>('idle');
+  const [wasCleared, setWasCleared] = useState(false);
 
   // Reset terminal state when reopening
   React.useEffect(() => {
@@ -45,6 +47,7 @@ export const useTerminal = (onExit: () => void, isOpen: boolean): UseTerminalRet
       setHistoryIndex(-1);
       setShowHtop(false);
       setRebootPhase('idle');
+      setWasCleared(false);
     }
   }, [isOpen]);
 
@@ -77,6 +80,7 @@ export const useTerminal = (onExit: () => void, isOpen: boolean): UseTerminalRet
 
   const clearTerminal = useCallback(() => {
     setLines([]);
+    setWasCleared(true);
   }, []);
 
   const handleHelp = useCallback(() => {
@@ -444,6 +448,7 @@ Available commands:
     historyIndex,
     showHtop,
     rebootPhase,
+    wasCleared,
     addLine,
     executeCommand,
     clearTerminal,
