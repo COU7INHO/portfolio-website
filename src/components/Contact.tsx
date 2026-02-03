@@ -1,0 +1,247 @@
+import { useState, useRef, useEffect } from 'react';
+import { Github, Linkedin, Mail } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+
+const socialLinks = [
+  { icon: Github, label: 'GitHub', href: 'https://github.com', x: 20, y: 30 },
+  { icon: Linkedin, label: 'LinkedIn', href: 'https://linkedin.com', x: 60, y: 10 },
+  { icon: Mail, label: 'Email', href: 'mailto:contact@example.com', x: 80, y: 50 },
+];
+
+const constellationLines = [
+  { from: 0, to: 1 },
+  { from: 1, to: 2 },
+];
+
+type SubmitState = 'idle' | 'submitting' | 'success' | 'error';
+
+const Contact = () => {
+  const [hoveredLink, setHoveredLink] = useState<number | null>(null);
+  const [submitState, setSubmitState] = useState<SubmitState>('idle');
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setSubmitState('submitting');
+
+    const formData = new FormData(e.currentTarget);
+
+    try {
+      const response = await fetch('https://formspree.io/f/maqbgkjq', {
+        method: 'POST',
+        body: formData,
+        headers: {
+          Accept: 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        setSubmitState('success');
+        formRef.current?.reset();
+        setTimeout(() => setSubmitState('idle'), 3000);
+      } else {
+        setSubmitState('error');
+        setTimeout(() => setSubmitState('idle'), 3000);
+      }
+    } catch {
+      setSubmitState('error');
+      setTimeout(() => setSubmitState('idle'), 3000);
+    }
+  };
+
+  const getButtonText = () => {
+    switch (submitState) {
+      case 'submitting':
+        return 'Transmitting...';
+      case 'success':
+        return 'Transmission Sent ✓';
+      case 'error':
+        return 'Transmission Failed';
+      default:
+        return 'Send Transmission';
+    }
+  };
+
+  return (
+    <section id="contact" className="py-20 relative">
+      <div className="container mx-auto px-6">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+          {/* Left Side - Title and Social Constellation */}
+          <div className="space-y-8">
+            <div className="space-y-3">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground">
+                Send a <span className="text-primary text-glow">Transmission</span>
+              </h2>
+              <p className="text-muted-foreground text-lg">
+                Reach me across the galaxy
+              </p>
+            </div>
+
+            {/* Mini Constellation Social Links */}
+            <div className="relative h-32 w-full max-w-xs">
+              <svg
+                className="absolute inset-0 w-full h-full"
+                viewBox="0 0 100 60"
+                preserveAspectRatio="xMidYMid meet"
+              >
+                {/* Constellation Lines */}
+                {constellationLines.map((line, idx) => {
+                  const from = socialLinks[line.from];
+                  const to = socialLinks[line.to];
+                  const isHighlighted = hoveredLink === line.from || hoveredLink === line.to;
+                  return (
+                    <line
+                      key={idx}
+                      x1={from.x}
+                      y1={from.y}
+                      x2={to.x}
+                      y2={to.y}
+                      stroke="hsl(var(--primary))"
+                      strokeWidth={isHighlighted ? 1 : 0.5}
+                      strokeOpacity={isHighlighted ? 0.8 : 0.3}
+                      className="transition-all duration-300"
+                    />
+                  );
+                })}
+              </svg>
+
+              {/* Social Link Icons */}
+              {socialLinks.map((link, idx) => {
+                const Icon = link.icon;
+                const isHovered = hoveredLink === idx;
+                return (
+                  <a
+                    key={idx}
+                    href={link.href}
+                    target={link.href.startsWith('mailto:') ? undefined : '_blank'}
+                    rel="noopener noreferrer"
+                    className="absolute group"
+                    style={{
+                      left: `${link.x}%`,
+                      top: `${link.y}%`,
+                      transform: 'translate(-50%, -50%)',
+                    }}
+                    onMouseEnter={() => setHoveredLink(idx)}
+                    onMouseLeave={() => setHoveredLink(null)}
+                    aria-label={link.label}
+                  >
+                    <div
+                      className={`
+                        w-10 h-10 rounded-full flex items-center justify-center
+                        bg-background/50 border border-border/50
+                        transition-all duration-300
+                        ${isHovered 
+                          ? 'border-primary/80 shadow-[0_0_20px_hsl(var(--primary)/0.5)] scale-110' 
+                          : 'hover:border-primary/50'
+                        }
+                      `}
+                    >
+                      <Icon 
+                        className={`w-5 h-5 transition-all duration-300 ${
+                          isHovered ? 'text-primary' : 'text-muted-foreground'
+                        }`} 
+                      />
+                    </div>
+                    {/* Tooltip */}
+                    <span
+                      className={`
+                        absolute -bottom-8 left-1/2 -translate-x-1/2
+                        text-xs text-muted-foreground whitespace-nowrap
+                        transition-all duration-300
+                        ${isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-1'}
+                      `}
+                    >
+                      {link.label}
+                    </span>
+                  </a>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Right Side - Contact Form */}
+          <div className="w-full">
+            <form
+              ref={formRef}
+              onSubmit={handleSubmit}
+              className="space-y-5"
+            >
+              <div className="space-y-4">
+                <Input
+                  type="text"
+                  name="name"
+                  placeholder="Your name"
+                  required
+                  className="
+                    bg-background/30 border-border/50 
+                    focus:border-primary focus:shadow-[0_0_15px_hsl(var(--primary)/0.2)]
+                    transition-all duration-300
+                    placeholder:text-muted-foreground/60
+                  "
+                />
+                <Input
+                  type="email"
+                  name="email"
+                  placeholder="Your email"
+                  required
+                  className="
+                    bg-background/30 border-border/50 
+                    focus:border-primary focus:shadow-[0_0_15px_hsl(var(--primary)/0.2)]
+                    transition-all duration-300
+                    placeholder:text-muted-foreground/60
+                  "
+                />
+                <Textarea
+                  name="message"
+                  placeholder="Your message..."
+                  required
+                  rows={5}
+                  className="
+                    bg-background/30 border-border/50 
+                    focus:border-primary focus:shadow-[0_0_15px_hsl(var(--primary)/0.2)]
+                    transition-all duration-300
+                    placeholder:text-muted-foreground/60
+                    resize-none
+                  "
+                />
+              </div>
+
+              <Button
+                type="submit"
+                disabled={submitState === 'submitting'}
+                className={`
+                  w-full relative overflow-hidden
+                  bg-primary text-primary-foreground
+                  hover:bg-primary/90
+                  transition-all duration-300
+                  ${submitState === 'success' 
+                    ? 'bg-green-600 hover:bg-green-600' 
+                    : submitState === 'error' 
+                      ? 'bg-destructive hover:bg-destructive' 
+                      : 'hover:shadow-[0_0_20px_hsl(var(--primary)/0.4)]'
+                  }
+                `}
+              >
+                <span className="relative z-10">{getButtonText()}</span>
+                {/* Pulse animation on success */}
+                {submitState === 'success' && (
+                  <span className="absolute inset-0 animate-ping bg-green-400/30 rounded-md" />
+                )}
+              </Button>
+
+              {submitState === 'error' && (
+                <p className="text-destructive text-sm text-center animate-fade-in">
+                  Transmission failed. Try again.
+                </p>
+              )}
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Contact;
