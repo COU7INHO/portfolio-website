@@ -57,13 +57,7 @@ const Navigation = () => {
                 onClick={() => scrollToSection('journey')}
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
-                Work
-              </button>
-              <button
-                onClick={() => scrollToSection('education')}
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Education
+                Journey
               </button>
               <button
                 onClick={() => scrollToSection('skills')}
@@ -93,24 +87,10 @@ const Navigation = () => {
                 About
               </Link>
               <Link
-                to="/experience"
-                className={`text-sm transition-colors ${
-                  location.pathname === '/experience' 
-                    ? 'text-primary' 
-                    : 'text-muted-foreground hover:text-foreground'
-                }`}
+                to="/#journey"
+                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
-                Work
-              </Link>
-              <Link
-                to="/education"
-                className={`text-sm transition-colors ${
-                  location.pathname === '/education' 
-                    ? 'text-primary' 
-                    : 'text-muted-foreground hover:text-foreground'
-                }`}
-              >
-                Education
+                Journey
               </Link>
               <Link
                 to="/#skills"
