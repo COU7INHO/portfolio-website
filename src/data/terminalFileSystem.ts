@@ -10,22 +10,18 @@ export interface FileSystemEntry {
 
 const aboutMeContent = `# About Me
 
-I build intelligent solutions at the intersection of AI, data engineering, 
-and software development.
+I'm a Software Engineer turned AI Data Engineer with a background in 
+Biomedical Engineering. My journey started in biology and healthcare, 
+where I discovered a passion for building software that turns complex 
+data into meaningful insights.
 
-## Expertise
+From developing computer vision applications for clinical gait analysis 
+to optimizing high-performance APIs handling thousands of daily requests, 
+I've always been drawn to solving real-world problems through code.
 
-My expertise lies in RAG-powered applications, machine learning pipelines, 
-and designing scalable software architectures that solve real-world problems.
-
-## Passion
-
-I'm passionate about leveraging cutting-edge technology to create 
-meaningful impact through clean, efficient, and maintainable code.
-
----
-
-*Currently working as an AI Data Engineer at Glintt Global, Porto, Portugal.*
+Currently at Glintt Global, I work on AI-powered solutions involving 
+RAG architectures, machine learning pipelines, and intelligent data 
+orchestration.
 `;
 
 const glinttContent = JSON.stringify({
