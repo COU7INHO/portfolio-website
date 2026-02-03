@@ -84,14 +84,16 @@ const mastersContent = JSON.stringify({
   degree: "Master's Degree in Biomedical Engineering",
   institution: "Universidade Católica Portuguesa",
   period: "2020 - 2022",
-  location: "Porto, Portugal"
+  location: "Porto, Portugal",
+  description: "Advanced studies in biology, computational methods, and data processing applied to healthcare, with a thesis focused on developing a software solution for gait analysis in lower limb amputees using computer vision and signal processing"
 }, null, 2);
 
 const bachelorsContent = JSON.stringify({
   degree: "Bachelor's Degree in Bioengineering",
   institution: "Universidade Católica Portuguesa",
   period: "2017 - 2020",
-  location: "Porto, Portugal"
+  location: "Porto, Portugal",
+  description: "Foundations in biology, biomedical sciences, signal processing, and programming, building a multidisciplinary profile that bridges life sciences with technology and software development"
 }, null, 2);
 
 const speedChampionContent = JSON.stringify({
