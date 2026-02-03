@@ -1,11 +1,13 @@
 import { useEffect, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import BackButton from '@/components/BackButton';
 import Footer from '@/components/Footer';
 import ParticlesBackground from '@/components/ParticlesBackground';
-import { GraduationCap, Calendar } from 'lucide-react';
+import { Calendar } from 'lucide-react';
 import { useScrollToTop } from '@/hooks/useScrollToTop';
+
+// Import university logo
+import ucpLogo from '@/assets/logos/universidade-catolica.jpg';
 
 interface EducationEntry {
   id: string;
@@ -13,6 +15,7 @@ interface EducationEntry {
   degree: string;
   years: string;
   description?: string;
+  logo: string;
 }
 
 const education: EducationEntry[] = [
@@ -22,6 +25,7 @@ const education: EducationEntry[] = [
     degree: "Master's Degree in Biomedical Engineering",
     years: '2017 - 2019',
     description: 'Thesis focused on machine learning applications in medical imaging and diagnostics.',
+    logo: ucpLogo,
   },
   {
     id: 'bachelors',
@@ -29,6 +33,7 @@ const education: EducationEntry[] = [
     degree: "Bachelor's Degree in Bioengineering",
     years: '2014 - 2017',
     description: 'Foundation in engineering principles applied to biological and medical systems.',
+    logo: ucpLogo,
   },
 ];
 
@@ -83,9 +88,13 @@ const EducationPage = () => {
               >
                 <div className="p-6 md:p-8 bg-card border border-border rounded-xl card-hover">
                   <div className="flex flex-col md:flex-row md:items-start gap-6">
-                    {/* Icon */}
-                    <div className="w-16 h-16 bg-secondary rounded-xl flex items-center justify-center shrink-0">
-                      <GraduationCap className="w-8 h-8 text-primary" />
+                    {/* Logo */}
+                    <div className="w-16 h-16 rounded-xl flex items-center justify-center shrink-0 bg-white/90 border border-border/50 overflow-hidden">
+                      <img 
+                        src={edu.logo} 
+                        alt={`${edu.institution} logo`}
+                        className="w-12 h-12 object-contain"
+                      />
                     </div>
 
                     <div className="flex-1">
