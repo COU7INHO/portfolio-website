@@ -8,6 +8,8 @@ export interface TerminalLine {
   prompt?: string;
 }
 
+export type RebootPhase = 'idle' | 'message' | 'imploding' | 'pause' | 'exploding' | 'done';
+
 interface UseTerminalReturn {
   lines: TerminalLine[];
   currentPath: string[];
@@ -15,6 +17,7 @@ interface UseTerminalReturn {
   commandHistory: string[];
   historyIndex: number;
   showHtop: boolean;
+  rebootPhase: RebootPhase;
   addLine: (line: Omit<TerminalLine, 'id'>) => void;
   executeCommand: (command: string) => void;
   clearTerminal: () => void;
@@ -31,6 +34,7 @@ export const useTerminal = (onExit: () => void, isOpen: boolean): UseTerminalRet
   const [commandHistory, setCommandHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [showHtop, setShowHtop] = useState(false);
+  const [rebootPhase, setRebootPhase] = useState<RebootPhase>('idle');
 
   // Reset terminal state when reopening
   React.useEffect(() => {
@@ -40,6 +44,7 @@ export const useTerminal = (onExit: () => void, isOpen: boolean): UseTerminalRet
       setCommandHistory([]);
       setHistoryIndex(-1);
       setShowHtop(false);
+      setRebootPhase('idle');
     }
   }, [isOpen]);
 
@@ -95,6 +100,7 @@ Available commands:
     help                  Show this help message
     exit                  Exit Dev Mode and return to normal site
     htop                  Check what's running in my brain
+    reboot                Restart the universe
 
   Tips:
     - Use TAB for autocomplete
@@ -300,6 +306,19 @@ Available commands:
     });
   }, [addLine]);
 
+  const handleReboot = useCallback(() => {
+    addLine({ type: 'output', content: 'Initiating system reboot...' });
+    setTimeout(() => {
+      addLine({ type: 'output', content: 'Shutting down portfolio terminal...' });
+      setTimeout(() => {
+        addLine({ type: 'success', content: 'Goodbye!' });
+        setTimeout(() => {
+          setRebootPhase('imploding');
+        }, 600);
+      }, 500);
+    }, 400);
+  }, [addLine]);
+
   const executeCommand = useCallback((input: string) => {
     const trimmed = input.trim();
     if (!trimmed) return;
@@ -352,13 +371,16 @@ Available commands:
       case 'htop':
         setShowHtop(true);
         break;
+      case 'reboot':
+        handleReboot();
+        break;
       default:
         addLine({
           type: 'error',
           content: `bash: ${command}: command not found\nType 'help' to see available commands.`
         });
     }
-  }, [addLine, prompt, onExit, clearTerminal, handleHelp, handleLs, handleCd, handlePwd, handleCat, handleGithub, handleLinkedin, handleOpen, handleRm]);
+  }, [addLine, prompt, onExit, clearTerminal, handleHelp, handleLs, handleCd, handlePwd, handleCat, handleGithub, handleLinkedin, handleOpen, handleRm, handleReboot]);
 
   const navigateHistory = useCallback((direction: 'up' | 'down'): string => {
     if (commandHistory.length === 0) return '';
@@ -383,7 +405,7 @@ Available commands:
     
     // Command autocomplete
     if (parts.length === 1) {
-      const commands = ['ls', 'cd', 'pwd', 'cat', 'clear', 'help', 'exit', 'github', 'linkedin', 'open', 'htop'];
+      const commands = ['ls', 'cd', 'pwd', 'cat', 'clear', 'help', 'exit', 'github', 'linkedin', 'open', 'htop', 'reboot'];
       const match = commands.find(c => c.startsWith(parts[0].toLowerCase()));
       if (match) return match;
     }
@@ -421,6 +443,7 @@ Available commands:
     commandHistory,
     historyIndex,
     showHtop,
+    rebootPhase,
     addLine,
     executeCommand,
     clearTerminal,
