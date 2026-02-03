@@ -112,9 +112,6 @@ const Education = () => {
                         <p className="text-muted-foreground text-sm mt-1">
                           {entry.institution}
                         </p>
-                        <p className="text-secondary-foreground text-sm mt-2 line-clamp-2">
-                          {entry.description}
-                        </p>
                         <p className="text-primary/80 text-sm mt-2 font-medium">
                           {entry.years}
                         </p>
