@@ -171,7 +171,7 @@ const DevModeTerminal = ({ isOpen, onClose }: DevModeTerminalProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const { lines, prompt, executeCommand, navigateHistory, autocomplete, showHtop, closeHtop, rebootPhase } = useTerminal(onClose, isOpen);
+  const { lines, prompt, executeCommand, navigateHistory, autocomplete, showHtop, closeHtop, rebootPhase, wasCleared } = useTerminal(onClose, isOpen);
 
   // Sync htop visibility with hook state
   useEffect(() => {
@@ -399,12 +399,16 @@ const DevModeTerminal = ({ isOpen, onClose }: DevModeTerminalProps) => {
 
             {bootPhase === 'ready' && (
               <div className="space-y-1">
-                {/* Welcome message */}
-                <pre className="text-primary text-xs md:text-sm leading-tight mb-4">{asciiLogo}</pre>
-                <div className="mb-4 space-y-1 text-secondary-foreground">
-                  <p>Welcome! Type '<span className="text-primary">help</span>' to see available commands.</p>
-                  <p>Press <span className="text-primary">ESC</span> or type '<span className="text-primary">exit</span>' to return to the normal site.</p>
-                </div>
+                {/* Welcome message - only show if terminal hasn't been cleared */}
+                {!wasCleared && (
+                  <>
+                    <pre className="text-primary text-xs md:text-sm leading-tight mb-4">{asciiLogo}</pre>
+                    <div className="mb-4 space-y-1 text-secondary-foreground">
+                      <p>Welcome! Type '<span className="text-primary">help</span>' to see available commands.</p>
+                      <p>Press <span className="text-primary">ESC</span> or type '<span className="text-primary">exit</span>' to return to the normal site.</p>
+                    </div>
+                  </>
+                )}
 
                 {/* Command history */}
                 {lines.map(renderLine)}
