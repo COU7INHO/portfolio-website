@@ -10,11 +10,6 @@ export interface TerminalLine {
 
 export type RebootPhase = 'idle' | 'message' | 'imploding' | 'pause' | 'exploding' | 'done';
 
-export interface PacmanState {
-  active: boolean;
-  terminalContent: string;
-}
-
 interface UseTerminalReturn {
   lines: TerminalLine[];
   currentPath: string[];
@@ -23,15 +18,12 @@ interface UseTerminalReturn {
   historyIndex: number;
   showHtop: boolean;
   rebootPhase: RebootPhase;
-  pacmanState: PacmanState;
   addLine: (line: Omit<TerminalLine, 'id'>) => void;
   executeCommand: (command: string) => void;
   clearTerminal: () => void;
   navigateHistory: (direction: 'up' | 'down') => string;
   autocomplete: (partial: string) => string;
   closeHtop: () => void;
-  startPacman: () => void;
-  endPacman: (score: number, ateEverything: boolean) => void;
 }
 
 let lineIdCounter = 0;
@@ -43,7 +35,6 @@ export const useTerminal = (onExit: () => void, isOpen: boolean): UseTerminalRet
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [showHtop, setShowHtop] = useState(false);
   const [rebootPhase, setRebootPhase] = useState<RebootPhase>('idle');
-  const [pacmanState, setPacmanState] = useState<PacmanState>({ active: false, terminalContent: '' });
 
   // Reset terminal state when reopening
   React.useEffect(() => {
@@ -54,7 +45,6 @@ export const useTerminal = (onExit: () => void, isOpen: boolean): UseTerminalRet
       setHistoryIndex(-1);
       setShowHtop(false);
       setRebootPhase('idle');
-      setPacmanState({ active: false, terminalContent: '' });
     }
   }, [isOpen]);
 
@@ -329,35 +319,6 @@ Available commands:
     }, 400);
   }, [addLine]);
 
-  const generateTerminalContent = useCallback((): string => {
-    // Generate a string representation of the current terminal content
-    const contentLines: string[] = [];
-    
-    lines.forEach(line => {
-      if (line.type === 'input') {
-        contentLines.push(`${line.prompt} ${line.content}`);
-      } else {
-        contentLines.push(line.content);
-      }
-    });
-    
-    return contentLines.join('\n');
-  }, [lines]);
-
-  const startPacman = useCallback(() => {
-    const content = generateTerminalContent();
-    setPacmanState({ active: true, terminalContent: content });
-  }, [generateTerminalContent]);
-
-  const endPacman = useCallback((score: number, ateEverything: boolean) => {
-    setPacmanState({ active: false, terminalContent: '' });
-    if (ateEverything) {
-      addLine({ type: 'success', content: `You ate the entire terminal! Score: ${score}` });
-    } else {
-      addLine({ type: 'output', content: `Game over! Score: ${score}` });
-    }
-  }, [addLine]);
-
   const executeCommand = useCallback((input: string) => {
     const trimmed = input.trim();
     if (!trimmed) return;
@@ -413,16 +374,13 @@ Available commands:
       case 'reboot':
         handleReboot();
         break;
-      case 'pacman':
-        startPacman();
-        break;
       default:
         addLine({
           type: 'error',
           content: `bash: ${command}: command not found\nType 'help' to see available commands.`
         });
     }
-  }, [addLine, prompt, onExit, clearTerminal, handleHelp, handleLs, handleCd, handlePwd, handleCat, handleGithub, handleLinkedin, handleOpen, handleRm, handleReboot, startPacman]);
+  }, [addLine, prompt, onExit, clearTerminal, handleHelp, handleLs, handleCd, handlePwd, handleCat, handleGithub, handleLinkedin, handleOpen, handleRm, handleReboot]);
 
   const navigateHistory = useCallback((direction: 'up' | 'down'): string => {
     if (commandHistory.length === 0) return '';
@@ -486,14 +444,11 @@ Available commands:
     historyIndex,
     showHtop,
     rebootPhase,
-    pacmanState,
     addLine,
     executeCommand,
     clearTerminal,
     navigateHistory,
     autocomplete,
-    closeHtop,
-    startPacman,
-    endPacman
+    closeHtop
   };
 };

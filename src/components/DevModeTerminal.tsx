@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useTerminal, TerminalLine } from '@/hooks/useTerminal';
 import RebootAnimation from './RebootAnimation';
-import PacmanGame from './PacmanGame';
 
 interface DevModeTerminalProps {
   isOpen: boolean;
@@ -172,18 +171,12 @@ const DevModeTerminal = ({ isOpen, onClose }: DevModeTerminalProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const { lines, prompt, executeCommand, navigateHistory, autocomplete, showHtop, closeHtop, rebootPhase, pacmanState, endPacman } = useTerminal(onClose, isOpen);
+  const { lines, prompt, executeCommand, navigateHistory, autocomplete, showHtop, closeHtop, rebootPhase } = useTerminal(onClose, isOpen);
 
-  const [pacmanVisible, setPacmanVisible] = useState(false);
   // Sync htop visibility with hook state
   useEffect(() => {
     setHtopVisible(showHtop);
   }, [showHtop]);
-
-  // Sync pacman visibility with hook state
-  useEffect(() => {
-    setPacmanVisible(pacmanState.active);
-  }, [pacmanState.active]);
 
   // Handle reboot completion
   const handleRebootComplete = useCallback(() => {
@@ -254,16 +247,16 @@ const DevModeTerminal = ({ isOpen, onClose }: DevModeTerminalProps) => {
     }
   }, [inputValue, executeCommand, navigateHistory, autocomplete, onClose]);
 
-  // Global escape key handler (only when not in htop or pacman)
+  // Global escape key handler
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isOpen && !htopVisible && !pacmanVisible) {
+      if (e.key === 'Escape' && isOpen) {
         onClose();
       }
     };
     window.addEventListener('keydown', handleEscape);
     return () => window.removeEventListener('keydown', handleEscape);
-  }, [isOpen, onClose, htopVisible, pacmanVisible]);
+  }, [isOpen, onClose]);
 
   // Keep focus on terminal
   const handleContainerClick = () => {
@@ -367,7 +360,7 @@ const DevModeTerminal = ({ isOpen, onClose }: DevModeTerminalProps) => {
             <div className="w-3 h-3 rounded-full bg-green-500" />
           </div>
           <span className="text-muted-foreground text-xs ml-3">
-            {showHtop ? 'htop - tiago@portfolio' : pacmanVisible ? 'pacman - tiago@portfolio' : 'tiago@portfolio — bash'}
+            {showHtop ? 'htop - tiago@portfolio' : 'tiago@portfolio — bash'}
           </span>
         </div>
 
@@ -377,14 +370,6 @@ const DevModeTerminal = ({ isOpen, onClose }: DevModeTerminalProps) => {
             closeHtop();
             setHtopVisible(false);
           }} />
-        ) : pacmanVisible ? (
-          <PacmanGame 
-            terminalContent={pacmanState.terminalContent}
-            onExit={(score, ateEverything) => {
-              endPacman(score, ateEverything);
-              setPacmanVisible(false);
-            }}
-          />
         ) : (
           /* Terminal content */
           <div 
