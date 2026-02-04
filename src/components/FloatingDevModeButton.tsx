@@ -35,7 +35,7 @@ const FloatingDevModeButton = ({ onClick, isTerminalOpen }: FloatingDevModeButto
         <TooltipTrigger asChild>
           <button
             onClick={onClick}
-            className={`fixed bottom-5 right-5 z-40 w-14 h-14 rounded-xl 
+            className={`fixed bottom-[5.5rem] right-5 z-40 w-14 h-14 rounded-xl
               bg-card/80 backdrop-blur-xl border border-border
               shadow-lg shadow-black/20
               flex items-center justify-center
