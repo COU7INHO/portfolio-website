@@ -9,6 +9,7 @@ import Education from "./pages/Education";
 import Projects from "./pages/Projects";
 import NotFound from "./pages/NotFound";
 import HandsFreeButton from "./components/HandsFreeButton";
+import ChatWidget from "./components/ChatWidget";
 
 const queryClient = new QueryClient();
 
@@ -19,6 +20,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <HandsFreeButton />
+        <ChatWidget />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/experience" element={<Experience />} />

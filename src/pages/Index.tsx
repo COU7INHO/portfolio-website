@@ -10,7 +10,7 @@ import Contact from '@/components/Contact';
 import Footer from '@/components/Footer';
 import ParticlesBackground from '@/components/ParticlesBackground';
 import DevModeTerminal from '@/components/DevModeTerminal';
-import FloatingDevModeButton from '@/components/FloatingDevModeButton';
+
 
 const Index = () => {
   const [isDevMode, setIsDevMode] = useState(false);
@@ -35,10 +35,6 @@ const Index = () => {
         onClose={() => setIsDevMode(false)} 
       />
       
-      <FloatingDevModeButton 
-        onClick={() => setIsDevMode(true)} 
-        isTerminalOpen={isDevMode}
-      />
     </div>
   );
 };
