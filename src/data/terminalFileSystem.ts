@@ -183,6 +183,8 @@ export const fileSystem: FileSystemEntry = {
         { type: 'file', name: 'redis.skill', content: '' },
         { type: 'file', name: 'elasticsearch.skill', content: '' },
         { type: 'file', name: 'langchain.skill', content: '' },
+        { type: 'file', name: 'langgraph.skill', content: '' },
+        { type: 'file', name: 'weaviate.skill', content: '' },
         { type: 'file', name: 'azure.skill', content: '' },
         { type: 'file', name: 'git.skill', content: '' },
         { type: 'file', name: 'linux.skill', content: '' },

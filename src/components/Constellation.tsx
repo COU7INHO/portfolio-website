@@ -5,7 +5,7 @@ import {
   SiOpenai, SiGitlab, SiApachekafka, SiNginx, SiMysql,
   SiScikitlearn, SiOpencv, SiCelery, SiSocketdotio
 } from 'react-icons/si';
-import { Cloud, Cpu, Layers, Workflow, Sparkles } from 'lucide-react';
+import { Cloud, Cpu, Layers, Workflow, Sparkles, GitBranch, Database, Bot } from 'lucide-react';
 
 interface Star {
   id: string;
@@ -40,7 +40,10 @@ export const iconMap: Record<string, React.ReactNode> = {
   'YOLO': <Cpu size={16} />,
   'Pandas': <SiPandas />,
   'LangChain': <Workflow size={16} />,
+  'LangGraph': <GitBranch size={16} />,
+  'Weaviate': <Database size={16} />,
   'OpenAI': <SiOpenai />,
+  'Claude Code': <Bot size={16} />,
   'Scikit-learn': <SiScikitlearn />,
   'OpenCV': <SiOpencv />,
   'Hugging Face': <Sparkles size={16} />,
@@ -258,15 +261,15 @@ export const constellationData: Record<string, {
     stars: [
       { id: 'yolo', name: 'YOLO', x: 0.28, y: 0.12 },
       { id: 'opencv', name: 'OpenCV', x: 0.38, y: 0.16 },
-      { id: 'pandas', name: 'Pandas', x: 0.32, y: 0.26 },
-      { id: 'scikitlearn', name: 'Scikit-learn', x: 0.42, y: 0.30 },
-      { id: 'elasticsearch', name: 'Elasticsearch', x: 0.26, y: 0.40 },
-      { id: 'opensearch', name: 'OpenSearch', x: 0.36, y: 0.44 },
-      { id: 'langchain', name: 'LangChain', x: 0.30, y: 0.56 },
-      { id: 'openai', name: 'OpenAI', x: 0.40, y: 0.58 },
-      { id: 'huggingface', name: 'Hugging Face', x: 0.35, y: 0.68 },
+      { id: 'pandas', name: 'Pandas', x: 0.32, y: 0.28 },
+      { id: 'scikitlearn', name: 'Scikit-learn', x: 0.42, y: 0.24 },
+      { id: 'langchain', name: 'LangChain', x: 0.28, y: 0.44 },
+      { id: 'langgraph', name: 'LangGraph', x: 0.40, y: 0.40 },
+      { id: 'openai', name: 'OpenAI', x: 0.44, y: 0.54 },
+      { id: 'claudecode', name: 'Claude Code', x: 0.34, y: 0.68 },
+      { id: 'huggingface', name: 'Hugging Face', x: 0.22, y: 0.60 },
     ],
-    connections: [[0, 1], [0, 2], [1, 3], [2, 3], [2, 4], [3, 5], [4, 5], [4, 6], [5, 7], [6, 7], [6, 8], [7, 8]],
+    connections: [[0, 1], [0, 2], [1, 3], [2, 3], [2, 4], [3, 5], [4, 5], [4, 6], [5, 6], [4, 7], [6, 7], [7, 8], [6, 8]],
   },
   'Cloud & Infrastructure': {
     stars: [
@@ -281,11 +284,14 @@ export const constellationData: Record<string, {
   },
   'Databases': {
     stars: [
-      { id: 'postgresql', name: 'PostgreSQL', x: 0.72, y: 0.52 },
-      { id: 'mysql', name: 'MySQL', x: 0.82, y: 0.58 },
-      { id: 'redis', name: 'Redis', x: 0.77, y: 0.70 },
+      { id: 'postgresql', name: 'PostgreSQL', x: 0.60, y: 0.52 },
+      { id: 'mysql', name: 'MySQL', x: 0.72, y: 0.48 },
+      { id: 'redis', name: 'Redis', x: 0.82, y: 0.54 },
+      { id: 'elasticsearch', name: 'Elasticsearch', x: 0.64, y: 0.64 },
+      { id: 'opensearch', name: 'OpenSearch', x: 0.76, y: 0.66 },
+      { id: 'weaviate', name: 'Weaviate', x: 0.86, y: 0.66 },
     ],
-    connections: [[0, 1], [1, 2], [0, 2]],
+    connections: [[0, 1], [1, 2], [0, 3], [1, 4], [2, 5], [3, 4], [4, 5]],
   },
   'Tools': {
     stars: [

@@ -105,16 +105,16 @@ const TechStack = () => {
     'Data & AI': {
       stars: [
         { id: 'yolo', name: 'YOLO', x: 0.45, y: 0.04 },
-        { id: 'opencv', name: 'OpenCV', x: 0.58, y: 0.06 },
+        { id: 'opencv', name: 'OpenCV', x: 0.60, y: 0.06 },
         { id: 'pandas', name: 'Pandas', x: 0.50, y: 0.14 },
         { id: 'scikitlearn', name: 'Scikit-learn', x: 0.65, y: 0.12 },
-        { id: 'elasticsearch', name: 'Elasticsearch', x: 0.42, y: 0.22 },
-        { id: 'opensearch', name: 'OpenSearch', x: 0.55, y: 0.24 },
         { id: 'langchain', name: 'LangChain', x: 0.75, y: 0.18 },
-        { id: 'openai', name: 'OpenAI', x: 0.85, y: 0.14 },
-        { id: 'huggingface', name: 'Hugging Face', x: 0.80, y: 0.26 },
+        { id: 'langgraph', name: 'LangGraph', x: 0.88, y: 0.14 },
+        { id: 'openai', name: 'OpenAI', x: 0.82, y: 0.26 },
+        { id: 'claudecode', name: 'Claude Code', x: 0.75, y: 0.36 },
+        { id: 'huggingface', name: 'Hugging Face', x: 0.62, y: 0.34 },
       ],
-      connections: [[0, 1], [0, 2], [1, 3], [2, 3], [2, 4], [3, 5], [4, 5], [3, 6], [6, 7], [6, 8], [7, 8]],
+      connections: [[0, 1], [0, 2], [1, 3], [2, 3], [3, 4], [4, 5], [4, 6], [5, 6], [4, 7], [6, 7], [7, 8], [6, 8]],
     },
     'Cloud & Infrastructure': {
       stars: [
@@ -129,11 +129,14 @@ const TechStack = () => {
     },
     'Databases': {
       stars: [
-        { id: 'postgresql', name: 'PostgreSQL', x: 0.65, y: 0.40 },
-        { id: 'mysql', name: 'MySQL', x: 0.80, y: 0.42 },
-        { id: 'redis', name: 'Redis', x: 0.72, y: 0.52 },
+        { id: 'postgresql', name: 'PostgreSQL', x: 0.42, y: 0.40 },
+        { id: 'mysql', name: 'MySQL', x: 0.56, y: 0.38 },
+        { id: 'redis', name: 'Redis', x: 0.68, y: 0.40 },
+        { id: 'elasticsearch', name: 'Elasticsearch', x: 0.46, y: 0.52 },
+        { id: 'opensearch', name: 'OpenSearch', x: 0.60, y: 0.52 },
+        { id: 'weaviate', name: 'Weaviate', x: 0.72, y: 0.52 },
       ],
-      connections: [[0, 1], [1, 2], [0, 2]],
+      connections: [[0, 1], [1, 2], [0, 3], [1, 4], [2, 5], [3, 4], [4, 5]],
     },
     'Tools': {
       stars: [
