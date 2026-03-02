@@ -3,7 +3,6 @@ import { MessageCircle, X, Send, Loader2 } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Switch } from '@/components/ui/switch';
 import {
   Tooltip,
   TooltipContent,
@@ -23,8 +22,6 @@ const ChatWidget = () => {
     messages,
     input,
     setInput,
-    provider,
-    setProvider,
     isStreaming,
     error,
     sendMessage,
@@ -183,9 +180,15 @@ const ChatWidget = () => {
                       : 'mr-auto bg-secondary text-foreground'
                   )}
                 >
-                  {msg.content}
-                  {msg.role === 'assistant' && isStreaming && i === messages.length - 1 && (
-                    <span className="inline-block w-1.5 h-4 ml-0.5 bg-foreground/70 animate-pulse align-middle" />
+                  {msg.role === 'assistant' && isStreaming && i === messages.length - 1 && msg.content === '' ? (
+                    <span className="text-muted-foreground italic animate-pulse">Thinking...</span>
+                  ) : (
+                    <>
+                      {msg.content}
+                      {msg.role === 'assistant' && isStreaming && i === messages.length - 1 && (
+                        <span className="inline-block w-1.5 h-4 ml-0.5 bg-foreground/70 animate-pulse align-middle" />
+                      )}
+                    </>
                   )}
                 </div>
               ))}
@@ -225,20 +228,6 @@ const ChatWidget = () => {
                 <Send className="w-4 h-4" />
               )}
             </Button>
-          </div>
-          <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
-            <span className={cn(provider === 'openai' && 'text-foreground font-medium')}>
-              OpenAI
-            </span>
-            <Switch
-              checked={provider === 'local'}
-              onCheckedChange={(checked) => setProvider(checked ? 'local' : 'openai')}
-              disabled={isStreaming}
-              className="scale-75"
-            />
-            <span className={cn(provider === 'local' && 'text-foreground font-medium')}>
-              Self-hosted
-            </span>
           </div>
         </div>
       </div>
