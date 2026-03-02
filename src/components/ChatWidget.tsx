@@ -211,7 +211,7 @@ const ChatWidget = () => {
             />
             <Button
               size="icon"
-              onClick={sendMessage}
+              onClick={() => sendMessage()}
               disabled={isStreaming || !input.trim()}
               className="h-9 w-9 shrink-0"
             >
