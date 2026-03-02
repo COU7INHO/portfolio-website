@@ -10,18 +10,18 @@ export interface FileSystemEntry {
 
 const aboutMeContent = `# About Me
 
-I'm a Software Engineer turned AI Data Engineer with a background in 
-Biomedical Engineering. My journey started in biology and healthcare, 
-where I discovered a passion for building software that turns complex 
-data into meaningful insights.
+I'm an AI Data Engineer focused on building production-grade AI systems.
+I design RAG pipelines over enterprise knowledge bases, document intelligence
+solutions combining OCR and NER, and multi-agent orchestration frameworks
+that automate complex, multi-step workflows.
 
-From developing computer vision applications for clinical gait analysis 
-to optimizing high-performance APIs handling thousands of daily requests, 
-I've always been drawn to solving real-world problems through code.
+I work across the full stack of modern AI engineering: large language models,
+vector databases, event-driven pipelines, and cloud-native infrastructure,
+putting the pieces together into systems that run reliably at scale.
 
-Currently at Glintt Global, I work on AI-powered solutions involving 
-RAG architectures, machine learning pipelines, and intelligent data 
-orchestration.
+I come from a Biomedical Engineering background, which is where I first got
+hooked on turning messy real-world data into something useful. That same
+instinct drives everything I build today.
 `;
 
 const glinttContent = JSON.stringify({
@@ -30,11 +30,13 @@ const glinttContent = JSON.stringify({
   period: "July 2025 - Present",
   location: "Porto, Portugal",
   description: [
-    "Develop AI-powered solutions using RAG (Retrieval-Augmented Generation) architectures",
-    "Design and orchestrate AI-based workflows and pipelines",
-    "Implement complex data flows involving machine learning models for classification, OCR, and Named Entity Recognition"
+    "Led the architecture design and development of an AI-powered address recognition pipeline, orchestrating OCR, NER, YOLO-based models, and classification models to extract and validate unstructured address data from physical documents, with Kafka and Redis handling thousands of data events per minute and OpenSearch powering fuzzy search across millions of records",
+    "Design and develop end-to-end RAG pipelines, from automated document ingestion and OCR-based text extraction, through chunking strategies using LangChain, to vector database population with Weaviate, enabling intelligent document retrieval and Q&A over enterprise knowledge bases",
+    "Design and implement multi-agent orchestration systems that process real-time voice input to progressively build and structure technical requirements specifications, coordinating specialised agents across transcription, interpretation, and document generation stages using LangGraph and Azure Agent Framework",
+    "Develop causal inference and counterfactual ML models to optimise marketing campaign strategies, enabling data-driven personalisation",
+    "Deploy and manage AI solutions in cloud-native environments (Azure, Docker), ensuring reliability, observability, and scalability"
   ],
-  technologies: ["Python", "Docker", "OpenSearch", "Azure", "YOLO", "Kafka", "Django", "Django REST Framework", "PostgreSQL", "Pandas"]
+  technologies: ["Python", "Docker", "OpenSearch", "Azure", "YOLO", "Kafka", "Redis", "LangChain", "LangGraph", "Weaviate", "Django", "Django REST Framework", "PostgreSQL", "Pandas", "Scikit-learn"]
 }, null, 2);
 
 const noniusContent = JSON.stringify({
@@ -58,9 +60,9 @@ const padraoDevContent = JSON.stringify({
   period: "November 2022 - February 2024",
   location: "Porto, Portugal",
   description: [
-    "Developed a Python application to support gait analysis in lower limb amputees, capturing raw data in real time using a YOLO-based computer vision model",
-    "Built a custom ETL pipeline: from data collection via computer vision, to data processing using Pandas and signal filtering techniques, and finally delivering structured gait assessment results",
-    "Designed and implemented a custom GUI to present the processed data and improve usability for healthcare professionals"
+    "Developed a real-time biomechanical analysis system for lower limb amputees, applying a YOLO-based computer vision model to capture and interpret gait data from live video input",
+    "Engineered a full ML data pipeline, from raw computer vision output through signal processing and filtering techniques, transforming noisy data into clinically structured gait assessments",
+    "Designed and implemented a clinical-grade GUI to visualise processed biomechanical data, built for usability by healthcare professionals in a medical setting"
   ],
   technologies: ["Python", "Pandas", "YOLO", "Cloud Computing"]
 }, null, 2);
@@ -100,7 +102,6 @@ const speedChampionContent = JSON.stringify({
   status: "Live",
   features: [
     "AI-powered OCR (Mistral) for automatic lap time extraction from race sheets",
-    "Real-time leaderboards and performance tracking",
     "Head-to-head comparison between drivers",
     "Historical data analysis and performance trends",
     "Mobile-friendly interface for trackside use",

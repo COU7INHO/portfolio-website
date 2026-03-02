@@ -33,20 +33,22 @@ const AboutMe = () => {
         <div className="reveal opacity-0 max-w-2xl mx-auto">
           <div className="space-y-5 text-center">
             <p className="text-lg text-secondary-foreground leading-relaxed font-light">
-              I'm a Software Engineer turned AI Data Engineer with a background in Biomedical Engineering. 
-              My journey started in biology and healthcare, where I discovered a passion for building 
-              software that turns complex data into meaningful insights.
+              I'm an AI Data Engineer focused on building production-grade AI systems.
+              I design RAG pipelines over enterprise knowledge bases, document intelligence solutions
+              combining OCR and NER, and multi-agent orchestration frameworks that automate
+              complex, multi-step workflows.
             </p>
-            
+
             <p className="text-lg text-secondary-foreground leading-relaxed font-light">
-              From developing computer vision applications for clinical gait analysis to optimizing 
-              high-performance APIs handling thousands of daily requests, I've always been drawn to 
-              solving real-world problems through code.
+              I work across the full stack of modern AI engineering: large language models,
+              vector databases, event-driven pipelines, and cloud-native infrastructure,
+              putting the pieces together into systems that run reliably at scale.
             </p>
-            
+
             <p className="text-lg text-secondary-foreground leading-relaxed font-light">
-              Currently at Glintt Global, I work on AI-powered solutions involving RAG architectures, 
-              machine learning pipelines, and intelligent data orchestration.
+              I come from a Biomedical Engineering background, which is where I first got hooked on
+              turning messy real-world data into something useful. That same instinct drives everything
+              I build today.
             </p>
           </div>
         </div>

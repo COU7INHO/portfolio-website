@@ -17,7 +17,6 @@ const projects: Project[] = [
     howItWasBuilt: `The frontend was built with React and TypeScript using Lovable, an AI-powered development tool, styled with Tailwind CSS for a clean and responsive interface. The backend runs on Django and Django REST Framework, handling the OCR processing pipeline powered by Mistral's OCR API to extract lap times and driver data from race sheet images. All data is stored in PostgreSQL with optimized queries for fast access to historical race data. The entire application is self-hosted on a Raspberry Pi 5, running behind Nginx as a reverse proxy — a compact and efficient home server setup that keeps the project running 24/7.`,
     features: [
       'AI-powered OCR (Mistral) for automatic lap time extraction from race sheets',
-      'Real-time leaderboards and performance tracking',
       'Head-to-head comparison between drivers',
       'Historical data analysis and performance trends',
       'Mobile-friendly interface for trackside use',

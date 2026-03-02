@@ -40,7 +40,7 @@ LinkedIn: linkedin.com/in/tiagocoutinho
 
 ## Who He Is
 
-Tiago is a Software Engineer turned AI Data Engineer with a background in Biomedical Engineering. His journey started in biology and healthcare, where he developed a passion for building software that turns complex data into meaningful insights. Throughout his career he has worked on computer vision applications for clinical gait analysis and high-performance APIs handling thousands of daily requests. He is drawn to real-world problems that can be solved with technology, especially at the intersection of AI, data, and software engineering. He currently works at Glintt Global as an AI Data Engineer, building solutions based on RAG architectures, machine learning pipelines, and intelligent data orchestration.
+Tiago is a Software Engineer turned AI Data Engineer with a background in Biomedical Engineering. His journey started in biology and healthcare, where he developed a passion for building software that turns complex data into meaningful insights. Throughout his career he has worked on computer vision applications for clinical gait analysis, high-performance APIs, and, more recently, large-scale AI systems processing millions of inference requests per month. He is drawn to real-world problems that can be solved with technology, especially at the intersection of AI, data, and software engineering. He currently works at Glintt Global as an AI Data Engineer, architecting AI pipelines, RAG systems, and multi-agent orchestration frameworks for enterprise use cases.
 
 ---
 
@@ -50,11 +50,13 @@ Tiago is a Software Engineer turned AI Data Engineer with a background in Biomed
 Period: July 2025 – Present
 Location: Porto, Portugal
 
-- Develops AI-powered solutions using RAG (Retrieval-Augmented Generation) architectures
-- Designs and orchestrates AI-based workflows and pipelines
-- Implements complex data flows involving machine learning models for classification, OCR, and Named Entity Recognition (NER)
+- Led the architecture design and development of an AI-powered address recognition pipeline, orchestrating OCR, NER, YOLO-based models, and classification models to extract and validate unstructured address data from physical documents — processing 15 million inference requests per month, with Kafka and Redis handling thousands of data events per minute, and OpenSearch powering fuzzy search and resolution across millions of records
+- Designs and develops end-to-end RAG pipelines, from automated document ingestion and OCR-based text extraction, through chunking strategies using LangChain, to vector database population with Weaviate — enabling intelligent document retrieval and Q&A over enterprise knowledge bases
+- Designs and implements multi-agent orchestration systems that process real-time voice input to progressively build and structure technical requirements specifications, coordinating specialised agents across transcription, interpretation, and document generation stages using LangGraph and Azure Agent Framework
+- Develops causal inference and counterfactual ML models to optimise marketing campaign strategies, enabling data-driven personalisation
+- Deploys and manages AI solutions in cloud-native environments (Azure, Docker), ensuring reliability, observability, and scalability
 
-Technologies: Python, Docker, OpenSearch, Azure, YOLO, Kafka, Django, Django REST Framework, PostgreSQL, Pandas
+Technologies: Python, Docker, OpenSearch, Azure, YOLO, Kafka, Redis, LangChain, LangGraph, Weaviate, Django, Django REST Framework, PostgreSQL, Pandas, Scikit-learn
 
 ---
 
@@ -76,9 +78,9 @@ Technologies: Python, Django, Django REST Framework, MySQL, Elasticsearch, Socke
 Period: November 2022 – February 2024
 Location: Porto, Portugal
 
-- Developed a Python application to support gait analysis in lower limb amputees, capturing raw data in real time using a YOLO-based computer vision model
-- Built a custom ETL pipeline: from data collection via computer vision, to processing with Pandas and signal filtering techniques, and finally delivering structured gait assessment results
-- Designed and implemented a custom GUI to present the processed data and improve usability for healthcare professionals
+- Developed a real-time biomechanical analysis system for lower limb amputees, applying a YOLO-based computer vision model to capture and interpret gait data from live video input
+- Engineered a full ML data pipeline, from raw computer vision output through signal processing and filtering techniques, transforming noisy data into clinically structured gait assessments
+- Designed and implemented a clinical-grade GUI to visualise processed biomechanical data, built for usability by healthcare professionals in a medical setting
 
 Technologies: Python, Pandas, YOLO, Cloud Computing
 
@@ -118,9 +120,9 @@ Foundations in biology, biomedical sciences, signal processing, and programming,
 
 Languages & Frameworks: Python, Django, Django REST Framework, FastAPI, React, TypeScript
 
-AI, Data & ML: YOLO, OpenCV, Pandas, Scikit-learn, LangChain, OpenAI API, Hugging Face, Elasticsearch, OpenSearch, Mistral OCR
+AI, Data & ML: YOLO, OpenCV, Pandas, Scikit-learn, LangChain, LangGraph, Weaviate, OpenAI API, Hugging Face, Elasticsearch, OpenSearch, Mistral OCR
 
-Cloud & Infrastructure: Azure, Docker, Kafka, Nginx, Celery, Linux, Raspberry Pi
+Cloud & Infrastructure: Azure, Docker, Kafka, Redis, Nginx, Celery, Linux, Raspberry Pi
 
 Databases: PostgreSQL, MySQL, Redis, MongoDB
 
