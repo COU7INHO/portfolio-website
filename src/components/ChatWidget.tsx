@@ -91,36 +91,29 @@ const ChatWidget = () => {
         </div>
       )}
 
-      {/* Floating toggle button */}
+      {/* Floating toggle button — hidden when panel is open */}
       <TooltipProvider delayDuration={200}>
         <Tooltip>
           <TooltipTrigger asChild>
             <button
-              onClick={() => (isOpen ? setIsOpen(false) : openPanel())}
+              onClick={openPanel}
               className={cn(
                 'fixed bottom-[5.5rem] right-5 z-40 w-14 h-14 rounded-xl',
                 'backdrop-blur-xl border shadow-lg',
                 'flex items-center justify-center',
                 'transition-all duration-300 ease-out',
                 'hover:scale-110 group',
-                isOpen
-                  ? 'bg-primary/20 border-primary/60 shadow-primary/30'
-                  : 'bg-card/80 border-border shadow-black/20 hover:border-primary/50 hover:shadow-primary/20'
+                'bg-card/80 border-border shadow-black/20 hover:border-primary/50 hover:shadow-primary/20',
+                isOpen && 'opacity-0 pointer-events-none'
               )}
-              aria-label={isOpen ? 'Close chat' : 'Open chat'}
+              aria-label="Open chat"
             >
-              {!isOpen && (
-                <span className="absolute inset-0 rounded-xl animate-pulse-glow opacity-40 bg-primary/10" />
-              )}
-              {isOpen ? (
-                <X className="w-6 h-6 text-primary transition-colors" />
-              ) : (
-                <MessageCircle className="w-6 h-6 text-muted-foreground group-hover:text-primary transition-colors" />
-              )}
+              <span className="absolute inset-0 rounded-xl animate-pulse-glow opacity-40 bg-primary/10" />
+              <MessageCircle className="w-6 h-6 text-muted-foreground group-hover:text-primary transition-colors" />
             </button>
           </TooltipTrigger>
           <TooltipContent side="left" className="bg-card border-border">
-            <p>{isOpen ? 'Close chat' : 'Chat with me'}</p>
+            <p>Chat with me</p>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
@@ -128,13 +121,13 @@ const ChatWidget = () => {
       {/* Chat panel */}
       <div
         className={cn(
-          'fixed bottom-28 right-5 z-50 w-[380px] h-[520px] max-w-[calc(100vw-2.5rem)] max-h-[calc(100vh-8rem)]',
-          'bg-card/95 backdrop-blur-xl border border-border rounded-2xl shadow-2xl',
+          'fixed bottom-0 right-0 z-50 w-full h-[100dvh] sm:bottom-28 sm:right-5 sm:w-[380px] sm:h-[520px] sm:max-w-[calc(100vw-2.5rem)] sm:max-h-[calc(100vh-8rem)] sm:rounded-2xl',
+          'bg-card/95 backdrop-blur-xl border border-border shadow-2xl',
           'flex flex-col overflow-hidden',
           'transition-all duration-300 ease-out origin-bottom-right',
           isOpen
-            ? 'scale-100 opacity-100 pointer-events-auto'
-            : 'scale-90 opacity-0 pointer-events-none'
+            ? 'scale-100 opacity-100 pointer-events-auto sm:origin-bottom-right'
+            : 'scale-90 opacity-0 pointer-events-none sm:origin-bottom-right'
         )}
       >
         {/* Header */}
