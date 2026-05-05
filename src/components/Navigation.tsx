@@ -77,6 +77,12 @@ const Navigation = () => {
               >
                 Projects
               </button>
+              <Link
+                to="/setup"
+                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Setup
+              </Link>
               <button
                 onClick={() => scrollToSection('contact')}
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors"
@@ -127,12 +133,22 @@ const Navigation = () => {
               <Link
                 to="/projects"
                 className={`text-sm transition-colors ${
-                  location.pathname === '/projects' 
-                    ? 'text-primary' 
+                  location.pathname === '/projects'
+                    ? 'text-primary'
                     : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
                 Projects
+              </Link>
+              <Link
+                to="/setup"
+                className={`text-sm transition-colors ${
+                  location.pathname === '/setup'
+                    ? 'text-primary'
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                Setup
               </Link>
               <Link
                 to="/#contact"

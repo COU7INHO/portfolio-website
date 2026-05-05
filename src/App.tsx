@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import Experience from "./pages/Experience";
 import Education from "./pages/Education";
 import Projects from "./pages/Projects";
+import Setup from "./pages/Setup";
 import NotFound from "./pages/NotFound";
 import HandsFreeButton from "./components/HandsFreeButton";
 import ChatWidget from "./components/ChatWidget";
@@ -26,6 +27,7 @@ const App = () => (
           <Route path="/experience" element={<Experience />} />
           <Route path="/education" element={<Education />} />
           <Route path="/projects" element={<Projects />} />
+          <Route path="/setup" element={<Setup />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

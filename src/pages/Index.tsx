@@ -6,6 +6,7 @@ import Timeline from '@/components/Timeline';
 import Education from '@/components/Education';
 import TechStack from '@/components/TechStack';
 import ProjectsPreview from '@/components/ProjectsPreview';
+import SetupPreview from '@/components/SetupPreview';
 import Contact from '@/components/Contact';
 import Footer from '@/components/Footer';
 import ParticlesBackground from '@/components/ParticlesBackground';
@@ -26,6 +27,7 @@ const Index = () => {
         <Education />
         <TechStack />
         <ProjectsPreview />
+        <SetupPreview />
         <Contact />
       </main>
       <Footer />
