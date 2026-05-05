@@ -13,7 +13,7 @@ export interface Project {
   githubUrl?: string;
   githubBackendUrl?: string;
   githubFrontendUrl?: string;
-  status: 'Live' | 'In Development' | 'Archived';
+  status?: 'Live' | 'In Development' | 'Archived';
   screenshots?: string[];
 }
 
@@ -51,15 +51,17 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
               </a>
             )}
           </div>
-          <span className={`px-3 py-1 text-xs font-medium rounded-full shrink-0 ${
-            project.status === 'Live' 
-              ? 'bg-green-500/10 text-green-400 border border-green-500/20' 
-              : project.status === 'In Development'
-              ? 'bg-yellow-500/10 text-yellow-400 border border-yellow-500/20'
-              : 'bg-muted text-muted-foreground border border-border'
-          }`}>
-            {project.status}
-          </span>
+          {project.status && (
+            <span className={`px-3 py-1 text-xs font-medium rounded-full shrink-0 ${
+              project.status === 'Live'
+                ? 'bg-green-500/10 text-green-400 border border-green-500/20'
+                : project.status === 'In Development'
+                ? 'bg-yellow-500/10 text-yellow-400 border border-yellow-500/20'
+                : 'bg-muted text-muted-foreground border border-border'
+            }`}>
+              {project.status}
+            </span>
+          )}
         </div>
 
         {/* Preview Image - Clickable for Gallery */}

@@ -8,8 +8,32 @@ import { useScrollToTop } from '@/hooks/useScrollToTop';
 
 import kartsMainPage from '@/assets/karts-main-page.png';
 import kartsRacePage from '@/assets/karts-race-page.png';
+import imlensMain from '@/assets/imlens-main.png';
+import imlensResults from '@/assets/imlens-results.png';
+import imlensSettings from '@/assets/imlens-settings.png';
+import imlensUsage from '@/assets/imlens-usage.png';
+import imlensLogin from '@/assets/imlens-login.png';
 
 const projects: Project[] = [
+  {
+    title: 'IMLens',
+    description: 'Natural language photo search for Immich, powered by local AI models running entirely on your own hardware.',
+    longDescription: `Immich is a fantastic open-source, self-hosted photo and video library, the go-to choice for anyone who wants to keep a local backup of their memories without handing them over to Google Photos or iCloud. It handles uploads from your phone, organises everything by date and people, and gives you full control over your data. But there's one thing it can't do, and honestly almost no photo app out there can: actually understand what's in your photos. You know the photo exists, you just can't find it. You don't remember when it was taken or which album it's in. You only remember it was a sunset, that Sarah was there, or that it was somewhere in Italy. Immich's search is limited to dates, people, and albums, so the photo stays buried. IMLens fills that gap. It uses a local Vision Language Model to read and describe every photo in your Immich library, stores those descriptions as searchable embeddings, and lets you find photos by describing what you're looking for in plain English. No cloud, no subscriptions, everything runs on your own hardware.`,
+    howItWasBuilt: `IMLens is built around a fully local AI pipeline. During indexing, photos are pulled from Immich and passed through a Vision Language Model running on Ollama, which generates a detailed description of each image. Those descriptions are converted into vector embeddings and stored in Weaviate, a vector database optimised for semantic search. When a user types a query, a second local LLM parses the natural language into structured filters (people, dates, locations, albums), which are then combined with semantic similarity in a hybrid search against Weaviate. The backend is Django and the whole stack is orchestrated with Docker. A smart RAM management mode swaps models in and out of memory so the project runs comfortably on a Raspberry Pi 5 with 8 GB of RAM, but the architecture is hardware agnostic: with a more powerful machine you can plug in larger and more capable models, get richer photo descriptions and more accurate query parsing, and really push how much the system can do. No data ever leaves the user's network.`,
+    features: [
+      'Natural language photo search powered by local Vision Language Models',
+      'Fully local pipeline, no cloud and no data leaving your network',
+      'Hybrid semantic and metadata search via Weaviate vector database',
+      'Person aliases mapping nicknames ("mom", "my sister") to Immich identities',
+      'Automatic daily sync with configurable off-peak indexing windows',
+      'VPN fallback URL with automatic failover for remote Immich access',
+      'Smart RAM management that swaps models in and out for low-memory hardware',
+      'Runs on a Raspberry Pi 5 with 8 GB RAM, scales up with better hardware',
+    ],
+    technologies: ['Python', 'Django', 'Ollama', 'Weaviate', 'Vision Language Models', 'LLMs', 'Vector Embeddings', 'Semantic Search', 'RAG', 'Hybrid Search', 'Prompt Engineering', 'Docker', 'Raspberry Pi'],
+    githubUrl: 'https://github.com/COU7INHO/imlens',
+    screenshots: [imlensMain, imlensResults, imlensSettings, imlensUsage, imlensLogin],
+  },
   {
     title: 'Speed Champion',
     description: 'A karting lap time tracking app that uses AI and OCR to parse race classifications.',
