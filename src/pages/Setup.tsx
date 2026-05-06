@@ -13,6 +13,7 @@ import mouseImg from '@/assets/setup/mx-master-3.webp';
 import dockImg from '@/assets/setup/hp-thunderbolt-dock-g4.png';
 import webcamImg from '@/assets/setup/anker-c200.webp';
 import piImg from '@/assets/setup/raspberry-pi-5.webp';
+import airpodsImg from '@/assets/setup/airpods-pro-2.png';
 
 interface SetupItem {
   name: string;
@@ -31,7 +32,7 @@ const setupItems: SetupItem[] = [
     brand: 'Apple',
     category: 'Laptop',
     image: macbookImg,
-    description: 'My daily driver for everything from full-stack development to running local AI models. The M5 chip handles everything I throw at it without breaking a sweat.',
+    description: 'My daily driver for everything from full stack development to running local AI models. The M5 chip handles almost everything I throw at it without breaking a sweat, except when I try to run the largest LLMs.',
     specs: ['Apple M5', '24 GB unified memory', '14" Liquid Retina XDR', 'Space Black'],
     productUrl: 'https://www.apple.com/shop/buy-mac/macbook-pro/14-inch-m5',
     imageScale: 1.6,
@@ -41,7 +42,7 @@ const setupItems: SetupItem[] = [
     brand: 'AOC',
     category: 'Monitor',
     image: monitorImg,
-    description: 'Curved ultrawide that makes side-by-side coding and reference docs feel natural. The 144 Hz refresh rate is a nice bonus when context switches into a quick game.',
+    description: 'Curved ultrawide that makes side by side coding and reference docs feel natural. Perfect for keeping multiple VS Code windows open at once without ever feeling cramped.',
     specs: ['34" curved VA panel', '3440 x 1440 UWQHD', '144 Hz, 1 ms', '1500R curvature'],
     productUrl: 'https://saas.aoc.com/product/CU34G2XP',
     imageScale: 1.15,
@@ -51,7 +52,7 @@ const setupItems: SetupItem[] = [
     brand: 'Logitech',
     category: 'Keyboard',
     image: keyboardImg,
-    description: 'Quiet, precise, and switches between three devices with a single key press. The perfect-stroke keys are gentle on the wrists during long coding sessions.',
+    description: 'Quiet, precise, and switches between three devices with a single key press. The keys are gentle on the wrists during long coding sessions.',
     specs: ['Wireless (Bluetooth + Unifying)', 'Backlit keys', 'Multi-device pairing', 'USB-C charging'],
     productUrl: 'https://www.logitech.com/en-eu/shop/p/mx-keys-s.920-011586',
     imageScale: 1.2,
@@ -61,7 +62,7 @@ const setupItems: SetupItem[] = [
     brand: 'Logitech',
     category: 'Mouse',
     image: mouseImg,
-    description: 'The MagSpeed scroll wheel alone justifies the price — flick it and skim through a thousand-line file in seconds. Customisable side buttons handle my most-used shortcuts.',
+    description: 'The MagSpeed scroll wheel alone justifies the price. Flick it and skim through a file with thousands of lines in seconds. Customisable side buttons handle my most used shortcuts.',
     specs: ['MagSpeed electromagnetic scroll', '4000 DPI sensor', 'Multi-device pairing', 'USB-C charging'],
     productUrl: 'https://www.logitech.com/en-us/shop/p/mx-master-3s',
     imageScale: 0.86,
@@ -81,17 +82,27 @@ const setupItems: SetupItem[] = [
     brand: 'Anker',
     category: 'Webcam',
     image: webcamImg,
-    description: 'Sharp 2K image with surprisingly good low-light performance. The built-in privacy cover is a small thing but I appreciate the peace of mind.',
+    description: 'Sharp 2K image with surprisingly good performance in low light. The privacy cover is a small thing but I appreciate the peace of mind.',
     specs: ['2K resolution', 'AI noise cancellation', 'Adjustable field of view', 'Privacy cover'],
     productUrl: 'https://us.ankerwork.com/products/a3369',
     imageScale: 0.8,
+  },
+  {
+    name: 'AirPods Pro 2',
+    brand: 'Apple',
+    category: 'Earbuds',
+    image: airpodsImg,
+    description: 'Active noise cancellation that lets me focus on whether I am at home, in a café, or on a plane. Seamless handoff between the MacBook and the iPhone makes them feel invisible.',
+    specs: ['Active noise cancellation', 'Adaptive audio', 'Spatial audio', 'USB-C charging case'],
+    productUrl: 'https://support.apple.com/en-us/111851',
+    imageScale: 0.86,
   },
   {
     name: 'Raspberry Pi 5',
     brand: 'Raspberry Pi',
     category: 'Home server',
     image: piImg,
-    description: 'My always-on home lab — runs Speed Champion, hosts IMLens with local AI models, and quietly handles a handful of side projects. Small, silent, and surprisingly capable.',
+    description: 'My always on home lab, quietly running 24/7. Hosts a few personal websites along with AI and ML side projects without breaking a sweat. Small, silent, and surprisingly capable.',
     specs: ['ARM Cortex-A76 quad-core', '8 GB LPDDR4X RAM', 'Dual 4K HDMI', 'PCIe 2.0 expansion'],
     productUrl: 'https://www.raspberrypi.com/products/raspberry-pi-5/',
     imageScale: 0.85,
