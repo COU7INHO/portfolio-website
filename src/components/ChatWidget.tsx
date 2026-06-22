@@ -39,7 +39,7 @@ const ChatWidget = () => {
       localStorage.setItem('chatHintLastShown', String(Date.now()));
     };
 
-    const timer = setTimeout(maybeShowHint, 5000);
+    const timer = setTimeout(maybeShowHint, 45000);
     return () => clearTimeout(timer);
   }, [isOpen]);
 

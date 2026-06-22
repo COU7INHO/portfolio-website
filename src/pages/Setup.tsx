@@ -13,7 +13,7 @@ import mouseImg from '@/assets/setup/mx-master-3.webp';
 import dockImg from '@/assets/setup/hp-thunderbolt-dock-g4.png';
 import webcamImg from '@/assets/setup/anker-c200.webp';
 import piImg from '@/assets/setup/raspberry-pi-5.webp';
-import airpodsImg from '@/assets/setup/airpods-pro-2.png';
+import jabraImg from '@/assets/setup/jabra_evolve3_85.png';
 
 interface SetupItem {
   name: string;
@@ -88,13 +88,13 @@ const setupItems: SetupItem[] = [
     imageScale: 0.8,
   },
   {
-    name: 'AirPods Pro 2',
-    brand: 'Apple',
-    category: 'Earbuds',
-    image: airpodsImg,
-    description: 'Active noise cancellation that lets me focus on whether I am at home, in a café, or on a plane. Seamless handoff between the MacBook and the iPhone makes them feel invisible.',
-    specs: ['Active noise cancellation', 'Adaptive audio', 'Spatial audio', 'USB-C charging case'],
-    productUrl: 'https://support.apple.com/en-us/111851',
+    name: 'Evolve3 85',
+    brand: 'Jabra',
+    category: 'Headset',
+    image: jabraImg,
+    description: 'Over-ear comfort with active noise cancellation that keeps me focused through long calls and deep work. The boom mic makes me sound clear on every meeting, and the all-day battery means I never think about charging.',
+    specs: ['Active noise cancellation', 'Boom microphone', 'Bluetooth multipoint', 'All-day battery'],
+    productUrl: 'https://www.jabra.com/business/office-headsets/jabra-evolve/jabra-evolve3-85',
     imageScale: 0.86,
   },
   {
