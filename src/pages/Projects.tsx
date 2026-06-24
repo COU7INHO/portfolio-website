@@ -13,8 +13,31 @@ import imlensResults from '@/assets/imlens-results.png';
 import imlensSettings from '@/assets/imlens-settings.png';
 import imlensUsage from '@/assets/imlens-usage.png';
 import imlensLogin from '@/assets/imlens-login.png';
+import githubDisciplineHero from '@/assets/github-discipline-hero.png';
+import githubDisciplineRepositorySetup from '@/assets/github-discipline-repository-setup.png';
+import githubDisciplinePullRequests from '@/assets/github-discipline-pull-requests.png';
 
 const projects: Project[] = [
+  {
+    title: 'The GitHub Discipline',
+    description: 'A field manual that helps engineering teams build better habits for managing code on GitHub, from intent to production.',
+    longDescription: `Most teams know git, but knowing git is not the same as having a healthy workflow. The GitHub Discipline is a guide that focuses on the habits and concepts behind good code management rather than the raw mechanics of the tool. It walks through the full journey of a change, from capturing work as intent in an issue, to branching, opening pull requests, reviewing code, merging, and shipping to production. Everything is framework-agnostic and meant to be adapted to each team's reality rather than followed as dogma. The goal is simple: give teams a structured, opinionated starting point so they can stop arguing about process and start improving their flow.`,
+    howItWasBuilt: `The site is built with Astro 4 in a static-first, content-focused setup, so the entire guide is generated as pure HTML at build time with no runtime framework overhead. Styling is hand-rolled CSS with custom properties, no Tailwind and no CSS-in-JS. Interactivity is kept deliberately minimal and treated as small islands of vanilla JavaScript: a scroll progress bar, sidebar section tracking, and copy buttons on code blocks. The whole guide lives in a single, searchable, version-controllable Astro file, and because the output is just static files it can be hosted anywhere, from Nginx to GitHub Pages, Netlify, or Vercel. The design philosophy treats the guide as a magazine to be read rather than an application to be run.`,
+    features: [
+      'Nine-chapter guide covering repository setup, branching, issues, PRs, code review, merging, and AI agents',
+      'Framework-agnostic practices teams can adapt to their own reality',
+      'Static HTML generated at build time with no runtime framework overhead',
+      'Minimal JavaScript islands: scroll progress, sidebar tracking, and copy buttons',
+      'Single-file, searchable, version-controllable architecture',
+      'Pure static output that runs on any host',
+      'Self-hosted on a Raspberry Pi 5',
+    ],
+    technologies: ['Astro', 'TypeScript', 'CSS', 'Static Site Generation'],
+    liveUrl: 'https://github-discipline.tiago-coutinho.com',
+    githubUrl: 'https://github.com/COU7INHO/github-discipline',
+    status: 'Live',
+    screenshots: [githubDisciplineHero, githubDisciplineRepositorySetup, githubDisciplinePullRequests],
+  },
   {
     title: 'IMLens',
     description: 'Natural language photo search for Immich, powered by local AI models running entirely on your own hardware.',
@@ -28,7 +51,7 @@ const projects: Project[] = [
       'Automatic daily sync with configurable off-peak indexing windows',
       'VPN fallback URL with automatic failover for remote Immich access',
       'Smart RAM management that swaps models in and out for low-memory hardware',
-      'Runs on a Raspberry Pi 5 with 8 GB RAM, scales up with better hardware',
+      'Self-hosted on a Raspberry Pi 5',
     ],
     technologies: ['Python', 'Django', 'Ollama', 'Weaviate', 'Vision Language Models', 'LLMs', 'Vector Embeddings', 'Semantic Search', 'RAG', 'Hybrid Search', 'Prompt Engineering', 'Docker', 'Raspberry Pi'],
     githubUrl: 'https://github.com/COU7INHO/imlens',
