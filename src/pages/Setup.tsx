@@ -13,6 +13,7 @@ import mouseImg from '@/assets/setup/mx-master-3.webp';
 import dockImg from '@/assets/setup/hp-thunderbolt-dock-g4.png';
 import webcamImg from '@/assets/setup/anker-c200.webp';
 import piImg from '@/assets/setup/raspberry-pi-5.webp';
+import lenovoImg from '@/assets/setup/thinkcentre-m920q.png';
 import jabraImg from '@/assets/setup/jabra_evolve3_85.png';
 
 interface SetupItem {
@@ -106,6 +107,16 @@ const setupItems: SetupItem[] = [
     specs: ['ARM Cortex-A76 quad-core', '8 GB LPDDR4X RAM', 'Dual 4K HDMI', 'PCIe 2.0 expansion'],
     productUrl: 'https://www.raspberrypi.com/products/raspberry-pi-5/',
     imageScale: 0.85,
+  },
+  {
+    name: 'ThinkCentre M920q',
+    brand: 'Lenovo',
+    category: 'Mini PC',
+    image: lenovoImg,
+    description: 'Compact 1-litre powerhouse running Proxmox as my virtualization playground. Hosts the VMs and containers behind my personal projects, packing far more punch than its tiny footprint suggests.',
+    specs: ['Intel Core i5-9500T', '16 GB DDR4 RAM', '1L Tiny form factor', 'Runs Proxmox VE'],
+    productUrl: 'https://www.lenovo.com/pt/pt/p/desktops/thinkcentre/m-series-tiny/thinkcentre-m920q/11tc1mtm92q',
+    imageScale: 0.94,
   },
 ];
 
