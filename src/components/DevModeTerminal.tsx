@@ -11,7 +11,7 @@ const asciiLogo = `
 ████████╗ ██████╗
 ╚══██╔══╝██╔════╝
    ██║   ██║        Tiago Coutinho
-   ██║   ██║        AI Data Engineer
+   ██║   ██║        AI Engineer
    ██║   ╚██████╗   Portfolio Terminal v1.0
    ╚═╝    ╚═════╝
 `;

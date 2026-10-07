@@ -10,7 +10,7 @@ export interface FileSystemEntry {
 
 const aboutMeContent = `# About Me
 
-I'm an AI Data Engineer focused on building production-grade AI systems.
+I'm an AI Engineer focused on building production-grade AI systems.
 I design RAG pipelines over enterprise knowledge bases, document intelligence
 solutions combining OCR and NER, and multi-agent orchestration frameworks
 that automate complex, multi-step workflows.
@@ -24,10 +24,24 @@ hooked on turning messy real-world data into something useful. That same
 instinct drives everything I build today.
 `;
 
+const unit4Content = JSON.stringify({
+  company: "Unit4",
+  position: "AI Engineer",
+  period: "October 2025 - Present",
+  location: "Remote",
+  description: [
+    "Build and integrate AI capabilities into enterprise cloud software, working across the ERP, financial planning, HR, and professional services domains that Unit4 serves",
+    "Design and develop solutions on top of large language models — covering retrieval over enterprise data, prompt design, and agent-based workflows — with a focus on accuracy, traceability, and fitness for business-critical processes",
+    "Work alongside product and engineering teams to take AI features from exploration and prototyping through to production, including evaluation, deployment, and monitoring",
+    "Apply responsible AI practices around data privacy, security, and governance, in line with the requirements of enterprise and public-sector customers"
+  ],
+  technologies: ["Python", "Azure", "AI Agents"]
+}, null, 2);
+
 const glinttContent = JSON.stringify({
   company: "Glintt Global",
   position: "AI Data Engineer",
-  period: "July 2025 - Present",
+  period: "July 2025 - September 2025",
   location: "Porto, Portugal",
   description: [
     "Led the architecture design and development of an AI-powered address recognition pipeline, orchestrating OCR, NER, YOLO-based models, and classification models to extract and validate unstructured address data from physical documents, with Kafka and Redis handling thousands of data events per minute and OpenSearch powering fuzzy search across millions of records",
@@ -135,7 +149,12 @@ export const fileSystem: FileSystemEntry = {
       children: [
         {
           type: 'file',
-          name: 'Glintt_Jul2025_current.json',
+          name: 'Unit4_Oct2025_current.json',
+          content: unit4Content
+        },
+        {
+          type: 'file',
+          name: 'Glintt_Jul2025_Sep2025.json',
           content: glinttContent
         },
         {

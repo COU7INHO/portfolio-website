@@ -7,6 +7,7 @@ import { Calendar, MapPin } from 'lucide-react';
 import { useScrollToTop } from '@/hooks/useScrollToTop';
 
 // Import company logos
+import unit4Logo from '@/assets/logos/unit4.png';
 import glinttLogo from '@/assets/logos/glintt.png';
 import noniusLogo from '@/assets/logos/nonius.png';
 import padraoLogo from '@/assets/logos/padrao-ortopedico.png';
@@ -24,10 +25,25 @@ interface ExperienceEntry {
 
 const experiences: ExperienceEntry[] = [
   {
+    id: 'unit4',
+    company: 'Unit4',
+    position: 'AI Engineer',
+    years: 'Oct 2025 - Present',
+    location: 'Remote',
+    description: [
+      'Build and integrate AI capabilities into enterprise cloud software, working across the ERP, financial planning, HR, and professional services domains that Unit4 serves',
+      'Design and develop solutions on top of large language models — covering retrieval over enterprise data, prompt design, and agent-based workflows — with a focus on accuracy, traceability, and fitness for business-critical processes',
+      'Work alongside product and engineering teams to take AI features from exploration and prototyping through to production, including evaluation, deployment, and monitoring',
+      'Apply responsible AI practices around data privacy, security, and governance, in line with the requirements of enterprise and public-sector customers',
+    ],
+    technologies: ['Python', 'Azure', 'AI Agents'],
+    logo: unit4Logo,
+  },
+  {
     id: 'glintt',
     company: 'Glintt Global',
     position: 'AI Data Engineer',
-    years: 'Jul 2025 - Present',
+    years: 'Jul 2025 - Sep 2025',
     location: 'Porto, Portugal',
     description: [
       'Led the architecture design and development of an AI-powered address recognition pipeline, orchestrating OCR, NER, YOLO-based models, and classification models to extract and validate unstructured address data from physical documents, with Kafka and Redis handling thousands of data events per minute and OpenSearch powering fuzzy search across millions of records',
