@@ -3,7 +3,7 @@ import Navigation from '@/components/Navigation';
 import BackButton from '@/components/BackButton';
 import Footer from '@/components/Footer';
 import ParticlesBackground from '@/components/ParticlesBackground';
-import { Calendar, MapPin } from 'lucide-react';
+import { Calendar, ExternalLink, MapPin } from 'lucide-react';
 import { useScrollToTop } from '@/hooks/useScrollToTop';
 
 // Import company logos
@@ -15,6 +15,7 @@ import padraoLogo from '@/assets/logos/padrao-ortopedico.png';
 interface ExperienceEntry {
   id: string;
   company: string;
+  companyUrl?: string;
   position: string;
   years: string;
   location?: string;
@@ -27,6 +28,7 @@ const experiences: ExperienceEntry[] = [
   {
     id: 'unit4',
     company: 'Unit4',
+    companyUrl: 'https://www.unit4.com',
     position: 'AI Engineer',
     years: 'Oct 2025 - Present',
     location: 'Remote',
@@ -165,7 +167,19 @@ const Experience = () => {
                           <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors">
                             {exp.position}
                           </h3>
-                          <p className="text-primary font-medium">{exp.company}</p>
+                          {exp.companyUrl ? (
+                            <a
+                              href={exp.companyUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1 text-primary font-medium hover:underline"
+                            >
+                              {exp.company}
+                              <ExternalLink className="w-3 h-3" />
+                            </a>
+                          ) : (
+                            <p className="text-primary font-medium">{exp.company}</p>
+                          )}
                         </div>
                         <div className="flex flex-col md:items-end gap-1 text-sm text-muted-foreground">
                           <span className="flex items-center gap-1">
