@@ -40,21 +40,34 @@ LinkedIn: linkedin.com/in/tiagocoutinho
 
 ## Who He Is
 
-Tiago is a Software Engineer turned AI Data Engineer with a background in Biomedical Engineering. His journey started in biology and healthcare, where he developed a passion for building software that turns complex data into meaningful insights. Throughout his career he has worked on computer vision applications for clinical gait analysis, high-performance APIs, and, more recently, large-scale AI systems processing millions of inference requests per month. He is drawn to real-world problems that can be solved with technology, especially at the intersection of AI, data, and software engineering. He currently works at Glintt Global as an AI Data Engineer, architecting AI pipelines, RAG systems, and multi-agent orchestration frameworks for enterprise use cases.
+Tiago is a Software Engineer turned AI Engineer with a background in Biomedical Engineering. His journey started in biology and healthcare, where he developed a passion for building software that turns complex data into meaningful insights. Throughout his career he has worked on computer vision applications for clinical gait analysis, high-performance APIs, and, more recently, large-scale AI systems processing millions of inference requests per month. He is drawn to real-world problems that can be solved with technology, especially at the intersection of AI, data, and software engineering. He currently works at Unit4 as an AI Engineer, building AI capabilities into enterprise cloud software for ERP, financial planning, HR, and professional services.
 
 ---
 
 ## Professional Experience
 
+### AI Engineer — Unit4
+Period: October 2025 – Present
+Location: Remote
+
+- Builds and integrates AI capabilities into enterprise cloud software, working across the ERP, financial planning, HR, and professional services domains that Unit4 serves
+- Designs and develops solutions on top of large language models — covering retrieval over enterprise data, prompt design, and agent-based workflows — with a focus on accuracy, traceability, and fitness for business-critical processes
+- Works alongside product and engineering teams to take AI features from exploration and prototyping through to production, including evaluation, deployment, and monitoring
+- Applies responsible AI practices around data privacy, security, and governance, in line with the requirements of enterprise and public-sector customers
+
+Technologies: Python, Azure, AI Agents
+
+---
+
 ### AI Data Engineer — Glintt Global
-Period: July 2025 – Present
+Period: July 2025 – September 2025
 Location: Porto, Portugal
 
 - Led the architecture design and development of an AI-powered address recognition pipeline, orchestrating OCR, NER, YOLO-based models, and classification models to extract and validate unstructured address data from physical documents — processing 15 million inference requests per month, with Kafka and Redis handling thousands of data events per minute, and OpenSearch powering fuzzy search and resolution across millions of records
-- Designs and develops end-to-end RAG pipelines, from automated document ingestion and OCR-based text extraction, through chunking strategies using LangChain, to vector database population with Weaviate — enabling intelligent document retrieval and Q&A over enterprise knowledge bases
-- Designs and implements multi-agent orchestration systems that process real-time voice input to progressively build and structure technical requirements specifications, coordinating specialised agents across transcription, interpretation, and document generation stages using LangGraph and Azure Agent Framework
-- Develops causal inference and counterfactual ML models to optimise marketing campaign strategies, enabling data-driven personalisation
-- Deploys and manages AI solutions in cloud-native environments (Azure, Docker), ensuring reliability, observability, and scalability
+- Designed and developed end-to-end RAG pipelines, from automated document ingestion and OCR-based text extraction, through chunking strategies using LangChain, to vector database population with Weaviate — enabling intelligent document retrieval and Q&A over enterprise knowledge bases
+- Designed and implemented multi-agent orchestration systems that process real-time voice input to progressively build and structure technical requirements specifications, coordinating specialised agents across transcription, interpretation, and document generation stages using LangGraph and Azure Agent Framework
+- Developed causal inference and counterfactual ML models to optimise marketing campaign strategies, enabling data-driven personalisation
+- Deployed and managed AI solutions in cloud-native environments (Azure, Docker), ensuring reliability, observability, and scalability
 
 Technologies: Python, Docker, OpenSearch, Azure, YOLO, Kafka, Redis, LangChain, LangGraph, Weaviate, Django, Django REST Framework, PostgreSQL, Pandas, Scikit-learn
 

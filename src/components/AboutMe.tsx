@@ -33,7 +33,7 @@ const AboutMe = () => {
         <div className="reveal opacity-0 max-w-2xl mx-auto">
           <div className="space-y-5 text-center">
             <p className="text-lg text-secondary-foreground leading-relaxed font-light">
-              I'm an AI Data Engineer focused on building production-grade AI systems.
+              I'm an AI Engineer focused on building production-grade AI systems.
               I design RAG pipelines over enterprise knowledge bases, document intelligence solutions
               combining OCR and NER, and multi-agent orchestration frameworks that automate
               complex, multi-step workflows.

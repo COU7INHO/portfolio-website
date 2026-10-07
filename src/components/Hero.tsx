@@ -105,8 +105,8 @@ const Hero = ({ onDevModeClick }: HeroProps) => {
               className={`transition-opacity duration-500 ease-out ${showContent ? 'opacity-100' : 'opacity-0'}`}
             >
               <p className="text-xl md:text-2xl font-medium">
-                <span className="text-primary">AI Data Engineer</span>
-                <span className="text-muted-foreground"> @ Glintt Global</span>
+                <span className="text-primary">AI Engineer</span>
+                <span className="text-muted-foreground"> @ Unit4</span>
               </p>
             </div>
 

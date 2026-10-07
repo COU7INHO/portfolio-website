@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 
 // Import company logos
+import unit4Logo from '@/assets/logos/unit4.png';
 import glinttLogo from '@/assets/logos/glintt.png';
 import noniusLogo from '@/assets/logos/nonius.png';
 import padraoLogo from '@/assets/logos/padrao-ortopedico.png';
@@ -17,10 +18,17 @@ interface TimelineEntry {
 
 const timelineData: TimelineEntry[] = [
   {
+    id: 'unit4',
+    company: 'Unit4',
+    position: 'AI Engineer',
+    years: 'Oct 2025 - Present',
+    logo: unit4Logo,
+  },
+  {
     id: 'glintt',
     company: 'Glintt Global',
     position: 'AI Data Engineer',
-    years: 'Jul 2025 - Present',
+    years: 'Jul 2025 - Sep 2025',
     logo: glinttLogo,
   },
   {
