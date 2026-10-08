@@ -14,6 +14,7 @@ export function useChat() {
   const [isStreaming, setIsStreaming] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const messagesRef = useRef<ChatMessage[]>([]);
+  const abortRef = useRef<AbortController | null>(null);
 
   const sendMessage = useCallback(async (text?: string) => {
     const trimmed = (text ?? input).trim();
@@ -35,11 +36,15 @@ export function useChat() {
     if (!text) setInput('');
     setIsStreaming(true);
 
+    const controller = new AbortController();
+    abortRef.current = controller;
+
     try {
       const response = await fetch('https://backend.tiago-coutinho.com/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ messages: outgoing, provider }),
+        signal: controller.signal,
       });
 
       if (!response.ok) {
@@ -63,6 +68,8 @@ export function useChat() {
 
       while (!done) {
         const { value, done: streamDone } = await reader.read();
+        // The conversation was reset while waiting: drop this chunk
+        if (controller.signal.aborted) break;
         done = streamDone;
         if (value) {
           const chunk = decoder.decode(value, { stream: true });
@@ -81,6 +88,8 @@ export function useChat() {
         }
       }
     } catch (err) {
+      // Aborted by a reset: the conversation is already cleared, not an error
+      if (controller.signal.aborted) return;
       const message =
         err instanceof Error ? err.message : 'Connection error. Is the server running?';
       setError(message);
@@ -95,9 +104,34 @@ export function useChat() {
         return prev;
       });
     } finally {
-      setIsStreaming(false);
+      // Skip if a reset already took over (it clears isStreaming itself)
+      if (abortRef.current === controller) {
+        abortRef.current = null;
+        setIsStreaming(false);
+      }
     }
-  }, [input, isStreaming, messages, provider]);
+  }, [input, isStreaming, provider]);
 
-  return { messages, input, setInput, provider, setProvider, isStreaming, error, sendMessage };
+  const resetConversation = useCallback(() => {
+    // Abort any in-flight answer so no late chunk lands in the new conversation
+    abortRef.current?.abort();
+    abortRef.current = null;
+    messagesRef.current = [];
+    setMessages([]);
+    setInput('');
+    setError(null);
+    setIsStreaming(false);
+  }, []);
+
+  return {
+    messages,
+    input,
+    setInput,
+    provider,
+    setProvider,
+    isStreaming,
+    error,
+    sendMessage,
+    resetConversation,
+  };
 }

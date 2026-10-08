@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { MessageCircle, X, Send, Loader2 } from 'lucide-react';
+import { MessageCircle, X, Send, Loader2, SquarePen } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 import { useChat } from '@/hooks/useChat';
+import ChatMarkdown from '@/components/ChatMarkdown';
 
 const ChatWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,6 +26,7 @@ const ChatWidget = () => {
     isStreaming,
     error,
     sendMessage,
+    resetConversation,
   } = useChat();
 
   // Hint popup — show once every 10 minutes
@@ -58,6 +60,11 @@ const ChatWidget = () => {
       e.preventDefault();
       sendMessage();
     }
+  };
+
+  const startNewConversation = () => {
+    resetConversation();
+    inputRef.current?.focus();
   };
 
   const openPanel = () => {
@@ -133,13 +140,33 @@ const ChatWidget = () => {
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-3 pt-14 sm:pt-3 border-b border-border">
           <h3 className="font-semibold text-foreground text-sm">Chat with me</h3>
-          <button
-            onClick={() => setIsOpen(false)}
-            className="text-muted-foreground hover:text-foreground transition-colors p-2 -m-2"
-            aria-label="Close chat"
-          >
-            <X className="w-5 h-5" />
-          </button>
+          <div className="flex items-center gap-4">
+            {messages.length > 0 && (
+              <TooltipProvider delayDuration={200}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      onClick={startNewConversation}
+                      className="text-muted-foreground hover:text-foreground transition-colors p-2 -m-2"
+                      aria-label="New conversation"
+                    >
+                      <SquarePen className="w-[18px] h-[18px]" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom" className="bg-card border-border">
+                    <p>New conversation</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            )}
+            <button
+              onClick={() => setIsOpen(false)}
+              className="text-muted-foreground hover:text-foreground transition-colors p-2 -m-2"
+              aria-label="Close chat"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
         </div>
 
         {/* Messages */}
@@ -177,7 +204,7 @@ const ChatWidget = () => {
                     <span className="text-muted-foreground italic animate-pulse">Thinking...</span>
                   ) : (
                     <>
-                      {msg.content}
+                      {msg.role === 'assistant' ? <ChatMarkdown content={msg.content} /> : msg.content}
                       {msg.role === 'assistant' && isStreaming && i === messages.length - 1 && (
                         <span className="inline-block w-1.5 h-4 ml-0.5 bg-foreground/70 animate-pulse align-middle" />
                       )}
