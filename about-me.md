@@ -172,6 +172,15 @@ Tools: Git, GitHub, GitLab, Postman, Jupyter, Socket.IO, Fusion360
 
 ## Personal Projects
 
+### Firebreak
+URL: https://firebreak.tiago-coutinho.com
+GitHub: github.com/COU7INHO/wildfire-prevention
+Status: Live, self-hosted
+
+Firebreak is a decision-support tool that shows Portuguese municipalities where fuel management protects the most, since the yearly fuel-management budget only covers a fraction of the territory. It splits the municipality into a grid of roughly 30 m cells and ranks each one by how likely it is to burn, how many homes are exposed and how hard a fire there would be to fight, with a plain-language explanation for every position. The pilot runs for Baião, which the ICNF classifies in the worst tier for both ignitions and burned area. It is built from open and official data: ICNF burned areas since 2009, Civil Protection ignitions, Sentinel-2 satellite imagery from Copernicus, DGT land cover, terrain tiles, building footprints, OpenStreetMap and the municipality's own fire defence plan. A LightGBM model trained on a panel of 2.1 million rows reaches an AUC of 0.80 on unseen years and 0.76 on unseen years and unseen terrain, and is statistically equivalent to the official hazard map; the difference is that the official map is frozen until 2030 while this model retrains. Ignitions, burned areas and satellite vegetation dryness refresh automatically every week. The data pipeline is written in Python (LightGBM, scikit-learn, Rasterio, Shapely) and the map interface is built with React and MapLibre, available in Portuguese and English. It runs on a Proxmox home server, served by nginx behind a Cloudflare Tunnel. It does not replace the official municipal fire defence plan; it is meant to help municipal technicians decide where to act first.
+
+---
+
 ### Speed Champion
 URL: karts.tiago-coutinho.com
 GitHub: github.com/COU7INHO/karst-app-backend (backend), github.com/COU7INHO/speedway-stats (frontend)
