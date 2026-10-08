@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useRef } from 'react';
-import { fileSystem, projectUrls, socialLinks, FileSystemEntry } from '@/data/terminalFileSystem';
+import { fileSystem, projectLinks, socialLinks, FileSystemEntry } from '@/data/terminalFileSystem';
 
 export interface TerminalLine {
   id: number;
@@ -293,13 +293,18 @@ Available commands:
     }
 
     const normalizedName = projectName.toLowerCase().replace(/\.json$/, '');
-    const url = projectUrls[normalizedName];
+    const project = projectLinks[normalizedName];
 
-    if (url) {
-      addLine({ type: 'success', content: `Opening ${projectName}...` });
-      window.open(url, '_blank');
-    } else {
+    if (!project) {
       addLine({ type: 'error', content: `Project not found: ${projectName}` });
+    } else if (project.liveUrl) {
+      addLine({ type: 'success', content: `Opening ${projectName}...` });
+      window.open(project.liveUrl, '_blank');
+    } else if (project.githubUrl) {
+      addLine({ type: 'success', content: `${project.name} has no live website. Opening its GitHub repository...` });
+      window.open(project.githubUrl, '_blank');
+    } else {
+      addLine({ type: 'error', content: `${project.name} has no live website or public repository yet.` });
     }
   }, [addLine]);
 

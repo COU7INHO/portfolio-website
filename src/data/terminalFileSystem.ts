@@ -1,3 +1,5 @@
+import { projects, PortfolioProject } from '@/data/projects';
+
 // Terminal File System Data
 // Matches the existing portfolio data
 
@@ -108,43 +110,26 @@ const bachelorsContent = JSON.stringify({
   description: "Foundations in biology, biomedical sciences, signal processing, and programming, building a multidisciplinary profile that bridges life sciences with technology and software development"
 }, null, 2);
 
-const firebreakContent = JSON.stringify({
-  name: "Firebreak",
-  description: "A decision-support map that tells a municipality where fuel management protects the most, built from open data and updated automatically.",
-  longDescription: "Firebreak helps Portuguese municipalities decide where to spend a fuel-management budget that only covers a fraction of their territory. It splits the municipality into a grid of roughly 30 m cells and ranks each one by how likely it is to burn, how many homes are exposed and how hard a fire there would be to fight, explaining every position in plain language. A LightGBM model trained on open and official data (AUC 0.80 on unseen years) retrains over time, while the official hazard map stays frozen until 2030. The pilot runs for Baião.",
-  url: "firebreak.tiago-coutinho.com",
-  status: "Live",
-  features: [
-    "Intervention priority combining fire susceptibility, exposure of homes and suppression difficulty",
-    "LightGBM model validated on unseen years (AUC 0.80) and unseen terrain (AUC 0.76)",
-    "Side-by-side comparison with the official 2021-2030 municipal hazard map",
-    "Weekly vegetation dryness from Sentinel-2 and automatic weekly data refresh",
-    "Interface in Portuguese and English",
-    "Self-hosted on a Proxmox home server behind a Cloudflare Tunnel"
-  ],
-  technologies: ["Python", "LightGBM", "Scikit-learn", "NumPy", "Rasterio", "Shapely", "Sentinel-2", "Geospatial Data", "React", "MapLibre GL", "Vite", "Nginx", "Cloudflare Tunnel", "Proxmox"],
-  github: "https://github.com/COU7INHO/wildfire-prevention"
-}, null, 2);
-
-const speedChampionContent = JSON.stringify({
-  name: "Speed Champion",
-  description: "A karting lap time tracking app that uses AI and OCR to parse race classifications.",
-  longDescription: "Speed Champion is a karting lap time tracking app built for competitive friend groups. It uses AI-powered OCR (Mistral OCR) to automatically read and parse race classification sheets, eliminating the need for manual data entry. Track your performance, compare lap times with friends, and settle the debate about who's really the fastest on the track.",
-  url: "karts.tiago-coutinho.com",
-  status: "Live",
-  features: [
-    "AI-powered OCR (Mistral) for automatic lap time extraction from race sheets",
-    "Head-to-head comparison between drivers",
-    "Historical data analysis and performance trends",
-    "Mobile-friendly interface for trackside use",
-    "Self-hosted on a Raspberry Pi 5"
-  ],
-  technologies: ["React", "TypeScript", "Django", "Django REST Framework", "Python", "PostgreSQL", "Mistral OCR", "Tailwind CSS", "Nginx", "Raspberry Pi", "Docker"],
-  github: {
-    backend: "https://github.com/COU7INHO/karst-app-backend",
-    frontend: "https://github.com/COU7INHO/speedway-stats"
+// Generated from the same data as the Projects page, so the terminal never drifts.
+const projectToJson = (project: PortfolioProject) => JSON.stringify({
+  name: project.title,
+  description: project.description,
+  longDescription: project.longDescription,
+  url: project.liveUrl ? project.liveUrl.replace('https://', '') : null,
+  status: project.status ?? null,
+  features: project.features,
+  technologies: project.technologies,
+  github: project.githubUrl ?? {
+    backend: project.githubBackendUrl,
+    frontend: project.githubFrontendUrl
   }
 }, null, 2);
+
+const projectFiles: FileSystemEntry[] = projects.map(project => ({
+  type: 'file',
+  name: `${project.slug}.json`,
+  content: projectToJson(project)
+}));
 
 export const fileSystem: FileSystemEntry = {
   type: 'directory',
@@ -242,26 +227,28 @@ export const fileSystem: FileSystemEntry = {
     {
       type: 'directory',
       name: 'projects',
-      children: [
-        {
-          type: 'file',
-          name: 'Firebreak.json',
-          content: firebreakContent
-        },
-        {
-          type: 'file',
-          name: 'SpeedChampion.json',
-          content: speedChampionContent
-        }
-      ]
+      children: projectFiles
     }
   ]
 };
 
-export const projectUrls: Record<string, string> = {
-  'firebreak': 'https://firebreak.tiago-coutinho.com',
-  'speedchampion': 'https://karts.tiago-coutinho.com'
-};
+export interface ProjectLinks {
+  name: string;
+  liveUrl?: string;
+  githubUrl?: string;
+}
+
+// Keyed by lowercase slug, used by the `open` command
+export const projectLinks: Record<string, ProjectLinks> = Object.fromEntries(
+  projects.map(project => [
+    project.slug.toLowerCase(),
+    {
+      name: project.title,
+      liveUrl: project.liveUrl,
+      githubUrl: project.githubUrl ?? project.githubFrontendUrl ?? project.githubBackendUrl
+    }
+  ])
+);
 
 export const socialLinks = {
   github: 'https://github.com/COU7INHO',
