@@ -16,8 +16,35 @@ import imlensLogin from '@/assets/imlens-login.png';
 import githubDisciplineHero from '@/assets/github-discipline-hero.png';
 import githubDisciplineRepositorySetup from '@/assets/github-discipline-repository-setup.png';
 import githubDisciplinePullRequests from '@/assets/github-discipline-pull-requests.png';
+import firebreakLanding from '@/assets/firebreak-landing.webp';
+import firebreakWhereToAct from '@/assets/firebreak-where-to-act.webp';
+import firebreakWhereItBurns from '@/assets/firebreak-where-it-burns.webp';
+import firebreakBurnedArea2024 from '@/assets/firebreak-burned-area-2024.webp';
 
 const projects: Project[] = [
+  {
+    title: 'Firebreak',
+    description: 'A decision-support map that tells a municipality where fuel management protects the most, built from open data and updated automatically.',
+    longDescription: `Every year Portuguese municipalities have to decide where to spend a fuel-management budget that only covers a fraction of their territory. The official tool for that decision is the municipal fire defence plan (PMDFCI), whose hazard map is drawn once and stays frozen for a decade. Firebreak is the decision layer on top of it. It splits the municipality into a grid of roughly 30 m cells and ranks every cell by how much it gains from being treated: how likely it is to burn, how many homes are exposed, and how hard a fire there would be to fight. Each position is explained in plain language, and the map can be explored as where to act, where fire keeps returning, vegetation, current dryness against the historical baseline, and a side-by-side comparison with the official 2021 plan. The pilot runs for Baião, which the ICNF classifies in the worst tier for both ignitions and burned area. It is not a fire-spread simulator and does not replace the official plan; it is meant to help municipal technicians decide where to act first.`,
+    howItWasBuilt: `The core is a Python data pipeline that pulls open and official sources (ICNF burned areas since 2009, Civil Protection ignitions, Sentinel-2 imagery from Copernicus, DGT land cover, terrain tiles, building footprints, OpenStreetMap, and the municipality's own plan) and turns them into features for 211,000 grid cells across ten years. A LightGBM model trained on that 2.1 million-row panel predicts where fire is likely, using only data from before each predicted year so nothing leaks backwards. Validation was deliberately strict: it reaches an AUC of 0.80 on unseen years and 0.76 on unseen years and unseen terrain, and a fair head-to-head with the official hazard map shows the two are statistically equivalent. The real difference is that the official map is fixed until 2030 while this model retrains. Every trained model is stored as a versioned artifact with its training window and score; a worse model is never promoted automatically, and scoring refuses to silently train one. A weekly cron job refreshes ignitions, burned areas and satellite dryness and exports GeoJSON, which a React and MapLibre frontend renders in Portuguese and English. There is no application server: nginx serves static files from a Debian container on a home Proxmox host, exposed through a Cloudflare Tunnel with no open ports.`,
+    features: [
+      'Intervention priority combining fire susceptibility, exposure of homes and suppression difficulty',
+      'LightGBM model validated on unseen years (AUC 0.80) and unseen terrain (AUC 0.76)',
+      'Side-by-side comparison with the official 2021-2030 municipal hazard map',
+      'Weekly vegetation dryness from Sentinel-2, compared against the 2015-2025 baseline',
+      'Real burned areas from 2009 onwards overlaid by year',
+      'Context layers for buildings, roads, water points and current-year ignitions',
+      'Automatic weekly refresh that keeps serving the last good data when a source fails',
+      'Versioned model artifacts with rollback and a guard against promoting worse models',
+      'Interface in Portuguese and English',
+      'Self-hosted on a Proxmox home server behind a Cloudflare Tunnel',
+    ],
+    technologies: ['Python', 'LightGBM', 'Scikit-learn', 'NumPy', 'Rasterio', 'Shapely', 'Sentinel-2', 'Geospatial Data', 'React', 'MapLibre GL', 'Vite', 'Nginx', 'Cloudflare Tunnel', 'Proxmox'],
+    liveUrl: 'https://firebreak.tiago-coutinho.com',
+    githubUrl: 'https://github.com/COU7INHO/wildfire-prevention',
+    status: 'Live',
+    screenshots: [firebreakLanding, firebreakWhereToAct, firebreakWhereItBurns, firebreakBurnedArea2024],
+  },
   {
     title: 'The GitHub Discipline',
     description: 'A field manual that helps engineering teams build better habits for managing code on GitHub, from intent to production.',

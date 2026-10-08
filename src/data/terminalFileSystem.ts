@@ -108,6 +108,24 @@ const bachelorsContent = JSON.stringify({
   description: "Foundations in biology, biomedical sciences, signal processing, and programming, building a multidisciplinary profile that bridges life sciences with technology and software development"
 }, null, 2);
 
+const firebreakContent = JSON.stringify({
+  name: "Firebreak",
+  description: "A decision-support map that tells a municipality where fuel management protects the most, built from open data and updated automatically.",
+  longDescription: "Firebreak helps Portuguese municipalities decide where to spend a fuel-management budget that only covers a fraction of their territory. It splits the municipality into a grid of roughly 30 m cells and ranks each one by how likely it is to burn, how many homes are exposed and how hard a fire there would be to fight, explaining every position in plain language. A LightGBM model trained on open and official data (AUC 0.80 on unseen years) retrains over time, while the official hazard map stays frozen until 2030. The pilot runs for Baião.",
+  url: "firebreak.tiago-coutinho.com",
+  status: "Live",
+  features: [
+    "Intervention priority combining fire susceptibility, exposure of homes and suppression difficulty",
+    "LightGBM model validated on unseen years (AUC 0.80) and unseen terrain (AUC 0.76)",
+    "Side-by-side comparison with the official 2021-2030 municipal hazard map",
+    "Weekly vegetation dryness from Sentinel-2 and automatic weekly data refresh",
+    "Interface in Portuguese and English",
+    "Self-hosted on a Proxmox home server behind a Cloudflare Tunnel"
+  ],
+  technologies: ["Python", "LightGBM", "Scikit-learn", "NumPy", "Rasterio", "Shapely", "Sentinel-2", "Geospatial Data", "React", "MapLibre GL", "Vite", "Nginx", "Cloudflare Tunnel", "Proxmox"],
+  github: "https://github.com/COU7INHO/wildfire-prevention"
+}, null, 2);
+
 const speedChampionContent = JSON.stringify({
   name: "Speed Champion",
   description: "A karting lap time tracking app that uses AI and OCR to parse race classifications.",
@@ -227,6 +245,11 @@ export const fileSystem: FileSystemEntry = {
       children: [
         {
           type: 'file',
+          name: 'Firebreak.json',
+          content: firebreakContent
+        },
+        {
+          type: 'file',
           name: 'SpeedChampion.json',
           content: speedChampionContent
         }
@@ -236,6 +259,7 @@ export const fileSystem: FileSystemEntry = {
 };
 
 export const projectUrls: Record<string, string> = {
+  'firebreak': 'https://firebreak.tiago-coutinho.com',
   'speedchampion': 'https://karts.tiago-coutinho.com'
 };
 
