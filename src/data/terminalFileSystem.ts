@@ -1,4 +1,5 @@
 import { projects, PortfolioProject } from '@/data/projects';
+import { setupItems } from '@/data/setup';
 
 // Terminal File System Data
 // Matches the existing portfolio data
@@ -131,6 +132,20 @@ const projectFiles: FileSystemEntry[] = projects.map(project => ({
   content: projectToJson(project)
 }));
 
+// Generated from the same data as the Setup page (images are page-only)
+const setupFiles: FileSystemEntry[] = setupItems.map(item => ({
+  type: 'file',
+  name: `${item.slug}.json`,
+  content: JSON.stringify({
+    name: item.name,
+    brand: item.brand,
+    category: item.category,
+    description: item.description,
+    specs: item.specs,
+    productUrl: item.productUrl
+  }, null, 2)
+}));
+
 export const fileSystem: FileSystemEntry = {
   type: 'directory',
   name: '~',
@@ -228,6 +243,11 @@ export const fileSystem: FileSystemEntry = {
       type: 'directory',
       name: 'projects',
       children: projectFiles
+    },
+    {
+      type: 'directory',
+      name: 'setup',
+      children: setupFiles
     }
   ]
 };

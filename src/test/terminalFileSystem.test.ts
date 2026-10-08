@@ -2,6 +2,7 @@ import { describe, it, expect, vi, afterEach } from "vitest";
 import { act, renderHook } from "@testing-library/react";
 import { fileSystem, projectLinks } from "@/data/terminalFileSystem";
 import { projects } from "@/data/projects";
+import { setupItems } from "@/data/setup";
 import { useTerminal } from "@/hooks/useTerminal";
 
 const getDirectory = (name: string) =>
@@ -47,6 +48,66 @@ describe("terminal projects/ directory", () => {
       expect(links).toBeDefined();
       expect(links.liveUrl ?? links.githubUrl).toBeTruthy();
     }
+  });
+});
+
+describe("terminal setup/ directory", () => {
+  const setupDir = getDirectory("setup");
+
+  it("lists every item from the Setup page, in the same order", () => {
+    const fileNames = setupDir?.children?.map((c) => c.name);
+    expect(fileNames).toEqual(setupItems.map((item) => `${item.slug}.json`));
+    expect(fileNames).toHaveLength(setupItems.length);
+    for (const name of fileNames ?? []) {
+      expect(name).toMatch(/^[A-Za-z0-9_]+\.json$/);
+    }
+  });
+
+  it("shows each item's details without page-only fields", () => {
+    for (const item of setupItems) {
+      const file = setupDir?.children?.find((c) => c.name === `${item.slug}.json`);
+      expect(JSON.parse(file?.content ?? "{}")).toEqual({
+        name: item.name,
+        brand: item.brand,
+        category: item.category,
+        description: item.description,
+        specs: item.specs,
+        productUrl: item.productUrl,
+      });
+    }
+  });
+});
+
+describe("terminal commands", () => {
+  const run = (...commands: string[]) => {
+    const { result } = renderHook(() => useTerminal(() => {}, true));
+    for (const command of commands) {
+      act(() => result.current.executeCommand(command));
+    }
+    return result.current;
+  };
+
+  it("can cd into setup, ls and cat an item", () => {
+    const terminal = run("cd setup", "ls", "cat AOC_CU34G2X.json");
+    expect(terminal.currentPath).toEqual(["setup"]);
+    const [ls, cat] = terminal.lines.filter((l) => l.type !== "input");
+    for (const item of setupItems) {
+      expect(ls.content).toContain(`${item.slug}.json`);
+    }
+    expect(cat.type).toBe("json");
+    expect(JSON.parse(cat.content).brand).toBe("AOC");
+  });
+
+  it("mentions setup in help and in the missing directory error", () => {
+    const terminal = run("help", "cd ~/nope");
+    const [help, error] = terminal.lines.filter((l) => l.type !== "input");
+    expect(help.content).toContain("projects, setup)");
+    expect(error.content).toContain("Available: about, work, education, skills, projects, setup");
+  });
+
+  it("autocompletes the setup directory", () => {
+    const { result } = renderHook(() => useTerminal(() => {}, true));
+    expect(result.current.autocomplete("cd se")).toBe("cd setup");
   });
 });
 

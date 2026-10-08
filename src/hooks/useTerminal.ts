@@ -29,6 +29,12 @@ interface UseTerminalReturn {
 
 let lineIdCounter = 0;
 
+// Top-level directories (about, work, education, skills, projects, setup)
+const rootDirectories = fileSystem.children
+  ?.filter(c => c.type === 'directory')
+  .map(c => c.name)
+  .join(', ');
+
 export const useTerminal = (onExit: () => void, isOpen: boolean): UseTerminalReturn => {
   const [lines, setLines] = useState<TerminalLine[]>([]);
   const [currentPath, setCurrentPath] = useState<string[]>([]);
@@ -91,7 +97,7 @@ Available commands:
 
   Navigation:
     ls                    List directory contents
-    cd <dir>              Change directory (about, work, education, skills, projects)
+    cd <dir>              Change directory (${rootDirectories})
     cd ..                 Go back to parent directory
     pwd                   Print current directory path
     cat <file>            Display file contents
@@ -192,7 +198,7 @@ Available commands:
         if (!found) {
           addLine({
             type: 'error',
-            content: `bash: cd: ${target}: No such directory\nAvailable: about, work, education, skills, projects`
+            content: `bash: cd: ${target}: No such directory\nAvailable: ${rootDirectories}`
           });
           return;
         }
