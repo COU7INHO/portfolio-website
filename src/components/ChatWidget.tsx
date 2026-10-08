@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 import { useChat } from '@/hooks/useChat';
+import ChatMarkdown from '@/components/ChatMarkdown';
 
 const ChatWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -203,7 +204,7 @@ const ChatWidget = () => {
                     <span className="text-muted-foreground italic animate-pulse">Thinking...</span>
                   ) : (
                     <>
-                      {msg.content}
+                      {msg.role === 'assistant' ? <ChatMarkdown content={msg.content} /> : msg.content}
                       {msg.role === 'assistant' && isStreaming && i === messages.length - 1 && (
                         <span className="inline-block w-1.5 h-4 ml-0.5 bg-foreground/70 animate-pulse align-middle" />
                       )}
