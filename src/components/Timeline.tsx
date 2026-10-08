@@ -21,14 +21,14 @@ const timelineData: TimelineEntry[] = [
     id: 'unit4',
     company: 'Unit4',
     position: 'AI Engineer',
-    years: 'Oct 2025 - Present',
+    years: 'Oct 2026 - Present',
     logo: unit4Logo,
   },
   {
     id: 'glintt',
     company: 'Glintt Global',
     position: 'AI Data Engineer',
-    years: 'Jul 2025 - Sep 2025',
+    years: 'Jul 2025 - Sep 2026',
     logo: glinttLogo,
   },
   {

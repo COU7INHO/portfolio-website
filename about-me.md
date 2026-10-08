@@ -66,12 +66,12 @@ His own framing of the role: an AI Engineer is no longer just a developer, but a
 ## Professional Experience
 
 ### AI Engineer — Unit4
-Period: October 2025 – Present
+Period: October 2026 – Present
 Location: Remote
 Company: Unit4 is an enterprise software company that builds cloud business applications for mid-market organisations — cloud ERP, financial planning and analysis (FP&A), human capital management (HCM), and professional services automation — with customers in professional services, the public sector, non-profit organisations, and higher education
 Website: https://www.unit4.com
 
-This is his current role. He joined Unit4 in October 2025 as an Artificial Intelligence (AI) Engineer, and AI Engineer is the job title he uses.
+This is his current role. He joined Unit4 in October 2026 as an Artificial Intelligence (AI) Engineer, and AI Engineer is the job title he uses.
 
 - Builds and integrates AI capabilities into enterprise cloud software, working across the ERP, financial planning, HR, and professional services domains that Unit4 serves
 - Designs and develops solutions on top of large language models — covering retrieval over enterprise data, prompt design, and agent-based workflows — with a focus on accuracy, traceability, and fitness for business-critical processes
@@ -87,7 +87,7 @@ How it relates to his previous work: it continues the AI and data engineering he
 ---
 
 ### AI Data Engineer — Glintt Global
-Period: July 2025 – September 2025
+Period: July 2025 – September 2026
 Location: Porto, Portugal
 
 - Led the architecture design and development of an AI-powered address recognition pipeline, orchestrating OCR, NER, YOLO-based models, and classification models to extract and validate unstructured address data from physical documents — processing 15 million inference requests per month, with Kafka and Redis handling thousands of data events per minute, and OpenSearch powering fuzzy search and resolution across millions of records

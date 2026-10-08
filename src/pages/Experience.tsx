@@ -30,7 +30,7 @@ const experiences: ExperienceEntry[] = [
     company: 'Unit4',
     companyUrl: 'https://www.unit4.com',
     position: 'AI Engineer',
-    years: 'Oct 2025 - Present',
+    years: 'Oct 2026 - Present',
     location: 'Remote',
     description: [
       'Build and integrate AI capabilities into enterprise cloud software, working across the ERP, financial planning, HR, and professional services domains that Unit4 serves',
@@ -45,7 +45,7 @@ const experiences: ExperienceEntry[] = [
     id: 'glintt',
     company: 'Glintt Global',
     position: 'AI Data Engineer',
-    years: 'Jul 2025 - Sep 2025',
+    years: 'Jul 2025 - Sep 2026',
     location: 'Porto, Portugal',
     description: [
       'Led the architecture design and development of an AI-powered address recognition pipeline, orchestrating OCR, NER, YOLO-based models, and classification models to extract and validate unstructured address data from physical documents, with Kafka and Redis handling thousands of data events per minute and OpenSearch powering fuzzy search across millions of records',

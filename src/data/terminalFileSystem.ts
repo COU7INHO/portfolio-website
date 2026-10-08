@@ -27,7 +27,7 @@ instinct drives everything I build today.
 const unit4Content = JSON.stringify({
   company: "Unit4",
   position: "AI Engineer",
-  period: "October 2025 - Present",
+  period: "October 2026 - Present",
   location: "Remote",
   description: [
     "Build and integrate AI capabilities into enterprise cloud software, working across the ERP, financial planning, HR, and professional services domains that Unit4 serves",
@@ -41,7 +41,7 @@ const unit4Content = JSON.stringify({
 const glinttContent = JSON.stringify({
   company: "Glintt Global",
   position: "AI Data Engineer",
-  period: "July 2025 - September 2025",
+  period: "July 2025 - September 2026",
   location: "Porto, Portugal",
   description: [
     "Led the architecture design and development of an AI-powered address recognition pipeline, orchestrating OCR, NER, YOLO-based models, and classification models to extract and validate unstructured address data from physical documents, with Kafka and Redis handling thousands of data events per minute and OpenSearch powering fuzzy search across millions of records",
@@ -149,12 +149,12 @@ export const fileSystem: FileSystemEntry = {
       children: [
         {
           type: 'file',
-          name: 'Unit4_Oct2025_current.json',
+          name: 'Unit4_Oct2026_current.json',
           content: unit4Content
         },
         {
           type: 'file',
-          name: 'Glintt_Jul2025_Sep2025.json',
+          name: 'Glintt_Jul2025_Sep2026.json',
           content: glinttContent
         },
         {
